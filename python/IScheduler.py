@@ -2,6 +2,7 @@ import Queue
 
 import WorkerRegistry
 import Task
+import IAppManager
 
 from Util import logger
 from Util.Config import Config
@@ -53,7 +54,7 @@ class IScheduler:
         """
         The master call this method when a Worker ask for tasks
         :param w_entry:
-        :return: a list of assigned task id
+        :return: a list of assigned task obj
         """
         raise NotImplementedError
 
@@ -111,6 +112,30 @@ class IScheduler:
     def get_task(self,tid):
         return self.task_list[tid]
 
+    def worker_finalized(self, wid):
+        """
+        worker finalize a app, and can start another app
+        :param wid:
+        :return:
+        """
+        raise  NotImplementedError
+
+    def setup_worker(self):
+        """
+        returns the setup command of the app
+        :return:
+        """
+        return self.appmgr.setup_app()
+
+    def uninstall_worker(self):
+        """
+        return the unsetup command of app
+        :return:
+        """
+        return self.appmgr.uninstall_app()
+
+
+# -------------------------discard-------------------------------
     def init_worker(self):
         app = self.appmgr.get_current_app()
         task_dict = {}
@@ -140,14 +165,6 @@ class IScheduler:
         """
         raise NotImplementedError
 
-    def worker_finalized(self, wid):
-        """
-
-        :param wid:
-        :return:
-        """
-        raise  NotImplementedError
-
     def worker_added(self, wid):
         """
         This method is called by RunMaster when the new worker agent is added. Application specific initialization data
@@ -164,7 +181,7 @@ class IScheduler:
         :return:
         """
         raise
-
+# -------------------------discard-------------------------------
 
 class SampleTaskScheduler(IScheduler):
 
@@ -185,7 +202,7 @@ class SampleTaskScheduler(IScheduler):
                 task = self.task_list[tmptask.tid]
                 task.update(tmptask)
                 task.assign(wid)
-                task_list.append(task.tid)
+                task_list.append(task)
                 self.scheduled_task_list[wid].append(task.tid)
 
         else:
@@ -193,7 +210,7 @@ class SampleTaskScheduler(IScheduler):
             if not self.task_todo_queue.empty():
                 tid = self.task_todo_queue.get()
                 self.get_task(tid).assign(wid)
-                task_list.append(tid)
+                task_list.append(self.get_task(tid))
                 self.scheduled_task_list[wid].append(tid)
             # assign tasks depends on the capacity of task
             #while room >= 1 and not self.task_todo_queue.empty():
@@ -204,6 +221,7 @@ class SampleTaskScheduler(IScheduler):
             #    self.scheduled_task_list[wid].append(tid)
         if task_list:
             scheduler_log.debug('[Scheduler] Assign %s to worker %s' % (self.scheduled_task_list[wid][-room:], wid))
+        return task_list
 
 
     def task_completed(self, wid, task):

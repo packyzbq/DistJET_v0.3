@@ -1,6 +1,5 @@
 import Queue
 import datetime
-import json
 import time
 import os
 
@@ -12,6 +11,7 @@ master_log = logger.getLogger('Master')
 import IR_Buffer_Module as IM
 import IScheduler
 import WorkerRegistry
+import Util.Package as Pack
 
 WorkerRegistry.wRegistery_log = master_log
 import MPI_Wrapper
@@ -21,6 +21,7 @@ MPI_Wrapper.MPI_log = master_log
 from BaseThread import BaseThread
 from IAppManager import SimpleAppManager
 from Task import TaskStatus
+from Process.Process import status
 from python.Util.Conf import Config, set_inipath
 from WorkerAgent import status
 
@@ -48,11 +49,6 @@ class ControlThread(BaseThread):
                 control_log.warning('Lost worker = %s' % lostworker)
                 for wid in lostworker:
                     self.master.remove_worker(wid)
-            # check if idle timeout
-            # if Config.getCFGattr('IDLE_WORKER_TIMEOUT'):
-            #    workerlist = self.master.worker_registry.checkIDLETimeout()
-            #    for wid in workerlist:
-            #        self.master.remove_worker(wid)
 
             time.sleep(self.master.cfg.getPolicyattr('CONTROL_DELAY'))
 
@@ -116,9 +112,6 @@ class JobMaster(IJobMaster):
 
     def stop(self):
         # TaskScheduler is not a thread
-        # if self.task_scheduler and self.task_scheduler.is_alive():
-        #    self.task_scheduler.join()
-        #    master_log.info('[Master] TaskScheduler has joined')
         if self.control_thread and self.control_thread.isAlive():
             self.control_thread.stop()
             self.control_thread.join()
@@ -139,7 +132,7 @@ class JobMaster(IJobMaster):
         else:
             worker_module_path = self.appmgr.current_app.specifiedWorker
             send_dict = {'wid': worker.wid, 'appid': self.task_scheduler.appid,
-                         'init': self.task_scheduler.init_worker(), 'uuid': w_uuid, 'wmp': worker_module_path}
+                         'init': self.task_scheduler.setup_worker(), 'uuid': w_uuid, 'wmp': worker_module_path}
             self.command_q.put({MPI_Wrapper.Tags.MPI_REGISTY_ACK: send_dict})
             # send_str = MSG_wrapper(wid=worker.wid,appid=self.task_scheduler.appid, init=self.task_scheduler.init_worker())
             # self.server.send_string(send_str, len(send_str), w_uuid, MPI_Wrapper.Tags.MPI_REGISTY_ACK)
@@ -158,149 +151,118 @@ class JobMaster(IJobMaster):
 
     def startProcessing(self):
         while not self.__stop:
-            current_uuid = None
-            if not self.recv_buffer.empty():
-                msg = self.recv_buffer.get()
-                if msg.tag != -1:
-                    master_log.debug('[Master] Receive msg = %s' % msg.sbuf[0:msg.size])
-                    if msg.tag == MPI_Wrapper.Tags.MPI_DISCONNECT:
-                        master_log.info("[Master] Agent disconnect")
-                        continue
-                    recv_dict = json.loads(msg.sbuf[0:msg.size])
-                    current_uuid = recv_dict['uuid']
-                    # master_log.debug('[Master] Receive msg from worker %s, keys = %s'%(recv_dict['wid'] if recv_dict.has_key('wid') else None,recv_dict.keys()))
-                    if recv_dict.has_key('flag'):
-                        if recv_dict['flag'] == 'firstPing' and msg.tag == MPI_Wrapper.Tags.MPI_REGISTY:
-                            # register worker
-                            # check dict's integrity
-                            if self.check_msg_integrity('firstPing', recv_dict):
-                                master_log.debug('[Master] Receive REGISTY msg = %s' % recv_dict)
-                                self.register_worker(recv_dict['uuid'],
-                                                     recv_dict[str(MPI_Wrapper.Tags.MPI_REGISTY)]['capacity'])
-                            else:
-                                master_log.error('firstPing msg incomplete, key=%s' % recv_dict.keys())
-                                # self.command_q.put({MPI_Wrapper.Tags.APP_INI: self.appmgr.get_app_init(self.appmgr.current_app_id), 'uuid':recv_dict['uuid']})
-                        elif recv_dict['flag'] == 'lastPing':
-                            # last ping from worker, sync completed task, report node's health, logout and disconnect worker
-                            master_log.debug(
-                                '[Master] From worker %s Receive DISCONNECT msg = %s' % (recv_dict['wid'], recv_dict))
-                            for tid, val in recv_dict['Task']:
-                                # handle complete task
-                                if self.check_msg_integrity('Task', val):
-                                    if val['task_stat'] == status.SUCCESS:
-                                        self.task_scheduler.task_completed(recv_dict['wid'], tid, val['time_start'],
-                                                                           val['time_fin'])
-                                    elif val['task_stat'] in [status.FAIL, status.TIMEOUT, status.OVERFLOW, status.ANR]:
-                                        self.task_scheduler.task_failed(recv_dict['wid'], tid, val['time_start'],
-                                                                        val['time_fin'], val['errcode'])
-                                else:
-                                    master_log.error('Task msg incomplete, key=%s' % val.keys())
-                            # logout and disconnect worker
-                            self.remove_worker(recv_dict['wid'])
-
-                    # normal ping msg
-                    if recv_dict.has_key('Task'):
-                        # handle complete tasks
-                        for tid, val in recv_dict['Task'].items():
-                            # handle complete task
-                            if self.check_msg_integrity('Task', val):
-                                if val['task_stat'] == status.SUCCESS:
-                                    self.task_scheduler.task_completed(recv_dict['wid'], tid, val['time_start'],
-                                                                       val['time_fin'])
-                                elif val['task_stat'] in [status.FAIL, status.TIMEOUT, status.OVERFLOW, status.ANR]:
-                                    self.task_scheduler.task_failed(recv_dict['wid'], tid, val['time_start'],
-                                                                    val['time_fin'], val['errcode'])
-                                else:
-                                    master_log.warning('[Master] Can not recognize the task status %s of Task %s' % (
-                                    val['task_stat'], tid))
-                            else:
-                                master_log.error('Task msg incomplete, key=%s' % val.keys())
-                    if recv_dict.has_key('health'):
-                        # TODO handle node health
-                        pass
-                    if recv_dict.has_key('ctime'):
-                        if not (recv_dict.has_key('flag') and recv_dict['flag'] == 'lastPing'):
-                            self.worker_registry.setContacttime(recv_dict['uuid'], recv_dict['ctime'])
-                    if recv_dict.has_key('wstatus'):
-                        wentry = self.worker_registry.get_entry(recv_dict['wid'])
-                        if wentry:
-                            master_log.debug('[Master] Set worker %s status = %s' % (wentry.wid, recv_dict['wstatus']))
-                            wentry.setStatus(recv_dict['wstatus'])
-
-                    if recv_dict.has_key(str(MPI_Wrapper.Tags.APP_INI)):
-                        v = recv_dict[str(MPI_Wrapper.Tags.APP_INI)]
-                        master_log.debug('[Master] From worker %d receive a App_INI msg = %s' % (recv_dict['wid'], v))
-                        if v['recode'] == status.SUCCESS:
-                            self.task_scheduler.worker_initialized(recv_dict['wid'])
-                            master_log.info('worker %d initialize successfully' % recv_dict['wid'])
-                        # # assign tasks to worker
-                        #                            assigned = self.task_scheduler.assignTask(recv_dict['wid'])
-                        #                            if not assigned:
-                        #                                master_log.error('[Master] Assign task to worker_%s error, worker is not alive'%recv_dict['wid'])
-                        #                                #TODO connect worker check if worker is alive
-                        #                            else:
-                        #                                send_dict = {'tag':MPI_Wrapper.Tags.TASK_ADD}
-                        #                                for tmptask in assigned:
-                        #                                    send_dict = dict(send_dict, **({tmptask.tid:tmptask.toDict()}))
-                        #                                self.command_q.put(send_dict)
-                        # FIXME: reinit should in workeragent
+            current_uuid=None
+            msg = self.recv_buffer.get()
+            if msg.tag!= -1:
+                master_log.debug('[Master] Receive msg = %s' % msg.sbuf[0:msg.size])
+                if msg.tag == MPI_Wrapper.Tags.MPI_DISCONNECT:
+                    master_log.info("[Master] Agent disconnect")
+                    continue
+                try:
+                    recv_dict = Pack.unpack_obj(msg.sbuf)
+                except:
+                    master_log.error("[Master] Parse msg error, sbuf=%s"%msg.sbuf)
+                current_uuid = recv_dict['uuid']
+                if recv_dict.has_key('flag'):
+                    if recv_dict['flag'] == 'FP' and msg.tag == MPI_Wrapper.Tags.MPI_REGISTY:
+                        # register worker
+                        # {uuid:str, MPI_REGISTY:{ capacity: int}, ctime:int, flag:"FP"}
+                        master_log.info('[Master] Receive REGISTY msg = %s' % recv_dict)
+                        self.register_worker(recv_dict['uuid'],recv_dict[MPI_Wrapper.Tags.MPI_REGISTY]['capacity'])
+                    elif recv_dict['flag'] == 'LP':
+                        # last ping from worker, sync completed task, report node's health, logout and disconnect worker
+                        master_log.info('[Master] From worker %s Receive DISCONNECT msg = %s' % (recv_dict['wid'], recv_dict))
+                        for task in recv_dict['Task']:
+                            if task.status == TaskStatus.COMPLETED:
+                                self.task_scheduler.task_completed(recv_dict['wid'],task)
+                            elif task.status == TaskStatus.FAILED:
+                                self.task_scheduler.task_failed(recv_dict['wid'],task)
+                        self.remove_worker(recv_dict['wid'])
+                    continue
+                # Normal ping msg
+                if recv_dict.has_key('Task'):
+                    for task in recv_dict['Task']:
+                        if task.status == TaskStatus.COMPLETED:
+                            self.task_scheduler.task_completed(recv_dict['wid'],task)
+                        elif task.status == TaskStatus.FAILED:
+                            self.task_scheduler.task_failed(recv_dict['wid'],task)
                         else:
-                            # initial worker failed
-                            # TODO: Optional, add other operation
-                            master_log.error('worker %d initialize error, errmsg=%s' % (recv_dict['wid'], v['errmsg']))
-                            # check re-initial times in policy
-                            if self.worker_registry.worker_reinit(v['wid']):
-                                send_dict = {'wid': v['wid'], 'appid': self.task_scheduler.appid,
-                                             'init': self.task_scheduler.init_worker(),
-                                             'uuid': recv_dict['uuid']}
-                                self.command_q.put({MPI_Wrapper.Tags.MPI_REGISTY_ACK: send_dict})
-                            else:
-                                # terminate worker
-                                # send_dict = {'tag': MPI_Wrapper.Tags.WORKER_STOP}
-                                self.command_q.put({MPI_Wrapper.Tags.WORKER_STOP: ""})
-
-                    if recv_dict.has_key(str(MPI_Wrapper.Tags.TASK_ADD)):
-                        v = recv_dict[str(MPI_Wrapper.Tags.TASK_ADD)]
-                        master_log.debug('[Master] From worker %s receive a TASK_ADD msg = %s' % (recv_dict['wid'], v))
-                        self.worker_registry.sync_capacity(recv_dict['wid'], int(v))
-                        task_list = self.task_scheduler.assignTask(recv_dict['wid'])
-                        if not task_list:
-                            master_log.debug('[Master] No more task to do')
-                            # according to Policy ,check other worker status and idle worker
-                            if Config.getPolicyattr('WORKER_SYNC_QUIT'):
-                                if self.worker_registry.checkIdle(exp=[recv_dict['wid']]):  # exp=[recv_dict['wid']]
-                                    if self.__all_final_flag:
-                                        master_log.info('[Master] Have send all finalize msg, skip this')
-                                    else:
-                                        tmp_dict = self.task_scheduler.fin_worker()
-                                        master_log.debug('[Master] All worker have done, finalize all worker')
-                                        self.command_q.put({MPI_Wrapper.Tags.APP_FIN: tmp_dict, 'extra': []})
-                                        self.__all_final_flag = True
-                                else:
-                                    master_log.debug('[Master] There are still running worker, halt')
-                                    self.command_q.put({MPI_Wrapper.Tags.WORKER_HALT: ''})
-                            else:
-                                tmp_dict = self.task_scheduler.fin_worker()
-                                self.command_q.put({MPI_Wrapper.Tags.APP_FIN: tmp_dict})
+                            master_log.warning('[Master] Can not recognize the task status %s of Task'%task.status)
+                if recv_dict.has_key('Health'):
+                    #TODO add monitor
+                    pass
+                if recv_dict.has_key('ctime'):
+                    self.worker_registry.setContacttime(recv_dict['uuid'],recv_dict['ctime'])
+                if recv_dict.has_key('wstatus'):
+                    self.worker_registry.setStatus(recv_dict['wid'],recv_dict['status'])
+                    master_log.debug('[Master] Set worker %s status = %s' % (recv_dict['wid'], recv_dict['wstatus']))
+                if recv_dict.has_key(MPI_Wrapper.Tags.APP_INI):
+                    # result of slave setup
+                    # wid:int, uuid:str, APP_INI:{recode:int, errmsg:str}
+                    v = recv_dict[MPI_Wrapper.Tags.APP_INI]
+                    master_log.debug('[Master] From worker %d receive a App_INI msg = %s' % (recv_dict['wid'], v))
+                    if v['recode'] == status.SUCCESS:
+                        master_log.info('worker %d initialize successfully' % recv_dict['wid'])
+                    else:
+                        # initial worker failed
+                        master_log.error('worker %d initialize error, errmsg=%s' % (recv_dict['wid'], v['errmsg']))
+                        if self.worker_registry.worker_refin(recv_dict['wid']):
+                            init_comm = self.task_scheduler.setup_worker()
+                            send_dict = {'wid':recv_dict['wid'],
+                                         'appid':self.task_scheduler.appid,
+                                         'init':init_comm,
+                                         'uuid':recv_dict['uuid']}
+                            self.command_q.put({MPI_Wrapper.Tags.MPI_REGISTY_ACK: send_dict})
                         else:
-                            task_dict = {}
-                            for tmptask in task_list:
-                                task_dict[tmptask.tid] = tmptask.toDict()
-                                master_log.info(
-                                    '[Master] Assign task %d to worker %d' % (tmptask.tid, recv_dict['wid']))
-                            self.command_q.put({MPI_Wrapper.Tags.TASK_ADD: task_dict})
+                            # terminate worker
+                            self.command_q.put({MPI_Wrapper.Tags.WORKER_STOP:''})
+                if recv_dict.has_key(MPI_Wrapper.Tags.TASK_ADD):
+                    v = recv_dict[MPI_Wrapper.Tags.TASK_ADD]
+                    master_log.debug('[Master] From worker %s receive a TASK_ADD msg = %s' % (recv_dict['wid'], v))
+                    task_list = self.task_scheduler.assignTask(recv_dict['wid'])
+                    if not task_list:
+                        master_log.debug('[Master] No more task to do')
+                        # according to Policy ,check other worker status and idle worker
+                        if Config.getPolicyattr('WORKER_SYNC_QUIT'):
+                            if self.worker_registry.checkIdle(exp=[recv_dict['wid']]):  # exp=[recv_dict['wid']]
+                                if self.__all_final_flag:
+                                    master_log.info('[Master] Have send all finalize msg, skip this')
+                                else:
+                                    # finalize all worker
+                                    master_log.debug('[Master] All worker have done, finalize all worker')
+                                    self.command_q.put({MPI_Wrapper.Tags.APP_FIN: '', 'extra': []})
+                            else:
+                                master_log.debug('[Master] There are still running worker, halt')
+                                self.command_q.put({MPI_Wrapper.Tags.WORKER_HALT: ''})
+                        else:
+                            master_log.info('[Master] Finalize worker %s'%recv_dict['wid'])
+                            self.command_q.put({MPI_Wrapper.Tags.APP_FIN: ''})
 
-                    if recv_dict.has_key(str(MPI_Wrapper.Tags.APP_FIN)):
-                        v = recv_dict[str(MPI_Wrapper.Tags.APP_FIN)]
-                        master_log.debug('[Master] From worker %s receive a APP_FIN msg = %s' % (recv_dict['wid'], v))
-                        if v['recode'] == status.SUCCESS:
-                            self.task_scheduler.worker_finalized(recv_dict['wid'])
-                            self.worker_registry.setStatus(recv_dict['wid'], recv_dict['wstatus'])
-                            master_log.info('worker %s finalized, set worker entry status = %s' % (
-                            recv_dict['wid'], recv_dict['wstatus']))
-                            if not self.appmgr.has_next_app():
-                                master_log.debug('[Master] No more apps, worker logout')
-                                self.command_q.put({MPI_Wrapper.Tags.LOGOUT: ""})
+                    else:
+                        # assign tasks to worker
+                        tid_list = [task.tid for task in task_list]
+                        master_log.info(
+                            '[Master] Assign task %d to worker %d' % (tid_list, recv_dict['wid']))
+                        self.command_q.put({MPI_Wrapper.Tags.TASK_ADD: task_list})
+                if recv_dict.has_key(MPI_Wrapper.Tags.APP_FIN):
+                    v = recv_dict[str(MPI_Wrapper.Tags.APP_FIN)]
+                    master_log.debug('[Master] From worker %s receive a APP_FIN msg = %s' % (recv_dict['wid'], v))
+                    if v['recode'] == status.SUCCESS:
+                        self.task_scheduler.worker_finalized()
+                        master_log.debug('[Master] Have finalized worker %s'%recv_dict['wid'])
+                        # TODO if more app need to be done
+                        # no more app need to do, logout worker
+                        self.command_q.put({MPI_Wrapper.Tags.LOGOUT:''})
+                    else:
+                        master_log.error('worker %d finalize error, errmsg=%s' % (recv_dict['wid'], v['errmsg']))
+                        if self.worker_registry.worker_refin(recv_dict['wid']):
+                            self.command_q.put({MPI_Wrapper.Tags.APP_FIN:self.task_scheduler.uninstall_worker()})
+                        else:
+                            # over the refinalize times, force to shutdown
+                            self.command_q.put({MPI_Wrapper.Tags.WORKER_STOP:''})
+
+
+                    ###########
                             else:
                                 # if all worker in Finalization status, go next app
                                 if self.worker_registry.checkFinalize():
@@ -327,15 +289,7 @@ class JobMaster(IJobMaster):
                                     master_log.debug('[Master] setup new app, send RegAck to worker')
                                 else:
                                     master_log.info('[Master] other worker is not finalized, wait...')
-                        # FIXME: refinalize should doing in workeragent
-                        else:
-                            master_log.error('worker %d finalize error, errmsg=%s' % (recv_dict['wid'], v['errmsg']))
-                            if self.worker_registry.worker_refin(recv_dict['wid']):
-                                tmp_dict = self.task_scheduler.fin_worker()
-                                self.command_q.put({MPI_Wrapper.Tags.APP_FIN: tmp_dict})
-                            else:
-                                send_dict = {MPI_Wrapper.Tags.WORKER_STOP: ""}
-                                self.command_q.put(send_dict)
+                    ###################
 
             while not self.command_q.empty():
                 send_dict = self.command_q.get()
@@ -385,10 +339,10 @@ class JobMaster(IJobMaster):
         tmp_dict = self.task_scheduler.fin_worker()
         self.command_q.put({MPI_Wrapper.Tags.APP_FIN: tmp_dict, 'extra': [uuid]})
 
-    def pullback_task(self, tid_list, wid):
-        master_log.debug('[Master] Pull back tasks=%s from worker %s' % (tid_list, wid))
+    def try_pullback(self,wid, tid):
+        master_log.debug('[Master] Try pull back task %s from worker %s'%(tid,wid))
         uuid = self.worker_registry.get_entry(wid).w_uuid
-        send_dict = {MPI_Wrapper.Tags.TASK_REMOVE: tid_list, 'extra': [uuid]}
+        send_dict = {MPI_Wrapper.Tags.TASK_REMOVE: tid, 'extra': [uuid]}
         self.command_q.put(send_dict)
 
 

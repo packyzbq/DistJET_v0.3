@@ -39,7 +39,15 @@ class IAppManager:
 
     def setup_app(self,appid=None):
         """
-        Provide app setup boot to the worker
+        Provide app setup boot to the scheduler
+        :param appid:
+        :return:
+        """
+        raise NotImplementedError
+
+    def uninstall_app(self,appid=None):
+        """
+        Provide app uninstall boot to scheduler
         :param appid:
         :return:
         """
@@ -75,7 +83,9 @@ class IAppManager:
             self.gen_task_list(app)
         return self.app_task_list[app.id]
 
-    def get_task(self, tid, appid):
+    def get_task(self, tid, appid=None):
+        if not appid:
+            appid= self.current_app_id
         return self.app_task_list[appid][tid]
 
     def gen_task_list(self, appid=None):
@@ -133,6 +143,11 @@ class SimpleAppManager(IAppManager):
         if not appid:
             appid=self.current_app_id
         return self.applist[appid].setup()
+
+    def uninstall_app(self,appid=None):
+        if not appid:
+            appid=self.current_app_id
+        return self.applist[appid].uninstall()
 
     def finalize_app(self, app=None):
         if not app:

@@ -170,6 +170,13 @@ class IApplication:
         """
         raise NotImplementedError
 
+    def uninstall(self):
+        """
+        this method is called by APPManager, tell worker how to uninstall, default is doing nothing
+        :return: list of command, return [E] means error, return None means no need to setup
+        """
+        return []
+
     def checkApp(self):
         for k, v in self.status.items():
             if self.status[k] is None:

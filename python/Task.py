@@ -94,8 +94,13 @@ class Task:
         return self.status
 
     def update(self,task):
-        #TODO
-        pass
+        for i in range(0,len(task.history)):
+            if i >= len(self.history):
+                self.history.extend(task.history[i:])
+                break
+            if self.history[i].info is None:
+                self.history[i] = task.history[i]
+
 
     def fail(self, time_start, time_end=time.time(), error = 0):
         self.status = TaskStatus.FAILED
