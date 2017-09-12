@@ -176,6 +176,9 @@ class WorkerRegistry:
     def isAlive(self,wid):
         return self.get_entry(wid).w_uuid in self.alive_workers
 
+    def hasAlive(self):
+        return len(self.alive_workers) != 0
+
     def __iter__(self):
         return self.__all_workers.copy().__iter__()
 

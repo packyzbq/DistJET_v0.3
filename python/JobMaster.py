@@ -11,7 +11,7 @@ master_log = logger.getLogger('Master')
 import IR_Buffer_Module as IM
 import IScheduler
 import WorkerRegistry
-import Util.Package as Pack
+import python.Util.Package as Pack
 
 WorkerRegistry.wRegistery_log = master_log
 import MPI_Wrapper
@@ -21,13 +21,9 @@ MPI_Wrapper.MPI_log = master_log
 from BaseThread import BaseThread
 from IAppManager import SimpleAppManager
 from Task import TaskStatus
-from Process.Process import status
+from python.Process.Process import status
 from python.Util.Conf import Config, set_inipath
-from WorkerAgent import status
 
-
-def MSG_wrapper(**kwd):
-    return json.dumps(kwd)
 
 
 class ControlThread(BaseThread):
@@ -236,7 +232,8 @@ class JobMaster(IJobMaster):
                                 self.command_q.put({MPI_Wrapper.Tags.WORKER_HALT: ''})
                         else:
                             master_log.info('[Master] Finalize worker %s'%recv_dict['wid'])
-                            self.command_q.put({MPI_Wrapper.Tags.APP_FIN: ''})
+                            comm_list = self.task_scheduler.uninstall_worker()
+                            self.command_q.put({MPI_Wrapper.Tags.APP_FIN: comm_list})
 
                     else:
                         # assign tasks to worker
@@ -261,43 +258,13 @@ class JobMaster(IJobMaster):
                             # over the refinalize times, force to shutdown
                             self.command_q.put({MPI_Wrapper.Tags.WORKER_STOP:''})
 
-
-                    ###########
-                            else:
-                                # if all worker in Finalization status, go next app
-                                if self.worker_registry.checkFinalize():
-                                    # all worker in Finalization
-                                    master_log.info('[Master] all worker finalized, do new app')
-                                    self.appmgr.next_app()
-                                    if self.appmgr.get_current_app():
-                                        self.task_scheduler = self.appmgr.get_current_app().scheduler(self, self.appmgr,
-                                                                                                      self.worker_registry)
-                                    else:
-                                        self.task_scheduler = IScheduler.SimpleScheduler(self, self.appmgr,
-                                                                                         self.worker_registry)
-                                    self.task_scheduler.appid = self.appmgr.get_current_appid()
-                                    worker_module_path = self.appmgr.current_app.specifiedWorker
-                                    send_dict = {MPI_Wrapper.Tags.MPI_REGISTY_ACK: {'appid': self.task_scheduler.appid,
-                                                                                    'init': self.task_scheduler.init_worker(),
-                                                                                    'wmp': worker_module_path,
-                                                                                    'flag': 'NEWAPP'
-                                                                                    },
-                                                 'extra': []
-                                                 }
-                                    self.command_q.put(send_dict)
-                                    self.__all_final_flag = False
-                                    master_log.debug('[Master] setup new app, send RegAck to worker')
-                                else:
-                                    master_log.info('[Master] other worker is not finalized, wait...')
-                    ###################
-
             while not self.command_q.empty():
                 send_dict = self.command_q.get()
                 if len(send_dict) != 0:
                     tag = send_dict.keys()[0]
                     if send_dict.has_key('extra') and (not send_dict['extra']):
                         del (send_dict['extra'])
-                        send_str = json.dumps(send_dict)
+                        send_str = Pack.pack_obj()
                         master_log.debug('[Master] Send msg = %s, tag=%s, uuid=%s' % (
                         send_str, tag, self.worker_registry.alive_workers))
                         for uuid in self.worker_registry.alive_workers:
@@ -305,12 +272,12 @@ class JobMaster(IJobMaster):
                     elif send_dict.has_key('extra') and send_dict['extra']:
                         tmplist = send_dict['extra']
                         del (send_dict['extra'])
-                        send_str = json.dumps(send_dict)
+                        send_str = Pack.pack_obj(send_dict)
                         master_log.debug('[Master] Send msg = %s' % send_str)
                         for uuid in tmplist:
                             self.server.send_string(send_str, len(send_str), uuid, tag)
                     else:
-                        send_str = json.dumps(send_dict)
+                        send_str = Pack.pack_obj(send_dict)
                         master_log.debug('[Master] Send to worker %s msg = %s' % (current_uuid, send_str))
                         self.server.send_string(send_str, len(send_str), current_uuid, tag)
             # master stop condition
@@ -319,18 +286,14 @@ class JobMaster(IJobMaster):
                 self.appmgr.finalize_app()
                 if not self.appmgr.has_next_app() and self.worker_registry.size() == 0:
                     master_log.info("[Master] Application done, logout workers")
-                    # TODO logout worker
-
+                    if self.worker_registry.hasAlive():
+                        #TODO logout/disconnect worker -- force stop?
+                        stop_line = Pack.pack_obj({MPI_Wrapper.Tags.WORKER_STOP:''})
+                        for uuid in self.worker_registry.alive_workers:
+                            self.server.send_string(stop_line,len(stop_line),uuid,MPI_Wrapper.Tags.WORKER_STOP)
+                        continue
                     self.stop()
 
-    def check_msg_integrity(self, tag, msg):
-        if tag == 'Task':
-            return set(['task_stat', 'time_start', 'time_fin', 'errcode']).issubset(set(msg.keys()))
-        elif tag == 'firstPing':
-            return set(['uuid']).issubset(set(msg.keys()))
-            # return set(['uuid', 'capacity']).issubset(set(msg.keys()))
-        elif tag == 'health':
-            return set(['CpuUsage', 'MemoUsage']).issubset(set(msg.keys()))
 
     def getRunFlag(self):
         return self.appmgr.runflag
