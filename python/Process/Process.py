@@ -73,7 +73,8 @@ class Process_withENV:
         try:
             for comm in command_list:
                 self.executable.put(comm)
-            self.executable.put('echo "recode:$?"')
+            if command_list[-1] != 'exit':
+                self.executable.put('echo "recode:$?"')
         finally:
             self.exec_queue_lock.release()
 
