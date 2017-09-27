@@ -61,6 +61,7 @@ class Process_withENV:
         self.status = None
 
         self.start = None
+        self.end = None
         self.killed = None
         self.fatalLine = None
         self.logParser = Parser()
@@ -74,8 +75,8 @@ class Process_withENV:
         try:
             for comm in command_list:
                 self.executable.put(comm)
-            if command_list[-1] != 'exit':
-                self.executable.put('echo "recode:$?"')
+               # if comm != 'exit':
+               #     self.executable.put('echo "recode:$?"\n')
         finally:
             self.exec_queue_lock.release()
 
@@ -117,6 +118,7 @@ class Process_withENV:
 
     def run(self):
         while not self.stop:
+            print self.executable.queue
             try:
                 self.exec_queue_lock.acquire()
                 if not self.executable.empty():
@@ -129,11 +131,13 @@ class Process_withENV:
                         self.logFile.write('\n' + '*' * 20 + ' script "%s" Running log ' % script[:-1] + '*' * 20 + '\n')
                         self.logFile.flush()
                     self.process.stdin.write(script)
+                    self.process.stdin.write('echo "recode:$?"\n')
                     while True:
                         fs = select.select([self.process.stdout],[],[],self.timeout)
                         if not fs[0]:
                             # No response
                             self.status = status.ANR
+                            self.logFile.write('[Proc] Task no response, ready to kill')
                             if self.hook and callable(self.hook):
                                 self.hook(self.status,self.recode)
                             self._kill_task()
@@ -149,11 +153,13 @@ class Process_withENV:
                             break
                         st = data.split("\n")
                         if "recode" in st[-2]:
+                            self.end = time.time()
                             for line in st[:-2]:
                                 self.logFile.write(line)
                                 self.logFile.flush()
                             self.recode = st[-2][-1]
-                            self.logFile.write("return code = %s"%self.recode)
+                            self.logFile.write("\nreturn code = %s"%self.recode)
+                            self.logFile.write("\nstart time = %s \nend time = %s"%(time.asctime(time.localtime(self.start)), time.asctime(time.localtime(self.end))))
                             self.logFile.flush()
                             if int(self.recode) == 0:
                                 self.status = status.SUCCESS
@@ -188,7 +194,7 @@ class Process_withENV:
         import os, signal
         self.process.stdout.flush()
         pgrp = os.getpgid(self.pid)
-        self.logFile.write('@Process: kill pid=%d\n' % pgrp)
+        self.logFile.write('[Proc] kill pid=%d\n' % pgrp)
         try:
             os.killpg(pgrp,signal.SIGHUP)
             self.process.wait()
@@ -228,6 +234,7 @@ if __name__ == '__main__':
         print "@proc setup recode=%d"%proc.initialize()
         thread = threading.Thread(target=add,args=[proc,comm])
         thread.start()
+        #proc.set_exe(comm)
         proc.run()
 
     print '@proc finished'
