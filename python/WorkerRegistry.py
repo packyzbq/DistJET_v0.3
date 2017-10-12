@@ -8,12 +8,14 @@ from python.Util.Config import Config
 
 class WorkerStatus:
     NEW = -1
-    INITILAZED = 0
-    IDLE = 1
+    INITIALIZED = 0
+    INITIALIZE_FAIL = 1
+    IDLE = 7
     RUNNING = 2
     ERROR = 3
     LOST = 4
     FINALIZED = 5
+    FINALIZE_FAIL = 6
 
 class WorkerEntry:
     def __init__(self, wid, w_uuid, max_capacity):
