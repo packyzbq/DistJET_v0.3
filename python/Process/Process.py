@@ -80,8 +80,11 @@ class Process_withENV:
         finally:
             self.exec_queue_lock.release()
 
-    def stop(self):
+    def stop(self,force=False):
         self.stop = True
+        if force:
+            self._kill_task()
+        self.process.wait()
 
 
     def initialize(self):
@@ -115,10 +118,11 @@ class Process_withENV:
                     self.logFile.write('[Setup_INFO] %s'%data)
 
                     self.logFile.flush()
+            else:
+                return 0
 
     def run(self):
         while not self.stop:
-            print self.executable.queue
             try:
                 self.exec_queue_lock.acquire()
                 if not self.executable.empty():
