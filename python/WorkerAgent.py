@@ -276,11 +276,11 @@ class WorkerAgent:
                     elif int(k) == Tags.TASK_ADD:
                         tasklist = v
                         self.halt_flag = False
-                        wlog.debug('[WorkerAgent] Add new task : %s' % ([task.id for task in tasklist]))
+                        wlog.debug('[WorkerAgent] Add new task : %s' % ([task.tid for task in tasklist]))
                         for task in tasklist:
                             self.task_queue.put(task)
                         count = len(tasklist)
-                        for worker_id, st in self.worker_status.keys():
+                        for worker_id, st in self.worker_status.items():
                             if st == WorkerStatus.IDLE:
                                 wlog.debug('[Agent] Worker %s IDLE, wake up worker' % worker_id)
                                 self.cond_list[worker_id].acquire()
@@ -396,6 +396,15 @@ class WorkerAgent:
             self.worker_status[wid] = WorkerStatus.FINALIZED
             self.remove_worker(wid)
             wlog.debug('[Agent] Worker %s finalized, remove from list'%wid)
+
+    def getRuntasklist(self):
+        rtask_list=[]
+        for worker in self.worker_list.values():
+            if worker.running_task is not None:
+                rtask_list.append(worker.running_task)
+        wlog.debug('[Agent] Running task = %s'%rtask_list)
+        return rtask_list
+
 
     def _app_change(self,appid):
         pass
@@ -565,7 +574,10 @@ def dummy_master_run(agent):
     print "<master> register success"
     initask = Task(0)
     initask.boot.append("source /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre2/setup.sh\n")
-    agent.recv_buff.put(MSG(Tags.MPI_REGISTY_ACK,Package.pack_obj({'wid':'1','appid':1,'wmp':None,'init':[initask]})))
+    value = Package.pack_obj({Tags.MPI_REGISTY_ACK:{'wid':'1','appid':1,'wmp':None,'init':[initask]}})
+    pack = IM.Pack(Tags.MPI_REGISTY_ACK,len(value))
+    pack.sbuf=value
+    agent.recv_buff.put(pack)
     time.sleep(1)
 
     print "<master> add task"
