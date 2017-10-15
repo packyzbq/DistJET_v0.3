@@ -13,11 +13,12 @@ import IR_Buffer_Module as IM
 
 import HealthDetect as HD
 from BaseThread import BaseThread
-from MPI_Wrapper import Tags ,Client
+from MPI_Wrapper import Tags ,Client, MSG
 from Util import logger
 from WorkerRegistry import WorkerStatus
 from python.Util import Config
 from python.Util import Package
+from Task import Task
 from python.Process.Process import Process_withENV,status
 
 wlog = None
@@ -46,7 +47,7 @@ class HeartbeatThread(BaseThread):
         self.worker_agent = worker_agent
         self.queue_lock = threading.RLock()
         self.acquire_queue = Queue.Queue()         # entry = key:val
-        self.interval = Config.getCFGattr('HeartBeatInterval') if Conf.Config.getCFGattr('HeartBeatInterval') else 1
+        self.interval = Config.getCFGattr('HeartBeatInterval') if Config.getCFGattr('HeartBeatInterval') else 0.1
         self.cond = cond
         global wlog
     def run(self):
@@ -58,7 +59,11 @@ class HeartbeatThread(BaseThread):
         send_dict['uuid'] = self.worker_agent.uuid
         send_str = Package.pack_obj(send_dict)
         wlog.debug('[HeartBeat] Send msg = %s'%send_dict)
-        ret = self._client.send_string(send_str, len(send_str),0,Tags.MPI_REGISTY)
+        #-----test----
+        ret = 0
+        print("MPI_REGISTY: send_str=%s, send_dict=%s"%(send_str,send_dict))
+        #----test----
+        #ret = self._client.send_string(send_str, len(send_str),0,Tags.MPI_REGISTY)
         if ret != 0:
             #TODO send error,add handler
             pass
@@ -94,7 +99,11 @@ class HeartbeatThread(BaseThread):
                 self.worker_agent.status_lock.release()
                 send_str = json.dumps(send_dict)
 #                wlog.debug('[HeartBeat] Send msg = %s'%send_str)
-                ret = self._client.send_string(send_str, len(send_str), 0, Tags.MPI_PING)
+                #ret = self._client.send_string(send_str, len(send_str), 0, Tags.MPI_PING)
+                # -----test----
+                ret = 0
+                print("MPI_PING: send_str=%s, send_dict=%s" % (send_str, send_dict))
+                # ----test----
                 if ret != 0:
                     #TODO add send error handler
                     pass
@@ -125,7 +134,11 @@ class HeartbeatThread(BaseThread):
         #send_dict['wstatus'] = self.worker_agent.worker.status
         send_str = Package.pack_obj(send_dict)
         wlog.debug('[HeartBeat] Send msg = %s'%send_dict)
-        ret = self._client.send_string(send_str, len(send_str), 0, Tags.MPI_PING)
+        #ret = self._client.send_string(send_str, len(send_str), 0, Tags.MPI_PING)
+        #-----test----
+        ret = 0
+        print("MPI_PING: send_str=%s, send_dict=%s"%(send_str,send_dict))
+        #----test----
         if ret != 0:
             #TODO add send error handler
             pass
@@ -154,8 +167,13 @@ class WorkerAgent:
         if self.cfg.isload():
             wlog.debug('[Agent] Loaded config file')
         wlog.debug('[Agent] Start to connect to service <%s>' % self.cfg.getCFGattr('svc_name'))
-        self.client = Client(self.recv_buff, self.cfg.getCFGattr('svc_name'), self.uuid)
-        ret = self.client.initial()
+
+        #self.client = Client(self.recv_buff, self.cfg.getCFGattr('svc_name'), self.uuid)
+        #ret = self.client.initial()
+        #----test----
+        self.client=None
+        ret = 0
+        #----test----
         if ret != 0:
             #TODO client initial error, add handler
             wlog.error('[Agent] Client initialize error, errcode = %d'%ret)
@@ -341,7 +359,8 @@ class WorkerAgent:
         if self.heartbeat:
             self.heartbeat.stop()
             self.heartbeat.join()
-        ret = self.client.stop()
+        #ret = self.client.stop()
+        ret=0
         wlog.info('[WorkerAgent] Agent stop..., exit code = %d'%ret)
         if ret != 0:
             wlog.error('[WorkerAgent] Client stop error, errcode = %d'%ret)
@@ -543,5 +562,18 @@ class Worker(BaseThread):
 
 
 
+# For test
+def dummy_master_run(agent):
+    time.sleep(1)
+    print "<master> register success"
+    initask = Task(0)
+    initask.boot.append("source /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre2/setup.sh\n")
+    agent.recv_buff.put(MSG(Tags.MPI_REGISTY_ACK,Package.pack_obj({'wid':'1','appid':1,'wmp':None,'init':[initask]})))
+
+if __name__ == '__main__':
+    workeragent = WorkerAgent("Test",capacity=2)
+    master_thread = threading.Thread(target=dummy_master_run,args=workeragent)
+    master_thread.start()
+    workeragent.run()
 
 
