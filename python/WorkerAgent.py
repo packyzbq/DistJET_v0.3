@@ -1,25 +1,21 @@
 import Queue
-import datetime
-import json
 import os,sys
-import select
 import subprocess
 import threading
-import multiprocessing
 import time
 import traceback
 
 import IR_Buffer_Module as IM
 
-import python.util.HealthDetect as HD
+from Util import HealthDetect as HD
 from BaseThread import BaseThread
 from MPI_Wrapper import Tags ,Client, MSG
 from Util import logger
 from WorkerRegistry import WorkerStatus
-from python.Util import Config
-from python.Util import Package
+from Util import Config
+from Util import Package
 from Task import Task
-from python.Process.Process import Process_withENV,status
+from Process.Process import Process_withENV,status
 
 wlog = None
 
@@ -47,7 +43,7 @@ class HeartbeatThread(BaseThread):
         self.worker_agent = worker_agent
         self.queue_lock = threading.RLock()
         self.acquire_queue = Queue.Queue()         # entry = key:val
-        self.interval = Config.getCFGattr('HeartBeatInterval') if Config.getCFGattr('HeartBeatInterval') else 0.1
+        self.interval = Config.Config.getCFGattr('HeartBeatInterval') if Config.Config.getCFGattr('HeartBeatInterval') else 0.1
         self.cond = cond
         global wlog
     def run(self):
@@ -97,7 +93,7 @@ class HeartbeatThread(BaseThread):
                 self.worker_agent.status_lock.acquire()
                 send_dict['wstatus'] = self.worker_agent.status
                 self.worker_agent.status_lock.release()
-                send_str = json.dumps(send_dict)
+                send_str = Package.pack_obj(send_dict)
 #                wlog.debug('[HeartBeat] Send msg = %s'%send_str)
                 #ret = self._client.send_string(send_str, len(send_str), 0, Tags.MPI_PING)
                 # -----test----
@@ -275,7 +271,7 @@ class WorkerAgent:
                             self.heartcond.notify()
                             self.heartcond.release()
                         except Exception:
-                            pass
+                            wlog.error("%s"%traceback.format_exc())
                     # add tasks  v=[Task obj]
                     elif int(k) == Tags.TASK_ADD:
                         tasklist = v
@@ -334,14 +330,14 @@ class WorkerAgent:
                         wlog.debug('[Agent] Receive WORKER_HALT command')
                         self.haltflag=True
                 continue
-            if len(self.worker_list) == 0 and not self.app_fin_flag:
+            if self.initial_flag and len(self.worker_list) == 0 and not self.app_fin_flag:
                 self.haltflag = False
                 self.heartbeat.acquire_queue.put({Tags.APP_FIN: {'wid': self.wid, 'recode': status.SUCCESS, 'result': None}})
                 wlog.debug('[Agent] Send APP_FIN msg for logout/newApp')
                 self.app_fin_flag = True
 
             #ask for new task
-            if self.task_queue.empty():
+            if self.task_queue.empty() and not self.fin_flag and len(self.worker_list) != 0:
                 wlog.debug('[Agent] Worker need more tasks, ask for new task')
                 self.heartbeat.acquire_queue.put({Tags.TASK_ADD:1})
 
@@ -458,6 +454,7 @@ class Worker(BaseThread):
             self.worker_obj = worker_class(self.log)
             self.log.debug('[Worker_%s] Create Worker object %s'%(self.id,self.worker_obj.__class__.__name__))
         self.proc_log = open("%s/worker_%d.log"%(self.workeragent.cfg.getCFGattr("Rundir"),self.id),'w+')
+        self.log.debug('[Worker_%s] Worker Process log path:%s/worker_%d.log'%(self.id,self.workeragent.cfg.getCFGattr("Rundir"),self.id))
 
         self.process = None
         self.recode = 0
@@ -569,10 +566,20 @@ def dummy_master_run(agent):
     initask = Task(0)
     initask.boot.append("source /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre2/setup.sh\n")
     agent.recv_buff.put(MSG(Tags.MPI_REGISTY_ACK,Package.pack_obj({'wid':'1','appid':1,'wmp':None,'init':[initask]})))
+    time.sleep(1)
+
+    print "<master> add task"
+    task = Task(1)
+    task.boot.append('echo "hello world"\n')
+    value = Package.pack_obj({Tags.TASK_ADD: [task]})
+    pack = IM.Pack(Tags.TASK_ADD, len(value))
+    pack.sbuf = value
+    agent.recv_buff.put(pack)
+
 
 if __name__ == '__main__':
     workeragent = WorkerAgent("Test",capacity=2)
-    master_thread = threading.Thread(target=dummy_master_run,args=workeragent)
+    master_thread = threading.Thread(target=dummy_master_run,args=(workeragent,))
     master_thread.start()
     workeragent.run()
 

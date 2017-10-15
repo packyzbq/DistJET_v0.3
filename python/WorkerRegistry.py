@@ -4,7 +4,7 @@ import threading
 import time
 import traceback
 
-from python.Util.Config import Config
+from Util.Config import Config
 
 class WorkerStatus:
     NEW = -1
