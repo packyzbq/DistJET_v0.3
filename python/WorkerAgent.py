@@ -11,7 +11,7 @@ import traceback
 
 import IR_Buffer_Module as IM
 
-import HealthDetect as HD
+import python.util.HealthDetect as HD
 from BaseThread import BaseThread
 from MPI_Wrapper import Tags ,Client, MSG
 from Util import logger
