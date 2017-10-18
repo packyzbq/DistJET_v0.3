@@ -57,7 +57,7 @@ class HeartbeatThread(BaseThread):
         wlog.debug('[HeartBeat] Send msg = %s'%send_dict)
         #-----test----
         ret = 0
-        print("MPI_REGISTY: send_str=%s, send_dict=%s"%(send_str,send_dict))
+        print("MPI_REGISTY: send_dict=%s"%(send_dict))
         #----test----
         #ret = self._client.send_string(send_str, len(send_str),0,Tags.MPI_REGISTY)
         if ret != 0:
@@ -90,15 +90,15 @@ class HeartbeatThread(BaseThread):
                 send_dict['rTask'] = self.worker_agent.getRuntasklist()
                 send_dict['ctime'] = time.time()
                 # before send heartbeat, sync agent status
-                self.worker_agent.status_lock.acquire()
-                send_dict['wstatus'] = self.worker_agent.status
-                self.worker_agent.status_lock.release()
+                #self.worker_agent.status_lock.acquire()
+                #send_dict['wstatus'] = self.worker_agent.status
+                #self.worker_agent.status_lock.release()
                 send_str = Package.pack_obj(send_dict)
 #                wlog.debug('[HeartBeat] Send msg = %s'%send_str)
                 #ret = self._client.send_string(send_str, len(send_str), 0, Tags.MPI_PING)
                 # -----test----
                 ret = 0
-                print("MPI_PING: send_str=%s, send_dict=%s" % (send_str, send_dict))
+                print("MPI_PING: send_dict=%s" % ( send_dict))
                 # ----test----
                 if ret != 0:
                     #TODO add send error handler
@@ -133,7 +133,7 @@ class HeartbeatThread(BaseThread):
         #ret = self._client.send_string(send_str, len(send_str), 0, Tags.MPI_PING)
         #-----test----
         ret = 0
-        print("MPI_PING: send_str=%s, send_dict=%s"%(send_str,send_dict))
+        print("MPI_PING:  send_dict=%s"%(send_dict))
         #----test----
         if ret != 0:
             #TODO add send error handler
@@ -191,6 +191,7 @@ class WorkerAgent:
         self.initial_flag = False
         self.app_fin_flag = False
         self.halt_flag = False
+        self.task_acquire = False
 
         self.heartcond = threading.Condition()
         self.heartbeat = HeartbeatThread(self.client, self, self.heartcond)
@@ -289,6 +290,7 @@ class WorkerAgent:
                                 count-=1
                                 if count == 0:
                                     break
+                        self.task_acquire = False
                     # remove task, v={flag:F/V, list:[tid]}
                     elif int(k) == Tags.TASK_REMOVE:
                         wlog.debug('[WorkerAgent] Receive TASK_REMOVE msg = %s' % v)
@@ -337,9 +339,10 @@ class WorkerAgent:
                 self.app_fin_flag = True
 
             #ask for new task
-            if self.task_queue.empty() and not self.fin_flag and len(self.worker_list) != 0:
+            if not self.task_acquire and self.task_queue.empty() and not self.fin_flag and len(self.worker_list) != 0:
                 wlog.debug('[Agent] Worker need more tasks, ask for new task')
                 self.heartbeat.acquire_queue.put({Tags.TASK_ADD:1})
+                self.task_acquire = True
 
             # Finalize worker
             if self.fin_flag and self.task_queue.empty():
@@ -398,10 +401,11 @@ class WorkerAgent:
             wlog.debug('[Agent] Worker %s finalized, remove from list'%wid)
 
     def getRuntasklist(self):
-        rtask_list=[]
+        rtask_list={}
         for worker in self.worker_list.values():
+            rtask_list[worker.id]=[]
             if worker.running_task is not None:
-                rtask_list.append(worker.running_task)
+                rtask_list[worker.id].append(worker.running_task)
         wlog.debug('[Agent] Running task = %s'%rtask_list)
         return rtask_list
 
@@ -448,7 +452,7 @@ class Worker(BaseThread):
         self.running_task = None #TASK obj
         self.cond = cond
         self.initialized = False
-        self.setup_flag = False
+        self.setup_flag = True
         self.finialized = False
         self.fin_flag = False
         self.status = WorkerStatus.NEW
@@ -492,13 +496,17 @@ class Worker(BaseThread):
         self.status = WorkerStatus.RUNNING
         self.workeragent.set_status(self.id, self.status)
         comm_list =[]
+        comm=""
         for i in xrange(0,len(task.boot)):
-            comm =+ task.boot[i]+' '
-            for data in task.data[i]:
-                comm+=' '+data
-            for args in task.args[i]:
-                comm+=' '+args
-            comm+='\n'
+            comm += task.boot[i]+" "
+            if task.data:
+                for data in task.data[i]:
+                    comm+=" "+data
+            if task.args:
+                for args in task.args[i]:
+                    comm+=" "+args
+            if not comm.endswith('\n'):
+                comm+="\n"
             comm_list.append(comm)
         self.process.set_exe(comm_list)
 
@@ -535,11 +543,13 @@ class Worker(BaseThread):
                 self.cond.wait()
                 self.cond.release()
             if not self.initialized:
+                print "<worker_%d> setup process"%self.id
                 ret = self.setup(self.workeragent.iniExecutor)
+                print "<worker_%d> self.process=%s"%(self.id,self.process)
                 self.workeragent.setup_done(self.id,ret)
                 if ret != 0:
                     continue
-
+            self.process.start()
             # ask for tasks
             tmptime=0 # times of ask tasks
             while not self.finialized:
@@ -550,7 +560,7 @@ class Worker(BaseThread):
                         tmptime = 0
                         self.idle()
                     continue
-
+                print 'worker %d running task %d'%(self.id,task.tid)
                 self.do_task(task)
                 # wait for process return result
                 self.cond.acquire()
@@ -594,5 +604,6 @@ if __name__ == '__main__':
     master_thread = threading.Thread(target=dummy_master_run,args=(workeragent,))
     master_thread.start()
     workeragent.run()
+
 
 

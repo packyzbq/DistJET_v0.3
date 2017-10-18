@@ -23,7 +23,7 @@ class status:
             return status.DES[stat]
 
 #FIXME start a sh process, cannot know when the command finished
-class Process_withENV:
+class Process_withENV(threading.Thread):
     """
     start process with setup env,
     """
@@ -51,10 +51,12 @@ class Process_withENV:
 
         self.stdout = subprocess.PIPE
         self.stdin = subprocess.PIPE
-        self.process = subprocess.Popen(['sh'], stdin=self.stdin, stdout=self.stdout, stderr=subprocess.STDOUT,preexec_fn=os.setsid)
+        print "<before create process>"
+        self.process = subprocess.Popen(['bash'], stdin=self.stdin, stdout=self.stdout, stderr=subprocess.STDOUT,preexec_fn=os.setsid)
         self.pid = self.process.pid
 
         self.logFile.write('@Process: create process for tasks, pid= %d\n' %self.pid)
+        print "<after create and write log>"
 
         self.timeout = timeout
         self.recode = None
@@ -75,6 +77,7 @@ class Process_withENV:
         try:
             for comm in command_list:
                 self.executable.put(comm)
+                print "<process> add command %s"%command_list
                # if comm != 'exit':
                #     self.executable.put('echo "recode:$?"\n')
         finally:
@@ -125,9 +128,11 @@ class Process_withENV:
         while not self.stop:
             try:
                 self.exec_queue_lock.acquire()
+                print "<process> executable size = %d"%self.executable.size()
                 if not self.executable.empty():
                     script = self.executable.get()
                     self.exec_queue_lock.release()
+                    print "<process> get script=%s"%script
                     if script == 'exit':
                         break
                     if "recode" not in script:
@@ -187,6 +192,7 @@ class Process_withENV:
                     time.sleep(1)
             except Exception,e:
                 self.logFile.write('@Process catch error: %s'%e.message)
+                print traceback.format_exec()
 
         self._burnProcess()
 
@@ -206,7 +212,7 @@ class Process_withENV:
             self.logFile.write('[Proc] KILLError: %s'%traceback.format_exc())
 
     def _restart(self):
-        proc = subprocess.Popen(['sh'], shell=self.shell, stdin=self.stdin, stdout=self.stdout, stderr=subprocess.STDOUT,preexec_fn=os.setsid)
+        proc = subprocess.Popen(['bash'], shell=self.shell, stdin=self.stdin, stdout=self.stdout, stderr=subprocess.STDOUT,preexec_fn=os.setsid)
         self.pid = proc.pid
         self.logFile.write('[Proc] Restart a new process,pid=%d'%self.pid)
         self.logFile.flush()
