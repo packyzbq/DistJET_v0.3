@@ -36,6 +36,9 @@ class Process_withENV(threading.Thread):
         :param ignoreFaile:
         :param hook: when complete tasks, call this method
         """
+        super(Process_withENV,self).__init__()
+        print self.start
+
         self.shell = shell
         self.ignoreFail = ignoreFaile
         self.exec_queue_lock = threading.RLock()
@@ -62,7 +65,7 @@ class Process_withENV(threading.Thread):
         self.recode = None
         self.status = None
 
-        self.start = None
+        self.start_time = None
         self.end = None
         self.killed = None
         self.fatalLine = None
@@ -128,7 +131,7 @@ class Process_withENV(threading.Thread):
         while not self.stop:
             try:
                 self.exec_queue_lock.acquire()
-                print "<process> executable size = %d"%self.executable.size()
+                print "<process> executable size = %d"%self.executable.qsize()
                 if not self.executable.empty():
                     script = self.executable.get()
                     self.exec_queue_lock.release()
@@ -136,7 +139,7 @@ class Process_withENV(threading.Thread):
                     if script == 'exit':
                         break
                     if "recode" not in script:
-                        self.start = time.time()
+                        self.start_time = time.time()
                         self.logFile.write('\n' + '*' * 20 + ' script "%s" Running log ' % script[:-1] + '*' * 20 + '\n')
                         self.logFile.flush()
                     self.process.stdin.write(script)
@@ -148,7 +151,7 @@ class Process_withENV(threading.Thread):
                             self.status = status.ANR
                             self.logFile.write('[Proc] Task no response, ready to kill')
                             if self.hook and callable(self.hook):
-                                self.hook(self.status,self.recode)
+                                self.hook(self.status,self.recode, self.start_time, self.end)
                             self._kill_task()
                             tmp_list=[]
                             while not self.executable.empty():
@@ -168,18 +171,18 @@ class Process_withENV(threading.Thread):
                                 self.logFile.flush()
                             self.recode = st[-2][-1]
                             self.logFile.write("\nreturn code = %s"%self.recode)
-                            self.logFile.write("\nstart time = %s \nend time = %s"%(time.asctime(time.localtime(self.start)), time.asctime(time.localtime(self.end))))
+                            self.logFile.write("\nstart time = %s \nend time = %s"%(time.asctime(time.localtime(self.start_time)), time.asctime(time.localtime(self.end))))
                             self.logFile.flush()
                             if int(self.recode) == 0:
                                 self.status = status.SUCCESS
                             if self.hook and callable(self.hook):
-                                self.hook(self.status, self.recode)
+                                self.hook(self.status, self.recode, self.start_time, self.end)
                             break
                         elif (not self.ignoreFail) and (self.logParser and (not self._parseLog(data))):
                             self.status = status.FAIL
                             self.recode = -1
                             if self.hook and callable(self.hook):
-                                self.hook(self.status, self.recode)
+                                self.hook(self.status, self.recode, self.start_time, self.end)
                             #self._kill_task()
                             #self.process = self._restart()
                             break
@@ -192,7 +195,7 @@ class Process_withENV(threading.Thread):
                     time.sleep(1)
             except Exception,e:
                 self.logFile.write('@Process catch error: %s'%e.message)
-                print traceback.format_exec()
+                print traceback.format_exc()
 
         self._burnProcess()
 
@@ -233,11 +236,11 @@ def hook(status, recode):
 def add(proc,comm):
     for com in comm:
         proc.set_exe([com])
-        print '@thread add comm %s'%com
+        #print '@thread add comm %s'%com
         time.sleep(2)
 
 if __name__ == '__main__':
-    comm = ['echo $HOME\n', 'python ./wait.py\n','exit']
+    comm = ['echo $HOME\n','echo "hello world"\n','python ./wait.py\n','exit']
     setup = 'source /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre2/setup.sh'
     with open('output.txt','w+') as output:
         proc = Process_withENV(setup,output,timeout=5,hook=hook)
@@ -245,7 +248,9 @@ if __name__ == '__main__':
         thread = threading.Thread(target=add,args=[proc,comm])
         thread.start()
         #proc.set_exe(comm)
-        proc.run()
+        print "proc.start = %s, thread.start=%s"%(proc.start,thread.start)
+        proc.start()
+        proc.join()
 
     print '@proc finished'
 

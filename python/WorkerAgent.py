@@ -80,10 +80,10 @@ class HeartbeatThread(BaseThread):
                         continue
                     send_dict = dict(send_dict, **tmp_d)
                 self.queue_lock.release()
-                send_dict['Task'] = {}
+                send_dict['Task'] = []
                 while not self.worker_agent.task_completed_queue.empty():
                     task = self.worker_agent.task_completed_queue.get()
-                    send_dict['Task'] = dict(send_dict['Task'],**task)
+                    send_dict['Task'].append(task)
                 send_dict['uuid'] = self.worker_agent.uuid
                 send_dict['wid'] = self.worker_agent.wid
                 send_dict['health'] = self.worker_agent.health_info()
@@ -478,7 +478,7 @@ class Worker(BaseThread):
             #TODO
             pass
         else:
-            self.process = Process_withENV(init_task.boot,self.proc_log,hook=self.task_done)
+            self.process = Process_withENV(init_task.boot,self.proc_log,hook=self.task_done,timeout=10)
             ret = self.process.initialize()
             if ret == 0:
                 self.initialized = True
@@ -545,7 +545,7 @@ class Worker(BaseThread):
             if not self.initialized:
                 print "<worker_%d> setup process"%self.id
                 ret = self.setup(self.workeragent.iniExecutor)
-                print "<worker_%d> self.process=%s"%(self.id,self.process)
+                print "<worker_%d> self.process =%s"%(self.id,self.process is None)
                 self.workeragent.setup_done(self.id,ret)
                 if ret != 0:
                     continue
@@ -592,7 +592,7 @@ def dummy_master_run(agent):
 
     print "<master> add task"
     task = Task(1)
-    task.boot.append('echo "hello world"\n')
+    task.boot.append('echo "hello world"')
     value = Package.pack_obj({Tags.TASK_ADD: [task]})
     pack = IM.Pack(Tags.TASK_ADD, len(value))
     pack.sbuf = value
