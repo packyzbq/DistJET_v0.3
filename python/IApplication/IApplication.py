@@ -8,6 +8,8 @@ from python import IScheduler
 # TODO add init/fin call function mode
 class IApplication:
     def __init__(self, rootdir, name, config_path=None):
+        assert (os.environ.has_key('JUNOTOP'))
+        assert(os.environ.has_key('DistJETPATH'))
         self.id = None
         self.flag = None
         self.cfg = None
