@@ -56,10 +56,10 @@ class HeartbeatThread(BaseThread):
         send_str = Package.pack_obj(send_dict)
         wlog.debug('[HeartBeat] Send msg = %s'%send_dict)
         #-----test----
-        ret = 0
-        print("MPI_REGISTY: send_dict=%s"%(send_dict))
+        #ret = 0
+        #print("MPI_REGISTY: send_dict=%s"%(send_dict))
         #----test----
-        #ret = self._client.send_string(send_str, len(send_str),0,Tags.MPI_REGISTY)
+        ret = self._client.send_string(send_str, len(send_str),0,Tags.MPI_REGISTY)
         if ret != 0:
             #TODO send error,add handler
             pass
@@ -95,10 +95,10 @@ class HeartbeatThread(BaseThread):
                 #self.worker_agent.status_lock.release()
                 send_str = Package.pack_obj(send_dict)
 #                wlog.debug('[HeartBeat] Send msg = %s'%send_str)
-                #ret = self._client.send_string(send_str, len(send_str), 0, Tags.MPI_PING)
+                ret = self._client.send_string(send_str, len(send_str), 0, Tags.MPI_PING)
                 # -----test----
-                ret = 0
-                print("MPI_PING: send_dict=%s" % ( send_dict))
+                #ret = 0
+                #print("MPI_PING: send_dict=%s" % ( send_dict))
                 # ----test----
                 if ret != 0:
                     #TODO add send error handler
@@ -130,10 +130,10 @@ class HeartbeatThread(BaseThread):
         #send_dict['wstatus'] = self.worker_agent.worker.status
         send_str = Package.pack_obj(send_dict)
         wlog.debug('[HeartBeat] Send msg = %s'%send_dict)
-        #ret = self._client.send_string(send_str, len(send_str), 0, Tags.MPI_PING)
+        ret = self._client.send_string(send_str, len(send_str), 0, Tags.MPI_PING)
         #-----test----
-        ret = 0
-        print("MPI_PING:  send_dict=%s"%(send_dict))
+        #ret = 0
+        #print("MPI_PING:  send_dict=%s"%(send_dict))
         #----test----
         if ret != 0:
             #TODO add send error handler
@@ -164,11 +164,11 @@ class WorkerAgent:
             wlog.debug('[Agent] Loaded config file')
         wlog.debug('[Agent] Start to connect to service <%s>' % self.cfg.getCFGattr('svc_name'))
 
-        #self.client = Client(self.recv_buff, self.cfg.getCFGattr('svc_name'), self.uuid)
-        #ret = self.client.initial()
+        self.client = Client(self.recv_buff, self.cfg.getCFGattr('svc_name'), self.uuid)
+        ret = self.client.initial()
         #----test----
-        self.client=None
-        ret = 0
+        #self.client=None
+        #ret = 0
         #----test----
         if ret != 0:
             #TODO client initial error, add handler
@@ -347,12 +347,19 @@ class WorkerAgent:
             # Finalize worker
             if self.app_fin_flag and self.task_queue.empty():
                 wlog.debug('[Agent] Wait for worker thread join')
-                while len(self.worker_list) != 0:
+                if len(self.worker_list) != 0:
                     #TODO wait for all worker finalized, handle maybe finalize task infinte loop
+                    wlog.debug('[Agent] set fin_flag for all workers')
                     for wid, worker in self.worker_list.items():
                         if self.worker_status[wid] != WorkerStatus.RUNNING and not worker.fin_flag:
                             worker.fin_flag = True
-                    time.sleep(0.1)
+                        if self.worker_status[wid] == WorkerStatus.IDLE:
+                            wlog.debug('[Agent] Wake up idle worker %d'%wid)
+                            self.cond_list[wid].acquire()
+                            self.cond_list[wid].notify()
+                            self.cond_list[wid].release()
+                    #time.sleep(0.1)
+            wlog.debug('[Agent] All worker status = %s'%self.worker_status)
         self.stop()
         wlog.debug('[Agent] remains %d alive thread, [%s]' % (threading.active_count(), threading.enumerate()))
 
@@ -514,7 +521,10 @@ class Worker(BaseThread):
         self.process.set_exe(comm_list)
 
     def finalize(self, fin_task):
+        self.log.debug('[Worker_%d] Ready to finalize'%self.id)
         self.process.finalize_and_cleanup(fin_task)
+        if fin_task is None:
+            return 0
 
     def terminate(self):
         self.process.stop(force=True)
@@ -573,10 +583,12 @@ class Worker(BaseThread):
                 self.workeragent.task_done(self.finish_task)
                 self.finish_task = None
 
-            self.finalize(self.workeragent.finExecutor)
+            ret = self.finalize(self.workeragent.finExecutor)
+            self.workeragent.finalize_done(self.id,ret)
             self.process.stop()
-            wlog.info("[Worker_%d] Stop...")
+            wlog.info("[Worker_%d] Stop..."%self.id)
             self.stop()
+        wlog.debug('[Worker_%d] Exit run method'%self.id)
 
 
 
@@ -597,6 +609,19 @@ def dummy_master_run(agent):
     task.boot.append('echo "hello world"')
     value = Package.pack_obj({Tags.TASK_ADD: [task]})
     pack = IM.Pack(Tags.TASK_ADD, len(value))
+    pack.sbuf = value
+    agent.recv_buff.put(pack)
+    time.sleep(1)
+
+    print "<master> finalize"
+    value = Package.pack_obj({Tags.APP_FIN:None})
+    pack = IM.Pack(Tags.APP_FIN,len(value))
+    pack.sbuf = value
+    agent.recv_buff.put(pack)
+    time.sleep(10)
+
+    value = Package.pack_obj({Tags.LOGOUT:None})
+    pack = IM.Pack(Tags.APP_FIN,len(value))
     pack.sbuf = value
     agent.recv_buff.put(pack)
 

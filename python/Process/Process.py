@@ -72,7 +72,7 @@ class Process_withENV(threading.Thread):
         self.logParser = Parser()
 
         self.ignoreFail = False
-        self.stop = False
+        self.stop_flag = False
 
     def set_exe(self,command_list):
         assert type(command_list) == types.ListType
@@ -87,7 +87,7 @@ class Process_withENV(threading.Thread):
             self.exec_queue_lock.release()
 
     def stop(self,force=False):
-        self.stop = True
+        self.stop_flag = True
         if force:
             self._kill_task()
         self.process.wait()
@@ -133,7 +133,7 @@ class Process_withENV(threading.Thread):
         self.set_exe(["exit"])
 
     def run(self):
-        while not self.stop:
+        while not self.stop_flag:
             try:
                 self.exec_queue_lock.acquire()
                 print "<process> executable size = %d"%self.executable.qsize()
