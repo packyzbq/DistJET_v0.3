@@ -127,6 +127,11 @@ class Process_withENV(threading.Thread):
             else:
                 return 0
 
+    def finalize_and_cleanup(self, command):
+        if type(command) == types.ListType:
+            self.set_exe(command)
+        self.set_exe(["exit"])
+
     def run(self):
         while not self.stop:
             try:

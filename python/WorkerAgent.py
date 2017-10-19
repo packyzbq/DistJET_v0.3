@@ -326,7 +326,7 @@ class WorkerAgent:
                         self.tmpLock.acquire()
                         self.finExecutor = v
                         self.tmpLock.release()
-                        self.fin_flag = True
+                        self.app_fin_flag = True
 
                     elif int(k) == Tags.WORKER_HALT:
                         wlog.debug('[Agent] Receive WORKER_HALT command')
@@ -345,10 +345,13 @@ class WorkerAgent:
                 self.task_acquire = True
 
             # Finalize worker
-            if self.fin_flag and self.task_queue.empty():
+            if self.app_fin_flag and self.task_queue.empty():
                 wlog.debug('[Agent] Wait for worker thread join')
                 while len(self.worker_list) != 0:
                     #TODO wait for all worker finalized, handle maybe finalize task infinte loop
+                    for wid, worker in self.worker_list.items():
+                        if self.worker_status[wid] != WorkerStatus.RUNNING and not worker.fin_flag:
+                            worker.fin_flag = True
                     time.sleep(0.1)
         self.stop()
         wlog.debug('[Agent] remains %d alive thread, [%s]' % (threading.active_count(), threading.enumerate()))
@@ -511,8 +514,7 @@ class Worker(BaseThread):
         self.process.set_exe(comm_list)
 
     def finalize(self, fin_task):
-        self.finialized = True
-        #TODO
+        self.process.finalize_and_cleanup(fin_task)
 
     def terminate(self):
         self.process.stop(force=True)
@@ -552,7 +554,7 @@ class Worker(BaseThread):
             self.process.start()
             # ask for tasks
             tmptime=0 # times of ask tasks
-            while not self.finialized:
+            while not self.fin_flag:
                 task = self.workeragent.getTask()
                 if task is None:
                     tmptime+=1
