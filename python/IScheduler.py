@@ -183,7 +183,7 @@ class IScheduler:
         raise
 # -------------------------discard-------------------------------
 
-class SampleTaskScheduler(IScheduler):
+class SimpleTaskScheduler(IScheduler):
 
     def assignTask(self, wid):
         room = self.worker_registry.get_entry(wid).capacity()

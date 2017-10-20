@@ -60,9 +60,9 @@ class Task:
         self.history = [TaskDetail()]
         self.attemptime=0
 
-        self.boot = []  # each index means one command
-        self.data = {}  # key:the correspond index of command, value:data []
-        self.args = {}  # key: the correspond index of command, value: args []
+        self.boot = []
+        self.data = {}
+        self.args = {}
 
         self.res_dir = None
 

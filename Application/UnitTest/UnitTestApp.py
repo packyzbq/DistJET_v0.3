@@ -1,5 +1,6 @@
 from python.IApplication.JunoApp import JunoApp
 from python.Task import TaskStatus
+from python.Task import Task
 import os
 import subprocess
 
@@ -7,6 +8,7 @@ class UnitTestApp(JunoApp):
     def __init__(self,rootdir, name, config_path=None):
         super(UnitTestApp,self).__init__(rootdir,name,config_path)
         self.task_reslist={}
+        self.app_boot.append("$JUNOTESTROOT/python/JunoTest/junotest UnitTest")
 
     def split(self):
         rc = subprocess.Popen(["python","$JUNOTESTROOT/python/JunoTest/junotest","UnitTest","list"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -21,10 +23,12 @@ class UnitTestApp(JunoApp):
                 break
         for c in case[startline:]:
             if c!= '' :
-                self.data[c] = ""
+                if not self.data[0]:
+                    self.data[0] = []
+                self.data[0].append(c)
         self.log.info('[App_%d] split data = %s'%(self.id, self.data))
         self.setStatus('data')
-        return self.data
+        return self.data,'data'
 
 
     def merge(self, tasklist):
@@ -39,7 +43,7 @@ class UnitTestApp(JunoApp):
 
     def analyze_log(self,logname):
         logpath = self.res_dir+'/app_%s_task_%s'%(self.id,logname)
-        if not os.path.exists(logpath)
+        if not os.path.exists(logpath):
             self.log.error("[App_%d] Cannot find log file %s"%(self.id,logpath))
             return False
         with open(logpath,'a+') as logFile:

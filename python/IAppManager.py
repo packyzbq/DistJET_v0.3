@@ -125,13 +125,14 @@ class SimpleAppManager(IAppManager):
         data = app.split()
         app.log.debug('after split')
         self.tid = 0
-        for k, v in data.items():
+        task_list = {}
+        for k, v in data:
+            for data_value in v:
             # create tasks, and store in task_queue
-            task = Task.Task(self.tid)
-            self.tid += 1
-            task.initial(app.app_boot, app.args, {k: v}, app.res_dir)
+                task = Task.Task(self.tid)
+                self.tid += 1
+                task.initial(app.app_boot[k], app.args[k], data_value, app.res_dir)
             # self.task_queue.put(task)
-            task_list = {}
             task_list[task.tid] = task
         if len(task_list) == 0 and len(data) == 0:
             appmgr_log.error('[AppMgr]: Create 0 task, check app split() method')

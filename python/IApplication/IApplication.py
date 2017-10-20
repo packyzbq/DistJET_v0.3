@@ -16,10 +16,11 @@ class IApplication:
         self.name = name
         self.app_boot = []
         self.res_dir = ""  # the directory of result
-        self.args = {}  # the args for app_boot
-        self.data = {}  # k-v
+        self.args = {}  # key:value = key:index of command, value= list of args[]
+        self.data = {}  # key:value = key:index of command, value= list of data[]
 
         self.input_path = None
+        self._task_id = 0
 
         self.scheduler = None
         self.specifiedWorker = None
@@ -153,7 +154,7 @@ class IApplication:
     def split(self):
         """
         this method needs to be overwrite by user to split data into key-value pattern
-        :return: k-v data
+        :return: k-v data, data/ k-v task, task
         """
         raise NotImplementedError
 
