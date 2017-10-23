@@ -44,10 +44,10 @@ class Server:
         if ret != 0:
             # log init error, boost return error need to be handled
             MPI_log.error('[MPI server]: Initialize server error, error code=%d',ret)
-            return False
+            return ret
         else:
             MPI_log.info('[MPI server]: start server with service_name=%s', self.svcname)
-            return True
+            return ret
 
     def send_int(self, int_data, msgsize, dest, tags):
         self.server.send_int(int_data, msgsize, dest, tags)
