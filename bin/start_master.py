@@ -2,8 +2,8 @@ from optparse import OptionParser
 import os,sys
 import subprocess
 
-if 'DistJETPATH' not in os.environ:
-    os.environ['DistJETPATH'] = "/afs/ihep.ac.cn/users/z/zhaobq/workerSpace/DistJET_v2"
+assert os.environ['DistJETPATH']
+assert os.environ['JUNOTOP']
 sys.path.append(os.environ['DistJETPATH'])
 
 parser = OptionParser(usage="%prog AppFile [opts] --ini <file>",description="start the master on local/HTCondor with config file")

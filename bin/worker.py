@@ -2,6 +2,8 @@ import sys,os
 assert os.environ['DistJETPATH']
 assert os.environ['JUNOTOP']
 
+sys.path.append(os.environ['DistJETPATH'])
+
 #argv[1]=capacity, argv[2]=conf_file
 if len(sys.argv) <= 2:
     print('@worker, need at least 2 parameter(given %d), exit'%(len(sys.argv)-1))
@@ -14,7 +16,7 @@ else:
     print('SETUP: find Boost')
 
 import python.Util.Config as CONF
-CONF.config.setCfg('Rundir',os.getcwd())
+CONF.Config.setCfg('Rundir',os.getcwd())
 cfg_path = sys.argv[2]
 if sys.argv[2] != 'null' and not os.path.exists(sys.argv[2]):
     CONF.set_inipath(os.path.abspath(sys.argv[2]))
