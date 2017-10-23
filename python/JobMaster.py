@@ -87,7 +87,7 @@ class JobMaster(IJobMaster):
         self.__all_final_flag = False
         # TODO(optional) load customed AppManager
         self.appmgr = SimpleAppManager(apps=self.applications)
-        master_log.debug('[Master] Appmgr has instanced')
+        #master_log.debug('[Master] Appmgr has instanced')
         if not self.appmgr.runflag:
             # appmgr load task error, exit
             return
@@ -102,7 +102,7 @@ class JobMaster(IJobMaster):
         if ret != 0:
             master_log.error('[Master] Server initialize error, stop. errcode = %d' % ret)
             # TODO add error handler
-            # exit()
+            exit()
 
         self.__stop = False
 
