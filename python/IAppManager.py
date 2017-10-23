@@ -20,13 +20,14 @@ class IAppManager:
                 continue
             self.applist[index] = app
             self.app_status[index] = False
+            self.app_task_list[index]=[]
             app.set_id(index)
             index += 1
             appmgr_log.info('[AppMgr] APP %s is loaded'%app.name)
         appmgr_log.debug('[AppMgr] Load apps, the number of app = %s' % self.applist)
         if len(self.applist) > 0:
             self.current_app = self.applist[0]
-            self.current_app_id = self.current_app.getid()
+            self.current_app_id = self.current_app.get_id()
             self.runflag = self.gen_task_list()
 
     def create_task(self,appid):
@@ -126,12 +127,12 @@ class SimpleAppManager(IAppManager):
         app.log.debug('after split')
         self.tid = 0
         task_list = {}
-        for k, v in data:
+        for k, v in data.items():
             for data_value in v:
             # create tasks, and store in task_queue
                 task = Task.Task(self.tid)
                 self.tid += 1
-                task.initial(app.app_boot[k], app.args[k], data_value, app.res_dir)
+                task.initial(app.app_boot[k], None if not app.args.has_key(k) else app.args[k], data_value, app.res_dir)
             # self.task_queue.put(task)
             task_list[task.tid] = task
         if len(task_list) == 0 and len(data) == 0:

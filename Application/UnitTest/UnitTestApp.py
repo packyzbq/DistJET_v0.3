@@ -9,9 +9,9 @@ class UnitTestApp(JunoApp):
         super(UnitTestApp,self).__init__(rootdir,name,config_path)
         self.task_reslist={}
         self.app_boot.append("$JUNOTESTROOT/python/JunoTest/junotest UnitTest")
-
+        self.setStatus('boot') 
     def split(self):
-        rc = subprocess.Popen(["python","$JUNOTESTROOT/python/JunoTest/junotest","UnitTest","list"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        rc = subprocess.Popen(["python",os.environ['JUNOTESTROOT']+"/python/JunoTest/junotest","UnitTest","list"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         unitcase, err = rc.communicate()
         if err:
             self.log.error('[APP_%d] @split() err = %s'%(self.id,str(err)))
@@ -23,12 +23,12 @@ class UnitTestApp(JunoApp):
                 break
         for c in case[startline:]:
             if c!= '' :
-                if not self.data[0]:
+                if not self.data.has_key(0):
                     self.data[0] = []
                 self.data[0].append(c)
         self.log.info('[App_%d] split data = %s'%(self.id, self.data))
         self.setStatus('data')
-        return self.data,'data'
+        return self.data
 
 
     def merge(self, tasklist):

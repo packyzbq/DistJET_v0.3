@@ -33,8 +33,8 @@ class IApplication(object):
             self.log.info('[App] No configure file need to be loaded...')
         self.status = {'scheduler': None,
                        'boot': None,
-                       'resdir': None,
-                       'data': None}
+                       'resdir': None}
+                       #'data': None}
         if os.path.exists(os.path.abspath(rootdir)):
             self.rootdir = os.path.abspath(rootdir)
             self.status['resdir'] = True
