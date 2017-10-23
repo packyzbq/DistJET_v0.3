@@ -6,7 +6,7 @@ from python import IScheduler
 
 
 # TODO add init/fin call function mode
-class IApplication:
+class IApplication(object):
     def __init__(self, rootdir, name, config_path=None):
         assert (os.environ.has_key('JUNOTOP'))
         assert(os.environ.has_key('DistJETPATH'))
@@ -25,7 +25,7 @@ class IApplication:
         self.scheduler = None
         self.specifiedWorker = None
         self.log = logger.getLogger(self.name, applog=True)
-        if(os.path.exists(config_path)):
+        if(config_path and os.path.exists(config_path)):
             self.app_config = Config.AppConf(config_path)
             self.log.info('[App] Load App configure file %s'%config_path)
         else:

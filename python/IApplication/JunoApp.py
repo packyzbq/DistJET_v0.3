@@ -4,7 +4,7 @@ import os
 junodir = '/afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6'
 class JunoApp(IApplication):
     def __init__(self,rootdir, name, config_path=None):
-        super(IApplication,self).__init__(rootdir,name,config_path)
+        super(JunoApp,self).__init__(rootdir,name,config_path)
         self.JUNOTOP = self.app_config.get('JunoTop')
         if self.JUNOTOP is None:
             self.JUNOTOP = self.app_config.get('JunoVer')

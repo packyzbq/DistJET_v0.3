@@ -1,8 +1,8 @@
 import os,sys
 import traceback
-
 assert os.environ['DistJETPATH']
 assert os.environ['JUNOTOP']
+sys.path.append(os.environ['DistJETPATH'])
 
 if 'Boost' not in os.environ['PATH']:
     print("can't find Boost.Python, please setup Boost.Python first")

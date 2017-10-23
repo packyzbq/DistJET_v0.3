@@ -22,7 +22,7 @@ from BaseThread import BaseThread
 from IAppManager import SimpleAppManager
 from Task import TaskStatus
 from python.Process.Process import status
-from python.Util.Conf import Config, set_inipath
+from python.Util.Config import Config, set_inipath
 
 
 
