@@ -201,175 +201,177 @@ class WorkerAgent:
         self.cond_list = {}
 
     def run(self):
-        wlog.debug('[Agent] WorkerAgent run...')
-        self.heartbeat.start()
-        wlog.debug('[WorkerAgent] HeartBeat thread start...')
-        while not self.__should_stop:
-            time.sleep(0.1) #TODO temporary config for loop interval
-            if not self.recv_buff.empty():
-                msg = self.recv_buff.get()
-                if msg.tag == -1:
-                    continue
-                recv_dict = Package.unpack_obj(msg.sbuf)
-                for k,v in recv_dict.items():
-                    # registery info v={wid:val,init:[TaskObj], appid:v, wmp:worker_module_path}
-                    if int(k) == Tags.MPI_REGISTY_ACK:
-                        if v.has_key('flag') and v['flag'] == 'NEWAPP':
-                            wlog.debug('[WorkerAgent] Receive New App msg = %s' % v)
-                            v['wid'] = self.wid
-                            self.appid = v['appid']
-                            self.task_queue.queue.clear()
-                            self.task_completed_queue.queue.clear()
-                            self.ignoreTask = []
-                            self.tmpLock.acquire()
+        try:
+            wlog.debug('[Agent] WorkerAgent run...')
+            self.heartbeat.start()
+            wlog.debug('[WorkerAgent] HeartBeat thread start...')
+            while not self.__should_stop:
+                time.sleep(0.1) #TODO temporary config for loop interval
+                if not self.recv_buff.empty():
+                    msg = self.recv_buff.get()
+                    if msg.tag == -1:
+                        continue
+                    recv_dict = Package.unpack_obj(msg.sbuf)
+                    for k,v in recv_dict.items():
+                        # registery info v={wid:val,init:[TaskObj], appid:v, wmp:worker_module_path}
+                        if int(k) == Tags.MPI_REGISTY_ACK:
+                            if v.has_key('flag') and v['flag'] == 'NEWAPP':
+                                wlog.debug('[WorkerAgent] Receive New App msg = %s' % v)
+                                v['wid'] = self.wid
+                                self.appid = v['appid']
+                                self.task_queue.queue.clear()
+                                self.task_completed_queue.queue.clear()
+                                self.ignoreTask = []
+                                self.tmpLock.acquire()
+                                try:
+                                    self.initExecutor = None
+                                    self.finExecutor = None
+                                finally:
+                                    self.tmpLock.release()
+                                self.fin_flag = False
+                                self.app_fin_flag = False
+                                self.halt_flag = False
+                            else:
+                                wlog.debug('[WorkerAgent] Receive Registry_ACK msg = %s' % v)
+                            worker_path = v['wmp']
+                            if worker_path is not None and worker_path!='None':
+                                module_path = os.path.abspath(worker_path)
+                                sys.path.append(os.path.dirname(module_path))
+                                worker_name = os.path.basename(module_path)
+                                if worker_name.endswith('.py'):
+                                    worker_name = worker_name[:-3]
+                                try:
+                                    worker_module = __import__(worker_name)
+                                    if worker_module.__dict__.has_key(worker_name) and callable(
+                                            worker_module.__dict__[worker_name]):
+                                        self.worker_class = worker_module.__dict__[worker_name]
+                                        wlog.info('[Agent] Load specific worker class = %s' % self.worker_class)
+                                except Exception:
+                                    wlog.error('[Agent] Error when import worker module %s, path = %s,errmsg=%s' % (
+                                    worker_name, worker_path, traceback.format_exc()))
+                            else:
+                                wlog.warning('[Agent] No specific worker input, use default')
                             try:
-                                self.initExecutor = None
-                                self.finExecutor = None
-                            finally:
+                                self.wid = v['wid']
+                                self.appid = v['appid']
+                                self.tmpLock.acquire()
+                                self.iniExecutor = v['init'][0] # pack init command into one task obj
                                 self.tmpLock.release()
-                            self.fin_flag = False
-                            self.app_fin_flag = False
-                            self.halt_flag = False
-                        else:
-                            wlog.debug('[WorkerAgent] Receive Registry_ACK msg = %s' % v)
-                        worker_path = v['wmp']
-                        if worker_path is not None and worker_path!='None':
-                            module_path = os.path.abspath(worker_path)
-                            sys.path.append(os.path.dirname(module_path))
-                            worker_name = os.path.basename(module_path)
-                            if worker_name.endswith('.py'):
-                                worker_name = worker_name[:-3]
-                            try:
-                                worker_module = __import__(worker_name)
-                                if worker_module.__dict__.has_key(worker_name) and callable(
-                                        worker_module.__dict__[worker_name]):
-                                    self.worker_class = worker_module.__dict__[worker_name]
-                                    wlog.info('[Agent] Load specific worker class = %s' % self.worker_class)
+
+                                # notify worker initialize
+                                wlog.info('[Agent] Start up worker and initialize')
+                                for i in range(self.capacity):
+                                    self.cond_list[i]=threading.Condition()
+                                    self.worker_list[i]=Worker(i, self, self.cond_list[i], worker_class=self.worker_class)
+                                    self.worker_status[i] = WorkerStatus.NEW
+                                    wlog.debug('[Agent] Worker %s start' % i)
+                                    self.worker_list[i].start()
+
+                                # notify the heartbeat thread
+                                wlog.debug('[WorkerAgent] Wake up the heartbeat thread')
+                                self.heartcond.acquire()
+                                self.heartcond.notify()
+                                self.heartcond.release()
                             except Exception:
-                                wlog.error('[Agent] Error when import worker module %s, path = %s,errmsg=%s' % (
-                                worker_name, worker_path, traceback.format_exc()))
-                        else:
-                            wlog.warning('[Agent] No specific worker input, use default')
-                        try:
-                            self.wid = v['wid']
-                            self.appid = v['appid']
+                                wlog.error("%s"%traceback.format_exc())
+                        # add tasks  v=[Task obj]
+                        elif int(k) == Tags.TASK_ADD:
+                            tasklist = v
+                            self.halt_flag = False
+                            wlog.debug('[WorkerAgent] Add new task : %s' % ([task.tid for task in tasklist]))
+                            for task in tasklist:
+                                self.task_queue.put(task)
+                            count = len(tasklist)
+                            for worker_id, st in self.worker_status.items():
+                                if st == WorkerStatus.IDLE:
+                                    wlog.debug('[Agent] Worker %s IDLE, wake up worker' % worker_id)
+                                    self.cond_list[worker_id].acquire()
+                                    self.cond_list[worker_id].notify()
+                                    self.cond_list[worker_id].release()
+                                    count-=1
+                                    if count == 0:
+                                        break
+                            self.task_acquire = False
+                        # remove task, v={flag:F/V, list:[tid]}
+                        elif int(k) == Tags.TASK_REMOVE:
+                            wlog.debug('[WorkerAgent] Receive TASK_REMOVE msg = %s' % v)
+                            self.removed_tasks.extend(v['list'])
+                            for worker in self.worker_list.values():
+                                if worker.running_task.tid in v['list']:
+                                    tmptask = worker.running_task
+                                    ret = worker.term_task(tmptask.tid, v['flag'])
+                        # master disconnect ack
+                        elif int(k) == Tags.LOGOUT:
+                            wlog.debug('[WorkerAgent] Receive LOGOUT msg = %s' % v)
+                            for i in range(len(self.worker_list)):
+                                if self.worker_status[i] == WorkerStatus.FINALIZED:
+                                    self.cond_list[i].acquire()
+                                    self.cond_list[i].notify()
+                                    self.cond_list[i].release()
+                            # TODO remove worker from list
+                            self.__should_stop = True
+                        # force worker to stop
+                        elif int(k) == Tags.WORKER_STOP:
+                            wlog.debug('[Agent] Receive WORKER_STOP msg = %s' % v)
+                            for i in self.worker_status.keys():
+                                if self.worker_status[i] == WorkerStatus.RUNNING:
+                                    self.worker_list[i].terminate()
+                                if self.worker_status[i] == WorkerStatus.IDLE:
+                                    self.cond_list[i].acquire()
+                                    self.cond_list[i].notify()
+                                    self.cond_list[i].release()
+
+                        # app finalize v=None/[Taskobj]
+                        elif int(k) == Tags.APP_FIN:
+                            wlog.debug('[WorkerAgent] Receive APP_FIN msg = %s' % v)
                             self.tmpLock.acquire()
-                            self.iniExecutor = v['init'][0] # pack init command into one task obj
+                            self.finExecutor = v
                             self.tmpLock.release()
+                            self.app_fin_flag = True
 
-                            # notify worker initialize
-                            wlog.info('[Agent] Start up worker and initialize')
-                            for i in range(self.capacity):
-                                self.cond_list[i]=threading.Condition()
-                                self.worker_list[i]=Worker(i, self, self.cond_list[i], worker_class=self.worker_class)
-                                self.worker_status[i] = WorkerStatus.NEW
-                                wlog.debug('[Agent] Worker %s start' % i)
-                                self.worker_list[i].start()
+                        elif int(k) == Tags.WORKER_HALT:
+                            wlog.debug('[Agent] Receive WORKER_HALT command')
+                            self.haltflag=True
+                    continue
+                if self.initial_flag and len(self.worker_list) == 0 and not self.app_fin_flag:
+                    self.haltflag = False
+                    self.heartbeat.acquire_queue.put({Tags.APP_FIN: {'wid': self.wid, 'recode': status.SUCCESS, 'result': None}})
+                    wlog.debug('[Agent] Send APP_FIN msg for logout/newApp')
+                    self.app_fin_flag = True
 
-                            # notify the heartbeat thread
-                            wlog.debug('[WorkerAgent] Wake up the heartbeat thread')
-                            self.heartcond.acquire()
-                            self.heartcond.notify()
-                            self.heartcond.release()
-                        except Exception:
-                            wlog.error("%s"%traceback.format_exc())
-                    # add tasks  v=[Task obj]
-                    elif int(k) == Tags.TASK_ADD:
-                        tasklist = v
-                        self.halt_flag = False
-                        wlog.debug('[WorkerAgent] Add new task : %s' % ([task.tid for task in tasklist]))
-                        for task in tasklist:
-                            self.task_queue.put(task)
-                        count = len(tasklist)
-                        for worker_id, st in self.worker_status.items():
-                            if st == WorkerStatus.IDLE:
-                                wlog.debug('[Agent] Worker %s IDLE, wake up worker' % worker_id)
-                                self.cond_list[worker_id].acquire()
-                                self.cond_list[worker_id].notify()
-                                self.cond_list[worker_id].release()
-                                count-=1
-                                if count == 0:
-                                    break
-                        self.task_acquire = False
-                    # remove task, v={flag:F/V, list:[tid]}
-                    elif int(k) == Tags.TASK_REMOVE:
-                        wlog.debug('[WorkerAgent] Receive TASK_REMOVE msg = %s' % v)
-                        self.removed_tasks.extend(v['list'])
-                        for worker in self.worker_list.values():
-                            if worker.running_task.tid in v['list']:
-                                tmptask = worker.running_task
-                                ret = worker.term_task(tmptask.tid, v['flag'])
-                    # master disconnect ack
-                    elif int(k) == Tags.LOGOUT:
-                        wlog.debug('[WorkerAgent] Receive LOGOUT msg = %s' % v)
-                        for i in range(len(self.worker_list)):
-                            if self.worker_status[i] == WorkerStatus.FINALIZED:
-                                self.cond_list[i].acquire()
-                                self.cond_list[i].notify()
-                                self.cond_list[i].release()
-                        # TODO remove worker from list
-                        self.__should_stop = True
-                    # force worker to stop
-                    elif int(k) == Tags.WORKER_STOP:
-                        wlog.debug('[Agent] Receive WORKER_STOP msg = %s' % v)
-                        for i in self.worker_status.keys():
-                            if self.worker_status[i] == WorkerStatus.RUNNING:
-                                self.worker_list[i].terminate()
-                            if self.worker_status[i] == WorkerStatus.IDLE:
-                                self.cond_list[i].acquire()
-                                self.cond_list[i].notify()
-                                self.cond_list[i].release()
+                #ask for new task
+                if not self.task_acquire and self.task_queue.empty() and not self.fin_flag and len(self.worker_list) != 0:
+                    wlog.debug('[Agent] Worker need more tasks, ask for new task')
+                    self.heartbeat.acquire_queue.put({Tags.TASK_ADD:1})
+                    self.task_acquire = True
 
-                    # app finalize v=None/[Taskobj]
-                    elif int(k) == Tags.APP_FIN:
-                        wlog.debug('[WorkerAgent] Receive APP_FIN msg = %s' % v)
-                        self.tmpLock.acquire()
-                        self.finExecutor = v
-                        self.tmpLock.release()
-                        self.app_fin_flag = True
-
-                    elif int(k) == Tags.WORKER_HALT:
-                        wlog.debug('[Agent] Receive WORKER_HALT command')
-                        self.haltflag=True
-                continue
-            if self.initial_flag and len(self.worker_list) == 0 and not self.app_fin_flag:
-                self.haltflag = False
-                self.heartbeat.acquire_queue.put({Tags.APP_FIN: {'wid': self.wid, 'recode': status.SUCCESS, 'result': None}})
-                wlog.debug('[Agent] Send APP_FIN msg for logout/newApp')
-                self.app_fin_flag = True
-
-            #ask for new task
-            if not self.task_acquire and self.task_queue.empty() and not self.fin_flag and len(self.worker_list) != 0:
-                wlog.debug('[Agent] Worker need more tasks, ask for new task')
-                self.heartbeat.acquire_queue.put({Tags.TASK_ADD:1})
-                self.task_acquire = True
-
-            # Finalize worker
-            if self.app_fin_flag and self.task_queue.empty():
-                wlog.debug('[Agent] Wait for worker thread join')
-                if len(self.worker_list) != 0:
-                    #TODO wait for all worker finalized, handle maybe finalize task infinte loop
-                    wlog.debug('[Agent] set fin_flag for all workers')
-                    for wid, worker in self.worker_list.items():
-                        if self.worker_status[wid] != WorkerStatus.RUNNING and not worker.fin_flag:
-                            worker.fin_flag = True
-                        if self.worker_status[wid] == WorkerStatus.IDLE:
-                            wlog.debug('[Agent] Wake up idle worker %d'%wid)
-                            self.cond_list[wid].acquire()
-                            self.cond_list[wid].notify()
-                            self.cond_list[wid].release()
-                    #time.sleep(0.1)
-            wlog.debug('[Agent] All worker status = %s'%self.worker_status)
-        self.stop()
-        wlog.debug('[Agent] remains %d alive thread, [%s]' % (threading.active_count(), threading.enumerate()))
+                # Finalize worker
+                if self.app_fin_flag and self.task_queue.empty():
+                    wlog.debug('[Agent] Wait for worker thread join')
+                    if len(self.worker_list) != 0:
+                        #TODO wait for all worker finalized, handle maybe finalize task infinte loop
+                        wlog.debug('[Agent] set fin_flag for all workers')
+                        for wid, worker in self.worker_list.items():
+                            if self.worker_status[wid] != WorkerStatus.RUNNING and not worker.fin_flag:
+                                worker.fin_flag = True
+                            if self.worker_status[wid] == WorkerStatus.IDLE:
+                                wlog.debug('[Agent] Wake up idle worker %d'%wid)
+                                self.cond_list[wid].acquire()
+                                self.cond_list[wid].notify()
+                                self.cond_list[wid].release()
+                        #time.sleep(0.1)
+                wlog.debug('[Agent] All worker status = %s'%self.worker_status)
+            self.stop()
+            wlog.debug('[Agent] remains %d alive thread, [%s]' % (threading.active_count(), threading.enumerate()))
+        except KeyboardInterrupt:
+            self.stop()
 
     def stop(self):
         self.__should_stop = True
         if self.heartbeat:
             self.heartbeat.stop()
             self.heartbeat.join()
-        #ret = self.client.stop()
-        ret=0
+        ret = self.client.stop()
         wlog.info('[WorkerAgent] Agent stop..., exit code = %d'%ret)
         if ret != 0:
             wlog.error('[WorkerAgent] Client stop error, errcode = %d'%ret)
