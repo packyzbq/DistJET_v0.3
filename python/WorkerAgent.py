@@ -129,6 +129,7 @@ class HeartbeatThread(BaseThread):
         send_dict['ctime'] = time.time()
         #send_dict['wstatus'] = self.worker_agent.worker.status
         send_str = Package.pack_obj(send_dict)
+        send_str = Package.pack2json({'uuid':self.worker_agent.uuid,'dict':send_str})
         wlog.debug('[HeartBeat] Send msg = %s'%send_dict)
         ret = self._client.send_string(send_str, len(send_str), 0, Tags.MPI_PING)
         #-----test----
@@ -211,7 +212,7 @@ class WorkerAgent:
                     msg = self.recv_buff.get()
                     if msg.tag == -1:
                         continue
-                    recv_dict = Package.unpack_obj(msg.sbuf)
+                    recv_dict = Package.unpack_obj(Package.unpack_from_json(msg.sbuf)['dict'])
                     for k,v in recv_dict.items():
                         # registery info v={wid:val,init:[TaskObj], appid:v, wmp:worker_module_path}
                         if int(k) == Tags.MPI_REGISTY_ACK:
