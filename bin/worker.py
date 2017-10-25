@@ -3,7 +3,6 @@ assert os.environ['DistJETPATH']
 assert os.environ['JUNOTOP']
 
 sys.path.append(os.environ['DistJETPATH'])
-
 #argv[1]=capacity, argv[2]=conf_file
 if len(sys.argv) <= 2:
     print('@worker, need at least 2 parameter(given %d), exit'%(len(sys.argv)-1))
@@ -23,7 +22,17 @@ if sys.argv[2] != 'null' and not os.path.exists(sys.argv[2]):
 
 CONF.set_inipath(cfg_path)
 cfg = CONF.Config()
-
+'''
+import time
+times=0
+while 'running.log' not in os.listdir('.'):
+    time.sleep(1)
+    times+=1
+    if times > 10:
+        print('@agent: Agent cannot find master,exit')
+        exit()
+    continue
+'''
 import python.WorkerAgent as WA
 capacity = int(sys.argv[1])
 worker_module_path = None

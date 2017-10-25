@@ -63,5 +63,11 @@ cfg = Conf.Config()
 
 master = JobMaster(applications=applications)
 if master.getRunFlag():
+    #with open("running.log","w+") as rf:
+    #    rf.write('True')
+    #    rf.flush()
     print('@master: start running')
     master.startProcessing()
+	
+    #if 'running.log' in os.listdir('.'):
+    #    os.remove('./running.log')

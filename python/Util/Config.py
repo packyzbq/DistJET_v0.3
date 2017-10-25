@@ -19,6 +19,7 @@ def set_inipath(inipath):
 
 class Config(object):
     __global_config = {
+        'svc_name':'Default',
         'Log_Level': 'debug',
         'health_detect_scripts': None,
         'topDir': os.environ['DistJETPATH'],

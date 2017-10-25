@@ -97,7 +97,7 @@ class IAppManager:
         tmp_tasklist = self.create_task(appid)
         if tmp_tasklist:
             self.app_task_list[appid] = tmp_tasklist
-            appmgr_log.info('[AppMgr] App %d, Create %d tasks' % (appid, len(self.app_task_list[appid])))
+            appmgr_log.info('[AppMgr] App %d, Create %d tasks:%s' % (appid, len(self.app_task_list[appid]),self.app_task_list[appid]))
             return True
         else:
             return False
@@ -134,7 +134,7 @@ class SimpleAppManager(IAppManager):
                 self.tid += 1
                 task.initial(app.app_boot[k], None if not app.args.has_key(k) else app.args[k], data_value, app.res_dir)
             # self.task_queue.put(task)
-            task_list[task.tid] = task
+                task_list[task.tid] = task
         if len(task_list) == 0 and len(data) == 0:
             appmgr_log.error('[AppMgr]: Create 0 task, check app split() method')
             return None

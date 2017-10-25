@@ -173,7 +173,7 @@ class WorkerAgent:
         if ret != 0:
             #TODO client initial error, add handler
             wlog.error('[Agent] Client initialize error, errcode = %d'%ret)
-            #exit()
+            exit()
 
         self.wid = None
         self.appid = None

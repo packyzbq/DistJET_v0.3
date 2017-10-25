@@ -150,7 +150,7 @@ class JobMaster(IJobMaster):
             current_uuid=None
             msg = self.recv_buffer.get()
             if msg.tag!= -1:
-                master_log.debug('[Master] Receive msg = %s' % msg.sbuf[0:msg.size])
+                #master_log.debug('[Master] Receive msg = %s' % msg.sbuf[0:msg.size])
                 if msg.tag == MPI_Wrapper.Tags.MPI_DISCONNECT:
                     master_log.info("[Master] Agent disconnect")
                     continue
@@ -159,6 +159,7 @@ class JobMaster(IJobMaster):
                 except:
                     master_log.error("[Master] Parse msg error, sbuf=%s"%msg.sbuf)
                 current_uuid = recv_dict['uuid']
+                master_log.debug('[Master] Receive message from %s'%current_uuid)
                 if recv_dict.has_key('flag'):
                     if recv_dict['flag'] == 'FP' and msg.tag == MPI_Wrapper.Tags.MPI_REGISTY:
                         # register worker
@@ -174,7 +175,7 @@ class JobMaster(IJobMaster):
                             elif task.status == TaskStatus.FAILED:
                                 self.task_scheduler.task_failed(recv_dict['wid'],task)
                         self.remove_worker(recv_dict['wid'])
-                    continue
+                    #continue
                 # Normal ping msg
                 if recv_dict.has_key('Task'):
                     for task in recv_dict['Task']:

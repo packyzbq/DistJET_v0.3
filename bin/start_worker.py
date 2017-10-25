@@ -12,7 +12,7 @@ parser.add_option("-c","--cap",dest="capacity")
 # FIXME: no need to give the config ?
 # parser.add_option('-f','--file', dest='capacity_file',help='tell the host and capacity for each worker')
 parser.add_option('-b','--back',dest='back',action='store_true',help='run worker in background')
-parser.add_option('-g',"--debug", dest="debug",action="store_true")
+parser.add_option('-d',"--debug", dest="debug",action="store_false")
 parser.add_option('--conf', dest='conf_file')
 
 (opts, args) = parser.parse_args()
@@ -52,7 +52,8 @@ if not opts.conf_file or not os.path.exists(opts.conf_file):
 else:
     parg+= ' '+opts.conf_file
 
-
+import time
+time.sleep(5)
 # this is the plan A-> each workerAgent has one worker
 print('mpiexec -n %s python $DistJETPATH/bin/worker.py %s'%(opts.worker_num,parg))
 os.system("mpiexec -n %s python $DistJETPATH/bin/worker.py %s"%(opts.worker_num,parg))
