@@ -54,6 +54,7 @@ class HeartbeatThread(BaseThread):
         send_dict['ctime'] = time.time()
         send_dict['uuid'] = self.worker_agent.uuid
         send_str = Package.pack_obj(send_dict)
+        send_str = Package.pack2json({'uuid':self.worker_agent.uuid,'dict':send_str})
         wlog.debug('[HeartBeat] Send msg = %s'%send_dict)
         #-----test----
         #ret = 0
@@ -94,6 +95,7 @@ class HeartbeatThread(BaseThread):
                 #send_dict['wstatus'] = self.worker_agent.status
                 #self.worker_agent.status_lock.release()
                 send_str = Package.pack_obj(send_dict)
+                send_str = Package.pack2json({'uuid':self.worker_agent.uuid,'dict':send_str})
 #                wlog.debug('[HeartBeat] Send msg = %s'%send_str)
                 ret = self._client.send_string(send_str, len(send_str), 0, Tags.MPI_PING)
                 # -----test----

@@ -151,7 +151,7 @@ class JobMaster(IJobMaster):
                 current_uuid=None
                 msg = self.recv_buffer.get()
                 if msg.tag!= -1:
-                    #master_log.debug('[Master] Receive msg = %s' % msg.sbuf[0:msg.size])
+                    master_log.debug('[Master] Receive msg = %s' % msg.sbuf)
                     if msg.tag == MPI_Wrapper.Tags.MPI_DISCONNECT:
                         master_log.info("[Master] Agent disconnect")
                         continue
@@ -298,7 +298,7 @@ class JobMaster(IJobMaster):
                                 self.server.send_string(stop_line,len(stop_line),uuid,MPI_Wrapper.Tags.WORKER_STOP)
                             continue
                         self.stop()
-        except KeyboardInterrupt:
+        except KeyboardInterrupt, Exception:
             self.stop()
 
 
