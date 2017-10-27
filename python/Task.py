@@ -129,6 +129,22 @@ class Task:
     def getdata(self):
         return self.data
 
+    def genCommand(self,log):
+        comm_list=[]
+        comm=None
+        for k, data in self.data:
+            if self.boot[k]:
+                comm = self.boot[k]+' '+data
+                if self.args[k]:
+                    comm+= ' '+self.args[k]
+            else:
+                log.error('[Task] Gen Command Fail, cannot find boot script <%d> for data <%s>'%k,data)
+            comm_list.append(comm)
+            comm=None
+        return comm_list
+
+
+
 class ChainTask(Task):
     def __init__(self,tid):
         Task.__init__(tid)

@@ -510,19 +510,7 @@ class Worker(BaseThread):
         self.running_task = task
         self.status = WorkerStatus.RUNNING
         self.workeragent.set_status(self.id, self.status)
-        comm_list =[]
-        comm=""
-        for i in xrange(0,len(task.boot)):
-            comm += task.boot[i]+" "
-            if task.data:
-                for data in task.data[i]:
-                    comm+=" "+data
-            if task.args:
-                for args in task.args[i]:
-                    comm+=" "+args
-            if not comm.endswith('\n'):
-                comm+="\n"
-            comm_list.append(comm)
+        comm_list = task.genCommand(self.log)
         self.process.set_exe(comm_list)
 
     def finalize(self, fin_task):

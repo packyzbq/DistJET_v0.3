@@ -79,6 +79,8 @@ class Process_withENV(threading.Thread):
         self.exec_queue_lock.acquire()
         try:
             for comm in command_list:
+                if not comm.endswith('\n'):
+                    comm+='\n'
                 self.executable.put(comm)
                 #print "<process> add command %s"%command_list
                # if comm != 'exit':
