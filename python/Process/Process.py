@@ -37,7 +37,7 @@ class Process_withENV(threading.Thread):
         :param hook: when complete tasks, call this method
         """
         super(Process_withENV,self).__init__()
-        print self.start
+        #print self.start
 
         self.shell = shell
         self.ignoreFail = ignoreFaile
@@ -54,12 +54,12 @@ class Process_withENV(threading.Thread):
 
         self.stdout = subprocess.PIPE
         self.stdin = subprocess.PIPE
-        print "<before create process>"
+        #print "<before create process>"
         self.process = subprocess.Popen(['bash'], stdin=self.stdin, stdout=self.stdout, stderr=subprocess.STDOUT,preexec_fn=os.setsid)
         self.pid = self.process.pid
 
         self.logFile.write('@Process: create process for tasks, pid= %d\n' %self.pid)
-        print "<after create and write log>"
+        #print "<after create and write log>"
 
         self.timeout = timeout
         self.recode = None
@@ -80,7 +80,7 @@ class Process_withENV(threading.Thread):
         try:
             for comm in command_list:
                 self.executable.put(comm)
-                print "<process> add command %s"%command_list
+                #print "<process> add command %s"%command_list
                # if comm != 'exit':
                #     self.executable.put('echo "recode:$?"\n')
         finally:
@@ -102,7 +102,7 @@ class Process_withENV(threading.Thread):
             return -1
         if self.initial is None:
             return 0
-        print "@init: initial comm = %s"%self.initial
+        #print "@init: initial comm = %s"%self.initial
         for comm in self.initial:
             if comm[-1] != '\n':
                 comm+='\n'
@@ -136,11 +136,11 @@ class Process_withENV(threading.Thread):
         while not self.stop_flag:
             try:
                 self.exec_queue_lock.acquire()
-                print "<process> executable size = %d"%self.executable.qsize()
+                #print "<process> executable size = %d"%self.executable.qsize()
                 if not self.executable.empty():
                     script = self.executable.get()
                     self.exec_queue_lock.release()
-                    print "<process> get script=%s"%script
+                    #print "<process> get script=%s"%script
                     if script == 'exit':
                         break
                     if "recode" not in script:

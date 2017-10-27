@@ -2,6 +2,7 @@ import Queue
 import datetime
 import time
 import os
+import traceback
 
 from Util import logger
 
@@ -151,14 +152,15 @@ class JobMaster(IJobMaster):
                 current_uuid=None
                 msg = self.recv_buffer.get()
                 if msg.tag!= -1:
-                    master_log.debug('[Master] Receive msg = %s' % msg.sbuf)
+                    master_log.debug('[Master] Receive msg = %s' % msg.sbuf[:msg.size])
                     if msg.tag == MPI_Wrapper.Tags.MPI_DISCONNECT:
                         master_log.info("[Master] Agent disconnect")
                         continue
                     try:
-                        recv_dict = Pack.unpack_obj(Pack.unpack_from_json(msg.sbuf)['dict'])
+                        message = msg.sbuf[0:msg.size]
+                        recv_dict = Pack.unpack_obj(Pack.unpack_from_json(message)['dict'])
                     except:
-                        master_log.error("[Master] Parse msg error, sbuf=%s"%msg.sbuf)
+                        master_log.error("[Master] Parse msg error, errmsg=%s, "%traceback.format_exc())
                     current_uuid = recv_dict['uuid']
                     master_log.debug('[Master] Receive message from %s'%current_uuid)
                     if recv_dict.has_key('flag'):
@@ -241,7 +243,7 @@ class JobMaster(IJobMaster):
                             # assign tasks to worker
                             tid_list = [task.tid for task in task_list]
                             master_log.info(
-                                '[Master] Assign task %d to worker %d' % (tid_list, recv_dict['wid']))
+                                '[Master] Assign task %s to worker %d' % (tid_list, recv_dict['wid']))
                             self.command_q.put({MPI_Wrapper.Tags.TASK_ADD: task_list})
                     if recv_dict.has_key(MPI_Wrapper.Tags.APP_FIN):
                         v = recv_dict[str(MPI_Wrapper.Tags.APP_FIN)]

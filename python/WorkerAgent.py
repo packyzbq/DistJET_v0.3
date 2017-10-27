@@ -258,7 +258,7 @@ class WorkerAgent:
                                 self.wid = v['wid']
                                 self.appid = v['appid']
                                 self.tmpLock.acquire()
-                                self.iniExecutor = v['init'][0] # pack init command into one task obj
+                                self.iniExecutor = v['init'] # pack init command into one task obj
                                 self.tmpLock.release()
 
                                 # notify worker initialize
