@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="add app config and fix juno">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Application/UnitTest/config.ini" />
+    <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/IAppManager.py" afterPath="$PROJECT_DIR$/python/IAppManager.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/IApplication/JunoApp.py" afterPath="$PROJECT_DIR$/python/IApplication/JunoApp.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/Task.py" afterPath="$PROJECT_DIR$/python/Task.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/WorkerAgent.py" afterPath="$PROJECT_DIR$/python/WorkerAgent.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/IScheduler.py" afterPath="$PROJECT_DIR$/python/IScheduler.py" />
     </list>
     <ignored path="DistJET_v0.3.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,11 +28,34 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="WorkerAgent.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="WorkerAgent.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="433">
-              <caret line="517" column="104" selection-start-line="517" selection-start-column="104" selection-end-line="517" selection-end-column="104" />
+            <state relative-caret-position="802">
+              <caret line="579" column="38" selection-start-line="579" selection-start-column="38" selection-end-line="579" selection-end-column="38" />
+              <folding>
+                <element signature="e#860#5937#0" expanded="false" />
+                <element signature="e#26145#27156#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Process.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2695">
+              <caret line="83" column="30" selection-start-line="83" selection-start-column="30" selection-end-line="83" selection-end-column="30" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Config.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/python/Util/Config.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="736">
+              <caret line="35" column="26" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -45,8 +64,8 @@
       <file leaf-file-name="IAppManager.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/IAppManager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="354">
-              <caret line="137" column="73" selection-start-line="137" selection-start-column="73" selection-end-line="137" selection-end-column="73" />
+            <state relative-caret-position="1573">
+              <caret line="136" column="42" selection-start-line="136" selection-start-column="42" selection-end-line="136" selection-end-column="42" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -57,8 +76,8 @@
       <file leaf-file-name="UnitTestApp.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Application/UnitTest/UnitTestApp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
-              <caret line="12" column="8" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
+            <state relative-caret-position="230">
+              <caret line="10" column="21" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
               <folding>
                 <element signature="e#0#47#0" expanded="true" />
                 <marker date="1508743012366" expanded="true" signature="224:401" ph="..." />
@@ -70,8 +89,8 @@
       <file leaf-file-name="Task.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/Task.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="446">
-              <caret line="138" column="35" selection-start-line="138" selection-start-column="35" selection-end-line="138" selection-end-column="35" />
+            <state relative-caret-position="-939">
+              <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -83,48 +102,38 @@
         <entry file="file://$PROJECT_DIR$/python/IApplication/JunoApp.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="828">
-              <caret line="38" column="43" selection-start-line="38" selection-start-column="43" selection-end-line="38" selection-end-column="43" />
+              <caret line="39" column="43" selection-start-line="39" selection-start-column="43" selection-end-line="39" selection-end-column="43" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="config.ini" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Application/UnitTest/config.ini">
+      <file leaf-file-name="JobMaster.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="23">
-              <caret line="1" column="36" selection-start-line="1" selection-start-column="36" selection-end-line="1" selection-end-column="36" />
-              <folding />
+            <state relative-caret-position="220">
+              <caret line="182" column="49" selection-start-line="182" selection-start-column="49" selection-end-line="182" selection-end-column="49" />
+              <folding>
+                <element signature="e#5968#7191#0" expanded="false" />
+                <element signature="e#7304#7800#0" expanded="false" />
+                <element signature="e#7877#7923#0" expanded="false" />
+                <element signature="e#8150#8340#0" expanded="false" />
+                <element signature="e#8433#9792#0" expanded="false" />
+                <element signature="e#9886#11944#0" expanded="false" />
+                <element signature="e#12037#13181#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IApplication.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/python/IApplication/IApplication.py">
+      <file leaf-file-name="IScheduler.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/python/IScheduler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="168" column="8" selection-start-line="168" selection-start-column="8" selection-end-line="168" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Process.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="410">
-              <caret line="82" column="36" selection-start-line="82" selection-start-column="36" selection-end-line="82" selection-end-column="36" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Queue.py" pinned="false" current-in-tab="false">
-        <entry file="file://C:/Python27/Lib/Queue.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="106" column="8" selection-start-line="106" selection-start-column="8" selection-end-line="106" selection-end-column="8" />
-              <folding />
+            <state relative-caret-position="272">
+              <caret line="29" column="28" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="28" />
+              <folding>
+                <element signature="e#5891#6562#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -151,11 +160,9 @@
         <option value="$PROJECT_DIR$/../DistJET_v2/python/WorkerAgent.py" />
         <option value="$PROJECT_DIR$/python/Util/HealthDetect.py" />
         <option value="$PROJECT_DIR$/python/WorkerRegistry.py" />
-        <option value="$PROJECT_DIR$/python/Util/Config.py" />
         <option value="$PROJECT_DIR$/python/BaseThread.py" />
         <option value="$PROJECT_DIR$/Application/UnitTest/UTestApp.py" />
         <option value="$PROJECT_DIR$/Application/UnitTest/__init__.py" />
-        <option value="$PROJECT_DIR$/python/IScheduler.py" />
         <option value="$PROJECT_DIR$/Application/UnitTest/App_Module.py" />
         <option value="$PROJECT_DIR$/python/IApplication/IApplication.py" />
         <option value="$PROJECT_DIR$/Application/UnitTest/UnitTestApp.py" />
@@ -169,9 +176,11 @@
         <option value="$PROJECT_DIR$/python/Process/Process.py" />
         <option value="$PROJECT_DIR$/python/IApplication/JunoApp.py" />
         <option value="$PROJECT_DIR$/Application/UnitTest/config.ini" />
-        <option value="$PROJECT_DIR$/python/Task.py" />
         <option value="$PROJECT_DIR$/python/IAppManager.py" />
         <option value="$PROJECT_DIR$/python/WorkerAgent.py" />
+        <option value="$PROJECT_DIR$/python/Task.py" />
+        <option value="$PROJECT_DIR$/python/Util/Config.py" />
+        <option value="$PROJECT_DIR$/python/IScheduler.py" />
       </list>
     </option>
   </component>
@@ -258,6 +267,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="Util" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DistJET_v0.3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DistJET_v0.3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="python" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="Process" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -320,9 +347,9 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/IApplication/JunoApp.py</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/python/Process/Process.py</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/python/Task.py</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/WorkerAgent.py</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
           <option name="myUpdateName" value="Created" />
@@ -818,7 +845,14 @@
       <option name="project" value="LOCAL" />
       <updated>1509095233210</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="add app config, fix juno env bug, add task empty detect log">
+      <created>1509179302429</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1509179302429</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -874,7 +908,8 @@
     <MESSAGE value="add keyInterrupt stop and default config.ini" />
     <MESSAGE value="change communication format" />
     <MESSAGE value="fix task add bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix task add bug" />
+    <MESSAGE value="add app config, fix juno env bug, add task empty detect log" />
+    <option name="LAST_COMMIT_MESSAGE" value="add app config, fix juno env bug, add task empty detect log" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1119,14 +1154,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/Util/Config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="22" column="23" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config.ini">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="161">
@@ -1193,26 +1220,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/IScheduler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="127" column="32" selection-start-line="127" selection-start-column="32" selection-end-line="127" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/python/Process/Parser.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="2" column="9" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="492">
-          <caret line="159" column="24" selection-start-line="159" selection-start-column="24" selection-end-line="159" selection-end-column="24" />
           <folding />
         </state>
       </provider>
@@ -1233,45 +1244,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="410">
-          <caret line="82" column="36" selection-start-line="82" selection-start-column="36" selection-end-line="82" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/python/IApplication/IApplication.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="168" column="8" selection-start-line="168" selection-start-column="8" selection-end-line="168" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../DistJET_v2/Application/TestApp/config.ini">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Application/UnitTest/UnitTestApp.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="12" column="8" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#47#0" expanded="true" />
-            <marker date="1508743012366" expanded="true" signature="224:401" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/python/IApplication/JunoApp.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="828">
-          <caret line="38" column="43" selection-start-line="38" selection-start-column="43" selection-end-line="38" selection-end-column="43" />
           <folding />
         </state>
       </provider>
@@ -1284,31 +1260,103 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/python/IApplication/IApplication.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/UnitTest/UnitTestApp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="10" column="21" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#47#0" expanded="true" />
+            <marker date="1508743012366" expanded="true" signature="224:401" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/IApplication/JunoApp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="828">
+          <caret line="39" column="43" selection-start-line="39" selection-start-column="43" selection-end-line="39" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2695">
+          <caret line="83" column="30" selection-start-line="83" selection-start-column="30" selection-end-line="83" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/python/Task.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="446">
-          <caret line="138" column="35" selection-start-line="138" selection-start-column="35" selection-end-line="138" selection-end-column="35" />
+        <state relative-caret-position="-939">
+          <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="802">
+          <caret line="579" column="38" selection-start-line="579" selection-start-column="38" selection-end-line="579" selection-end-column="38" />
+          <folding>
+            <element signature="e#860#5937#0" expanded="false" />
+            <element signature="e#26145#27156#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/Util/Config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="736">
+          <caret line="35" column="26" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="182" column="49" selection-start-line="182" selection-start-column="49" selection-end-line="182" selection-end-column="49" />
+          <folding>
+            <element signature="e#5968#7191#0" expanded="false" />
+            <element signature="e#7304#7800#0" expanded="false" />
+            <element signature="e#7877#7923#0" expanded="false" />
+            <element signature="e#8150#8340#0" expanded="false" />
+            <element signature="e#8433#9792#0" expanded="false" />
+            <element signature="e#9886#11944#0" expanded="false" />
+            <element signature="e#12037#13181#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/python/IAppManager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="137" column="73" selection-start-line="137" selection-start-column="73" selection-end-line="137" selection-end-column="73" />
+        <state relative-caret-position="1573">
+          <caret line="136" column="42" selection-start-line="136" selection-start-column="42" selection-end-line="136" selection-end-column="42" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
+    <entry file="file://$PROJECT_DIR$/python/IScheduler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="433">
-          <caret line="517" column="104" selection-start-line="517" selection-start-column="104" selection-end-line="517" selection-end-column="104" />
-          <folding />
+        <state relative-caret-position="272">
+          <caret line="29" column="28" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="28" />
+          <folding>
+            <element signature="e#5891#6562#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -86,7 +86,7 @@ class IScheduler:
                     break
         return flag
 
-    def task_failed(self, wid, tid, time_start, time_finish, error):
+    def task_failed(self, wid, task):
         """
         called when tasks completed with failure
         :param wid: worker id
@@ -232,7 +232,7 @@ class SimpleTaskScheduler(IScheduler):
             self.scheduled_task_list[wid].remove(tid)
         scheduler_log.info('[Scheduler] Task %s complete' % tid)
         scheduler_log.debug('[Scheduler] Task %s complete, remove form scheduled_task_list, now = %s' % (tid, self.scheduled_task_list))
-
+        self.completed_queue.put(task)
         # update chain task
         if isinstance(task,Task.ChainTask):
             for child_id in task.get_child_list():
@@ -241,6 +241,20 @@ class SimpleTaskScheduler(IScheduler):
                 if child.father_len == 0:
                     self.task_todo_queue.put(child)
                     scheduler_log.debug('[Scheduler] ChainTask %s add to todo list'%child.tid)
+
+    def task_failed(self, wid, task):
+        wid = int(wid)
+        tid = task.tid
+        if tid in self.scheduled_task_list[wid]:
+            self.scheduled_task_list[wid].remove(tid)
+        scheduler_log.info('[Scheduler] Task %s failed, errmsg=%s'%(tid,task.history[-1].error))
+        attempt = self.master.cfg.getPolicyattr('TASK_ATTEMPT_TIME')
+        if task.attemptime < attempt:
+            scheduler_log.info('[Scheduler] Redo Task %s'%tid)
+            self.task_todo_queue.put(task)
+        else:
+            scheduler_log.info('[Scheduler] Task %s execute times is limited, ignore'%tid)
+            self.completed_queue.put(task)
 
     def worker_initialized(self, wid):
         entry = self.worker_registry.get_entry(wid)
