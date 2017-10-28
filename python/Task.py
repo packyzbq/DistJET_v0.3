@@ -137,15 +137,16 @@ class Task:
             comm = self.boot+' '+self.data
             if self.args:
                 comm+=' '+self.args
+            comm_list.append(comm)
         elif type(self.data) == types.DictType:
             for k, data in self.data.items():
                 if self.boot[k]:
                     comm = self.boot[k]+' '+data
                     if self.args[k]:
                         comm+= ' '+self.args[k]
+                    comm_list.append(comm)
                 else:
                     log.error('[Task] Gen Command Fail, cannot find boot script <%d> for data <%s>'%k,data)
-                comm_list.append(comm)
                 comm=None
         else:
             log.error('[Task] Cannot recognize the boot<%s> and data<%s>'%(self.boot,self.data))

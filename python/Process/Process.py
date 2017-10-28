@@ -171,7 +171,7 @@ class Process_withENV(threading.Thread):
                         if not data:
                             break
                         st = data.split("\n")
-                        if "recode" in st[-2]:
+                        if len(st) >= 2 and "recode" in st[-2]:
                             self.end = time.time()
                             for line in st[:-2]:
                                 self.logFile.write(line)
