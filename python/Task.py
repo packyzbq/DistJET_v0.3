@@ -137,7 +137,7 @@ class Task:
             comm = self.boot+' '+self.data
             if self.args:
                 comm+=' '+self.args
-        elif type(data) == types.DictType:
+        elif type(self.data) == types.DictType:
             for k, data in self.data.items():
                 if self.boot[k]:
                     comm = self.boot[k]+' '+data

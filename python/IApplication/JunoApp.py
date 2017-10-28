@@ -31,7 +31,11 @@ class JunoApp(IApplication):
 
     def _findJunoTop(self):
         os.chdir(junodir)
-        output = os.popen('ls -rt *Release|tail -1')
-        return junodir+'/'+output.read()[:-1]
+        output = os.popen('ls -rt *Release|tail -n 4')
+        output = output.split('\n')
+        output.reverse()
+        for basename in output:
+            if 'branch' not in basename:
+                return junodir+'/'+basename
 
 

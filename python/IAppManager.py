@@ -135,6 +135,7 @@ class SimpleAppManager(IAppManager):
                 task.initial(app.app_boot[k], None if not app.args.has_key(k) else app.args[k], data_value, app.res_dir)
             # self.task_queue.put(task)
                 task_list[task.tid] = task
+                appmgr_log.debug('[AppMgr] Create Task: %s'%task.toDict())
         if len(task_list) == 0 and len(data) == 0:
             appmgr_log.error('[AppMgr]: Create 0 task, check app split() method')
             return None

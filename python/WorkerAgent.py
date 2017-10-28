@@ -512,7 +512,10 @@ class Worker(BaseThread):
         self.workeragent.set_status(self.id, self.status)
         comm_list = task.genCommand(self.log)
         self.log.debug('[Worker_%d] Worker add task script:%s'%(self.id,comm_list))
-        self.process.set_exe(comm_list)
+        if len(comm_list) != 0:
+            self.process.set_exe(comm_list)
+        else:
+            self.log.error('[Worker_%d] Task is empty, cannot execute. Task=<%s>'%(self.id,task.toDict()))
 
     def finalize(self, fin_task):
         self.log.debug('[Worker_%d] Ready to finalize'%self.id)
