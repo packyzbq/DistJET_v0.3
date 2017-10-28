@@ -493,7 +493,7 @@ class Worker(BaseThread):
             #TODO
             pass
         else:
-            self.process = Process_withENV(init_task.boot,self.proc_log,hook=self.task_done,timeout=10)
+            self.process = Process_withENV(init_task.boot,self.proc_log, self.log,hook=self.task_done,timeout=10)
             ret = self.process.initialize()
             if ret == 0:
                 self.initialized = True
@@ -511,6 +511,7 @@ class Worker(BaseThread):
         self.status = WorkerStatus.RUNNING
         self.workeragent.set_status(self.id, self.status)
         comm_list = task.genCommand(self.log)
+        self.log.debug('[Worker_%d] Worker add task script:%s'%(self.id,comm_list))
         self.process.set_exe(comm_list)
 
     def finalize(self, fin_task):

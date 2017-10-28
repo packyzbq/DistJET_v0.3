@@ -1,4 +1,5 @@
 import time
+import types
 
 class TaskStatus:
     """
@@ -132,15 +133,22 @@ class Task:
     def genCommand(self,log):
         comm_list=[]
         comm=None
-        for k, data in self.data:
-            if self.boot[k]:
-                comm = self.boot[k]+' '+data
-                if self.args[k]:
-                    comm+= ' '+self.args[k]
-            else:
-                log.error('[Task] Gen Command Fail, cannot find boot script <%d> for data <%s>'%k,data)
-            comm_list.append(comm)
-            comm=None
+        if type(self.data) == types.StringType:
+            comm = self.boot+' '+self.data
+            if self.args:
+                comm+=' '+self.args
+        elif type(data) == types.DictType:
+            for k, data in self.data.items():
+                if self.boot[k]:
+                    comm = self.boot[k]+' '+data
+                    if self.args[k]:
+                        comm+= ' '+self.args[k]
+                else:
+                    log.error('[Task] Gen Command Fail, cannot find boot script <%d> for data <%s>'%k,data)
+                comm_list.append(comm)
+                comm=None
+        else:
+            log.error('[Task] Cannot recognize the boot<%s> and data<%s>'%(self.boot,self.data))
         return comm_list
 
 

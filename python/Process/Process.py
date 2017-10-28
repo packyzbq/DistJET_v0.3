@@ -27,7 +27,7 @@ class Process_withENV(threading.Thread):
     """
     start process with setup env,
     """
-    def __init__(self,initial,logfile, shell=True, timeout=0, ignoreFaile=False, hook=None):
+    def __init__(self,initial,logfile, WorkerLog,shell=True, timeout=0,ignoreFaile=False, hook=None):
         """
         :param initial: the command of setup
         :param logfile:  open file where exec_log write
@@ -44,6 +44,7 @@ class Process_withENV(threading.Thread):
         self.exec_queue_lock = threading.RLock()
         self.executable = Queue.Queue()
 
+        self.WorkerLog = WorkerLog
         self.hook = hook
         self.logFile = logfile
         self.initial = []
@@ -82,7 +83,7 @@ class Process_withENV(threading.Thread):
                 if not comm.endswith('\n'):
                     comm+='\n'
                 self.executable.put(comm)
-                #print "<process> add command %s"%command_list
+                self.WorkerLog.debug("<process> add command %s"%command_list)
                # if comm != 'exit':
                #     self.executable.put('echo "recode:$?"\n')
         finally:
@@ -98,13 +99,13 @@ class Process_withENV(threading.Thread):
     def initialize(self):
         """
         setup env for process
-        :return: -1 no process; -2 setup timeout; 0 success;
+        :return: -1 no process; -2 setup timeout; 0 success;1 other error
         """
         if self.process is None:
             return -1
         if self.initial is None:
             return 0
-        #print "@init: initial comm = %s"%self.initial
+        self.WorkerLog.debug("<process>@init: initial comm = %s"%self.initial)
         for comm in self.initial:
             if comm[-1] != '\n':
                 comm+='\n'
@@ -124,10 +125,9 @@ class Process_withENV(threading.Thread):
                     return int(recode)
                 else:
                     self.logFile.write('[Setup_INFO] %s'%data)
-
                     self.logFile.flush()
             else:
-                return 0
+                return 1
 
     def finalize_and_cleanup(self, command):
         if type(command) == types.ListType:
