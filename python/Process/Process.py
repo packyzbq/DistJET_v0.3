@@ -130,8 +130,13 @@ class Process_withENV(threading.Thread):
                 return 1
 
     def finalize_and_cleanup(self, command):
-        if type(command) == types.ListType:
-            self.set_exe(command)
+        if command:
+            if type(command) == types.ListType:
+                self.set_exe(command)
+            elif type(command) == types.StringType:
+                self.set_exe([command])
+            else:
+                self.logFile.write('[Uninstall_INFO] Cannot recognize command %s, skip it\n'%command)if type(command) == types.ListType:
         self.set_exe(["exit"])
 
     def run(self):
@@ -157,6 +162,7 @@ class Process_withENV(threading.Thread):
                             # No response
                             self.status = status.ANR
                             self.logFile.write('[Proc] Task no response, ready to kill')
+                            self.end = time.time()
                             if self.hook and callable(self.hook):
                                 self.hook(self.status,self.recode, self.start_time, self.end)
                             self._kill_task()
@@ -178,7 +184,7 @@ class Process_withENV(threading.Thread):
                                 self.logFile.flush()
                             self.recode = st[-2][-1]
                             self.logFile.write("\nreturn code = %s"%self.recode)
-                            self.logFile.write("\nstart time = %s \nend time = %s"%(time.asctime(time.localtime(self.start_time)), time.asctime(time.localtime(self.end))))
+                            self.logFile.write("\nstart time = %s \nend time = %s\n\n"%(time.asctime(time.localtime(self.start_time)), time.asctime(time.localtime(self.end))))
                             self.logFile.flush()
                             if int(self.recode) == 0:
                                 self.status = status.SUCCESS
@@ -188,6 +194,7 @@ class Process_withENV(threading.Thread):
                         elif (not self.ignoreFail) and (self.logParser and (not self._parseLog(data))):
                             self.status = status.FAIL
                             self.recode = -1
+                            self.end = time.time()
                             if self.hook and callable(self.hook):
                                 self.hook(self.status, self.recode, self.start_time, self.end)
                             #self._kill_task()

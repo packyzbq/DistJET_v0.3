@@ -214,7 +214,11 @@ class WorkerAgent:
                     msg = self.recv_buff.get()
                     if msg.tag == -1:
                         continue
-                    recv_dict = Package.unpack_obj(Package.unpack_from_json(msg.sbuf)['dict'])
+                    message = msg.sbuf[0:msg.size]
+                    try:
+                        recv_dict = Package.unpack_obj(Package.unpack_from_json(message)['dict'])
+                    except:
+                        wlog.error('[WorkerAgent] Error occurs when parse msg, <%s>'%traceback.format_exc())
                     for k,v in recv_dict.items():
                         # registery info v={wid:val,init:[TaskObj], appid:v, wmp:worker_module_path}
                         if int(k) == Tags.MPI_REGISTY_ACK:
@@ -409,7 +413,7 @@ class WorkerAgent:
     def finalize_done(self,wid,retcode, errmsg=None):
         if retcode != 0:
             self.worker_status[wid] = WorkerStatus.FINALIZE_FAIL
-            wlog.error('[Error] Worker %s initialization error, error msg = %s' % (wid, errmsg))
+            wlog.error('[Error] Worker %s finalize error, error msg = %s' % (wid, errmsg))
         else:
             self.worker_status[wid] = WorkerStatus.FINALIZED
             self.remove_worker(wid)
@@ -535,6 +539,7 @@ class Worker(BaseThread):
         self.cond.release()
 
     def task_done(self, stu, retcode, start_time, end_time):
+        self.log.info('[Worker_%d] Task %s finish, status=%s'%(self.id, str(self.running_task.tid),status.describe(stu)))
         if status == status.SUCCESS:
             self.running_task.complete(start_time,end_time)
         else:

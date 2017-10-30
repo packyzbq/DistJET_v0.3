@@ -193,9 +193,11 @@ class SimpleTaskScheduler(IScheduler):
         if self.task_todo_queue.empty():
             # pull idle task back from worker and assign to other worker
             # try pull back task
-            for wid, worker_task_list in self.scheduled_task_list.items():
-                while len(worker_task_list) > self.worker_registry.get_capacity(wid) :
-                    flag, tmptask = self.master.try_pullback(wid,worker_task_list[-1])
+            for workerid, worker_task_list in self.scheduled_task_list.items():
+                if wid == workerid:
+                    continue
+                while len(worker_task_list) > self.worker_registry.get_capacity(workerid) :
+                    flag, tmptask = self.master.try_pullback(workerid,worker_task_list[-1])
                     if flag:
                         worker_task_list.pop()
                         break
@@ -209,8 +211,9 @@ class SimpleTaskScheduler(IScheduler):
             # assign 1 task once
             if not self.task_todo_queue.empty():
                 tid = self.task_todo_queue.get()
-                self.get_task(tid).assign(wid)
-                task_list.append(self.get_task(tid))
+                task = self.get_task(tid)
+                task.assign(wid)
+                task_list.append(task)
                 self.scheduled_task_list[wid].append(tid)
             # assign tasks depends on the capacity of task
             #while room >= 1 and not self.task_todo_queue.empty():
@@ -251,7 +254,7 @@ class SimpleTaskScheduler(IScheduler):
         attempt = self.master.cfg.getPolicyattr('TASK_ATTEMPT_TIME')
         if task.attemptime < attempt:
             scheduler_log.info('[Scheduler] Redo Task %s'%tid)
-            self.task_todo_queue.put(task)
+            self.task_todo_queue.put(task.tid)
         else:
             scheduler_log.info('[Scheduler] Task %s execute times is limited, ignore'%tid)
             self.completed_queue.put(task)

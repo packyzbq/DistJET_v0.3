@@ -33,7 +33,7 @@ class Config(object):
         'LOST_WORKER_TIMEOUT': 60,
         'IDLE_WORKER_TIMEOUT': 0,
         'CONTROL_DELAY': 10,
-        'TASK_ATTEMPT_TIME': 2,
+        'TASK_ATTEMPT_TIME': 1,
         'INITIAL_TRY_TIME': 3,
         'FIN_TRY_TIME': 3,
         'WORKER_SYNC_QUIT': True

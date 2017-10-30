@@ -35,10 +35,10 @@ class UnitTestApp(JunoApp):
         for task in tasklist.values():
             with open(self.res_dir+'/summary.log','a+') as resfile:
                 if task.status == TaskStatus.COMPLETED:
-                    resfile.writelines(task.tid+' '+task.data+'  SUCCESS\n')
+                    resfile.writelines(str(task.tid)+' '+task.data+'  SUCCESS\n')
                     resfile.flush()
                 else:
-                    resfile.writelines(task.tid+' '+task.data+'  SUCCESS\n')
+                    resfile.writelines(str(task.tid)+' '+task.data+'  SUCCESS\n')
 
 
     def analyze_log(self,logname):
