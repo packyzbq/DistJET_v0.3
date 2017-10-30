@@ -263,6 +263,7 @@ class WorkerAgent:
                                 self.appid = v['appid']
                                 self.tmpLock.acquire()
                                 self.iniExecutor = v['init'] # pack init command into one task obj
+                                wlog.debug('[Agent] init_task:%s, boot=%s'%(self.iniExecutor,self.iniExecutor.boot))
                                 self.tmpLock.release()
 
                                 # notify worker initialize
@@ -424,7 +425,7 @@ class WorkerAgent:
         for worker in self.worker_list.values():
             rtask_list[worker.id]=[]
             if worker.running_task is not None:
-                rtask_list[worker.id].append(worker.running_task)
+                rtask_list[worker.id].append(worker.running_task.tid)
         wlog.debug('[Agent] Running task = %s'%rtask_list)
         return rtask_list
 
@@ -545,10 +546,10 @@ class Worker(BaseThread):
         else:
             self.running_task.fail(start_time,end_time,status.describe(stu))
         self.finish_task = self.running_task
-        if self.status == WorkerStatus.IDLE:
-            self.cond.acquire()
-            self.cond.notify()
-            self.cond.release()
+        #if self.status == WorkerStatus.IDLE:
+        self.cond.acquire()
+        self.cond.notify()
+        self.cond.release()
 
 
     def run(self):
@@ -558,9 +559,9 @@ class Worker(BaseThread):
                 self.cond.wait()
                 self.cond.release()
             if not self.initialized:
-                print "<worker_%d> setup process"%self.id
+                #print "<worker_%d> setup process"%self.id
                 ret = self.setup(self.workeragent.iniExecutor)
-                print "<worker_%d> self.process =%s"%(self.id,self.process is None)
+                #print "<worker_%d> self.process =%s"%(self.id,self.process is None)
                 self.workeragent.setup_done(self.id,ret)
                 if ret != 0:
                     continue

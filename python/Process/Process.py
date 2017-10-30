@@ -27,7 +27,7 @@ class Process_withENV(threading.Thread):
     """
     start process with setup env,
     """
-    def __init__(self,initial,logfile, WorkerLog ,shell=True, timeout=0,ignoreFaile=False, hook=None):
+    def __init__(self,initial,logfile, WorkerLog ,shell=True, timeout=None,ignoreFaile=False, hook=None):
         """
         :param initial: the command of setup
         :param logfile:  open file where exec_log write
@@ -55,7 +55,7 @@ class Process_withENV(threading.Thread):
 
         self.stdout = subprocess.PIPE
         self.stdin = subprocess.PIPE
-        #print "<before create process>"
+        print "<init=%s>"%self.initial
         self.process = subprocess.Popen(['bash'], stdin=self.stdin, stdout=self.stdout, stderr=subprocess.STDOUT,preexec_fn=os.setsid)
         self.pid = self.process.pid
 
@@ -147,7 +147,7 @@ class Process_withENV(threading.Thread):
                 if not self.executable.empty():
                     script = self.executable.get()
                     self.exec_queue_lock.release()
-                    #print "<process> get script=%s"%script
+                    print "<process> get script=%s"%script
                     if script == 'exit':
                         self.WorkerLog.debug("[Proc] Ready to exit")
                         break
@@ -176,6 +176,7 @@ class Process_withENV(threading.Thread):
                             break
                         data = os.read(self.process.stdout.fileno(),1024)
                         if not data:
+                            print "<proc> No data output ,break"
                             break
                         st = data.split("\n")
                         if len(st) >= 2 and "recode" in st[-2]:
@@ -246,7 +247,7 @@ class Process_withENV(threading.Thread):
         self.process.terminate()
         self.process.wait()
 
-def hook(status, recode):
+def hook(status, recode, start_time, end_time):
     print 'hook method called, status= %s, recode=%s'%(str(status),str(recode))
 
 def add(proc,comm):
@@ -256,10 +257,12 @@ def add(proc,comm):
         time.sleep(2)
 
 if __name__ == '__main__':
-    comm = ['echo $HOME\n','echo "hello world"\n','python ./wait.py\n','exit']
+    comm = ['$JUNOTESTROOT/python/JunoTest/junotest UnitTest Tutorial\n','$JUNOTESTROOT/python/JunoTest/junotest UnitTest JunoTest\n','$JUNOTESTROOT/python/JunoTest/junotest UnitTest Cf252\n','exit']
     setup = 'source /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre2/setup.sh'
+    import logging
+    log = logging.getLogger('test.log')
     with open('output.txt','w+') as output:
-        proc = Process_withENV(setup,output,timeout=5,hook=hook)
+        proc = Process_withENV(setup,output,log,hook=hook)
         print "@proc setup recode=%d"%proc.initialize()
         thread = threading.Thread(target=add,args=[proc,comm])
         thread.start()
