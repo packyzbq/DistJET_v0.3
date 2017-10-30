@@ -27,7 +27,7 @@ class Process_withENV(threading.Thread):
     """
     start process with setup env,
     """
-    def __init__(self,initial,logfile, WorkerLog,shell=True, timeout=0,ignoreFaile=False, hook=None):
+    def __init__(self,initial,logfile, WorkerLog ,shell=True, timeout=0,ignoreFaile=False, hook=None):
         """
         :param initial: the command of setup
         :param logfile:  open file where exec_log write
@@ -136,7 +136,7 @@ class Process_withENV(threading.Thread):
             elif type(command) == types.StringType:
                 self.set_exe([command])
             else:
-                self.logFile.write('[Uninstall_INFO] Cannot recognize command %s, skip it\n'%command)if type(command) == types.ListType:
+                self.logFile.write('[Uninstall_INFO] Cannot recognize command %s, skip it\n'%command)
         self.set_exe(["exit"])
 
     def run(self):
@@ -149,6 +149,7 @@ class Process_withENV(threading.Thread):
                     self.exec_queue_lock.release()
                     #print "<process> get script=%s"%script
                     if script == 'exit':
+                        self.WorkerLog.debug("[Proc] Ready to exit")
                         break
                     if "recode" not in script:
                         self.start_time = time.time()
@@ -241,6 +242,7 @@ class Process_withENV(threading.Thread):
         return result
 
     def _burnProcess(self):
+        self.WorkerLog.debug('[Proc] Terminate Process....')
         self.process.terminate()
         self.process.wait()
 

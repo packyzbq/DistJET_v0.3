@@ -545,9 +545,10 @@ class Worker(BaseThread):
         else:
             self.running_task.fail(start_time,end_time,status.describe(stu))
         self.finish_task = self.running_task
-        self.cond.acquire()
-        self.cond.notify()
-        self.cond.release()
+        if self.status == WorkerStatus.IDLE:
+            self.cond.acquire()
+            self.cond.notify()
+            self.cond.release()
 
 
     def run(self):
