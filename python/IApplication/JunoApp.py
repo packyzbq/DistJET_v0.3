@@ -20,10 +20,10 @@ class JunoApp(IApplication):
         self.log.info('[JunoAPP] Set JunoTop = %s'%self.JUNOTOP)
 
     def setup(self):
-        if self.JUNOTOP and os.path.exists(self.JUNOTOP):
-            return ['source %s'%self.JUNOTOP]
-        else:
-            self._findJunoTop()
+        if not self.JUNOTOP or os.path.exists(self.JUNOTOP):
+            self.log.info('[JunoAPP] Cannot find JUNOTOP:%s ,use default'%self.JUNOTOP)
+            self.JUNOTOP = self._findJunoTop()
+        return ['source %s'%self.JUNOTOP]
 
     def _setJunoTop(self,path):
         if os.path.exists(path):

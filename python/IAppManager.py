@@ -147,7 +147,7 @@ class SimpleAppManager(IAppManager):
             appid=self.current_app_id
         initask = Task.Task(0)
         initask.boot = self.applist[appid].setup()
-        appmgr_log.debug('[AppMgr] Application:%s create setup command'%self.applist[appid].name)
+        appmgr_log.debug('[AppMgr] Application:%s create setup command: %s'%(self.applist[appid].name,initask.boot))
         return initask
     def uninstall_app(self,appid=None):
         if not appid:

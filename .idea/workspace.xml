@@ -3,7 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/IAppManager.py" afterPath="$PROJECT_DIR$/python/IAppManager.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/IApplication/JunoApp.py" afterPath="$PROJECT_DIR$/python/IApplication/JunoApp.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/Process/Process.py" afterPath="$PROJECT_DIR$/python/Process/Process.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/Task.py" afterPath="$PROJECT_DIR$/python/Task.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/WorkerAgent.py" afterPath="$PROJECT_DIR$/python/WorkerAgent.py" />
     </list>
     <ignored path="DistJET_v0.3.iws" />
@@ -29,44 +32,39 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="WorkerAgent.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="WorkerAgent.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="533" column="19" selection-start-line="533" selection-start-column="19" selection-end-line="533" selection-end-column="19" />
+            <state relative-caret-position="410">
+              <caret line="508" column="58" selection-start-line="508" selection-start-column="58" selection-end-line="508" selection-end-column="58" />
               <folding>
-                <element signature="e#26534#27545#0" expanded="false" />
+                <element signature="e#26696#27707#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="WorkerRegistry.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/python/WorkerRegistry.py">
+      <file leaf-file-name="logger.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/python/Util/logger.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1219">
-              <caret line="32" column="56" selection-start-line="32" selection-start-column="56" selection-end-line="32" selection-end-column="56" />
-              <folding />
+            <state relative-caret-position="207">
+              <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="44" />
+              <folding>
+                <element signature="e#0#14#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Process.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Process.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1210">
-              <caret line="61" column="69" selection-start-line="61" selection-start-column="69" selection-end-line="61" selection-end-column="69" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="subprocess.py" pinned="false" current-in-tab="false">
-        <entry file="file://C:/Python27/Lib/subprocess.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="1086" column="12" selection-start-line="1086" selection-start-column="12" selection-end-line="1086" selection-end-column="12" />
-              <folding />
+            <state relative-caret-position="1350">
+              <caret line="97" column="43" selection-start-line="97" selection-start-column="43" selection-end-line="97" selection-end-column="43" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+                <marker date="1509355947698" expanded="false" signature="3567:4026" ph="'''...'''" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -87,8 +85,8 @@
       <file leaf-file-name="IAppManager.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/IAppManager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3082">
-              <caret line="136" column="42" selection-start-line="136" selection-start-column="42" selection-end-line="136" selection-end-column="42" />
+            <state relative-caret-position="257">
+              <caret line="135" column="39" selection-start-line="135" selection-start-column="39" selection-end-line="135" selection-end-column="39" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -99,8 +97,8 @@
       <file leaf-file-name="Task.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/Task.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1541">
-              <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
+            <state relative-caret-position="630">
+              <caret line="153" column="31" selection-start-line="153" selection-start-column="31" selection-end-line="153" selection-end-column="31" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -111,8 +109,8 @@
       <file leaf-file-name="JunoApp.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/IApplication/JunoApp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="851">
-              <caret line="39" column="43" selection-start-line="39" selection-start-column="43" selection-end-line="39" selection-end-column="43" />
+            <state relative-caret-position="437">
+              <caret line="21" column="11" selection-start-line="21" selection-start-column="11" selection-end-line="21" selection-end-column="11" />
               <folding />
             </state>
           </provider>
@@ -121,8 +119,8 @@
       <file leaf-file-name="JobMaster.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3910">
-              <caret line="221" column="63" selection-start-line="221" selection-start-column="63" selection-end-line="221" selection-end-column="63" />
+            <state relative-caret-position="500">
+              <caret line="131" column="58" selection-start-line="131" selection-start-column="58" selection-end-line="131" selection-end-column="58" />
               <folding>
                 <element signature="e#5968#7191#0" expanded="false" />
                 <element signature="e#7304#7800#0" expanded="false" />
@@ -138,53 +136,9 @@
       <file leaf-file-name="IScheduler.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/IScheduler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5727">
-              <caret line="259" column="32" selection-start-line="259" selection-start-column="17" selection-end-line="259" selection-end-column="32" />
-              <folding>
-                <marker date="1509334736604" expanded="true" signature="187:5513" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="249:1061" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="631:815" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="1088:1260" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="1097:1247" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-                <marker date="1509334736604" expanded="true" signature="1280:1334" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="1289:1321" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-                <marker date="1509334736604" expanded="true" signature="1359:1455" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="1368:1442" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-                <marker date="1509334736604" expanded="true" signature="1500:1648" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-                <marker date="1509334736604" expanded="true" signature="1733:1853" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="1742:1806" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-                <marker date="1509334736604" expanded="true" signature="1883:2246" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="1892:2054" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-                <marker date="1509334736604" expanded="true" signature="2063:2198" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="2290:2690" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="2377:2670" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="2456:2670" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="2514:2670" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="2729:3102" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="2738:3068" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-                <marker date="1509334736604" expanded="true" signature="3144:3368" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="3153:3334" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-                <marker date="1509334736604" expanded="true" signature="3397:3432" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="3470:3623" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="3479:3588" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-                <marker date="1509334736604" expanded="true" signature="3652:3777" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="3661:3738" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-                <marker date="1509334736604" expanded="true" signature="3810:3936" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="3819:3893" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-                <marker date="1509334736604" expanded="true" signature="4031:4331" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="4358:4655" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="4695:4969" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="4704:4935" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-                <marker date="1509334736604" expanded="true" signature="5003:5279" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="5012:5245" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-                <marker date="1509334736604" expanded="true" signature="5327:5513" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="5336:5499" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-                <marker date="1509334736604" expanded="true" signature="5619:10145" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="5651:6002" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="5878:6002" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="5891:5984" ph="..." />
-                <marker date="1509334736604" expanded="true" signature="8854:8855" ph="..." />
-              </folding>
+            <state relative-caret-position="732">
+              <caret line="127" column="32" selection-start-line="127" selection-start-column="32" selection-end-line="127" selection-end-column="32" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -224,12 +178,12 @@
         <option value="$PROJECT_DIR$/bin/master.py" />
         <option value="$PROJECT_DIR$/python/Util/Package.py" />
         <option value="$PROJECT_DIR$/python/JobMaster.py" />
-        <option value="$PROJECT_DIR$/python/IApplication/JunoApp.py" />
         <option value="$PROJECT_DIR$/Application/UnitTest/config.ini" />
-        <option value="$PROJECT_DIR$/python/IAppManager.py" />
-        <option value="$PROJECT_DIR$/python/Task.py" />
         <option value="$PROJECT_DIR$/python/Util/Config.py" />
         <option value="$PROJECT_DIR$/python/IScheduler.py" />
+        <option value="$PROJECT_DIR$/python/IApplication/JunoApp.py" />
+        <option value="$PROJECT_DIR$/python/IAppManager.py" />
+        <option value="$PROJECT_DIR$/python/Task.py" />
         <option value="$PROJECT_DIR$/python/Process/Process.py" />
         <option value="$PROJECT_DIR$/python/WorkerAgent.py" />
       </list>
@@ -398,11 +352,7 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/Application/UnitTest/App_Module.py</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/Application/UnitTest/UnitTestApp.py</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/IScheduler.py</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/python/Process/Process.py</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/Util/Config.py</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/python/WorkerAgent.py</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
@@ -913,20 +863,27 @@
       <option name="project" value="LOCAL" />
       <updated>1509188911574</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="add proc debug log">
+      <created>1509344552471</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1509344552471</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13143776" sideWeight="0.5321308" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13251074" sideWeight="0.5321308" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27733934" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2356257" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13143776" sideWeight="0.46786922" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13251074" sideWeight="0.46786922" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -989,7 +946,8 @@
     <MESSAGE value="fix task add bug" />
     <MESSAGE value="add app config, fix juno env bug, add task empty detect log" />
     <MESSAGE value="add task fail function" />
-    <option name="LAST_COMMIT_MESSAGE" value="add task fail function" />
+    <MESSAGE value="add proc debug log" />
+    <option name="LAST_COMMIT_MESSAGE" value="add proc debug log" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1009,13 +967,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/python/IApplication/IApplication.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/python/Util/Package.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1280,6 +1231,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="2" column="9" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1309,6 +1261,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="276">
           <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1323,24 +1276,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/IApplication/JunoApp.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="851">
-          <caret line="39" column="43" selection-start-line="39" selection-start-column="43" selection-end-line="39" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/python/Task.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1541">
-          <caret line="68" column="0" selection-start-line="68" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/python/Util/Config.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="736">
@@ -1348,83 +1283,6 @@
           <folding>
             <marker date="1509334736617" expanded="true" signature="376:3494" ph="..." />
             <marker date="1509334736617" expanded="true" signature="687:913" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/python/IAppManager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3082">
-          <caret line="136" column="42" selection-start-line="136" selection-start-column="42" selection-end-line="136" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3910">
-          <caret line="221" column="63" selection-start-line="221" selection-start-column="63" selection-end-line="221" selection-end-column="63" />
-          <folding>
-            <element signature="e#5968#7191#0" expanded="false" />
-            <element signature="e#7304#7800#0" expanded="false" />
-            <element signature="e#7877#7923#0" expanded="false" />
-            <element signature="e#8150#8340#0" expanded="false" />
-            <element signature="e#8433#9792#0" expanded="false" />
-            <element signature="e#12037#13181#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/python/IScheduler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5727">
-          <caret line="259" column="32" selection-start-line="259" selection-start-column="17" selection-end-line="259" selection-end-column="32" />
-          <folding>
-            <marker date="1509334736604" expanded="true" signature="187:5513" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="249:1061" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="631:815" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="1088:1260" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="1097:1247" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1509334736604" expanded="true" signature="1280:1334" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="1289:1321" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1509334736604" expanded="true" signature="1359:1455" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="1368:1442" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1509334736604" expanded="true" signature="1500:1648" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1509334736604" expanded="true" signature="1733:1853" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="1742:1806" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1509334736604" expanded="true" signature="1883:2246" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="1892:2054" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1509334736604" expanded="true" signature="2063:2198" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="2290:2690" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="2377:2670" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="2456:2670" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="2514:2670" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="2729:3102" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="2738:3068" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1509334736604" expanded="true" signature="3144:3368" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="3153:3334" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1509334736604" expanded="true" signature="3397:3432" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="3470:3623" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="3479:3588" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1509334736604" expanded="true" signature="3652:3777" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="3661:3738" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1509334736604" expanded="true" signature="3810:3936" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="3819:3893" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1509334736604" expanded="true" signature="4031:4331" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="4358:4655" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="4695:4969" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="4704:4935" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1509334736604" expanded="true" signature="5003:5279" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="5012:5245" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1509334736604" expanded="true" signature="5327:5513" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="5336:5499" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1509334736604" expanded="true" signature="5619:10145" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="5651:6002" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="5878:6002" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="5891:5984" ph="..." />
-            <marker date="1509334736604" expanded="true" signature="8854:8855" ph="..." />
           </folding>
         </state>
       </provider>
@@ -1445,21 +1303,85 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
+    <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="533" column="19" selection-start-line="533" selection-start-column="19" selection-end-line="533" selection-end-column="19" />
+        <state relative-caret-position="500">
+          <caret line="131" column="58" selection-start-line="131" selection-start-column="58" selection-end-line="131" selection-end-column="58" />
           <folding>
-            <element signature="e#26534#27545#0" expanded="false" />
+            <element signature="e#5968#7191#0" expanded="false" />
+            <element signature="e#7304#7800#0" expanded="false" />
+            <element signature="e#7877#7923#0" expanded="false" />
+            <element signature="e#8150#8340#0" expanded="false" />
+            <element signature="e#8433#9792#0" expanded="false" />
+            <element signature="e#12037#13181#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/IScheduler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="732">
+          <caret line="127" column="32" selection-start-line="127" selection-start-column="32" selection-end-line="127" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/Task.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="153" column="31" selection-start-line="153" selection-start-column="31" selection-end-line="153" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/IApplication/JunoApp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="21" column="11" selection-start-line="21" selection-start-column="11" selection-end-line="21" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/IAppManager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="135" column="39" selection-start-line="135" selection-start-column="39" selection-end-line="135" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/Util/logger.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1210">
-          <caret line="61" column="69" selection-start-line="61" selection-start-column="69" selection-end-line="61" selection-end-column="69" />
-          <folding />
+        <state relative-caret-position="1350">
+          <caret line="97" column="43" selection-start-line="97" selection-start-column="43" selection-end-line="97" selection-end-column="43" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+            <marker date="1509355947698" expanded="false" signature="3567:4026" ph="'''...'''" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="410">
+          <caret line="508" column="58" selection-start-line="508" selection-start-column="58" selection-end-line="508" selection-end-column="58" />
+          <folding>
+            <element signature="e#26696#27707#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

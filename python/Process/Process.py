@@ -1,12 +1,14 @@
 import time
 import types
 import os,sys
+sys.path.append(os.environ['DistJETPATH'])
 import threading
 import select
 import subprocess
 import Queue
 import traceback
 from Parser import Parser
+import python.Util.logger as logger
 
 
 class status:
@@ -22,15 +24,24 @@ class status:
         if status.DES.has_key(stat):
             return status.DES[stat]
 
+class CommandPack:
+    def __init__(self, command, task_log=None, proc_log=None):
+        self.command = []
+        if type(command) == types.ListType:
+            self.command.extend(command)
+        else:
+            self.command.append(command)
+        self.task_log = task_log
+        self.proc_log = proc_log
+
 #FIXME start a sh process, cannot know when the command finished
 class Process_withENV(threading.Thread):
     """
     start process with setup env,
     """
-    def __init__(self,initial,logfile, WorkerLog ,shell=True, timeout=None,ignoreFaile=False, hook=None):
+    def __init__(self,initial,logpath,shell=True, timeout=None,ignoreFaile=False, hook=None):
         """
         :param initial: the command of setup
-        :param logfile:  open file where exec_log write
         :param shell:
         :param timeout: select time out
         :param ignoreFaile:
@@ -44,9 +55,8 @@ class Process_withENV(threading.Thread):
         self.exec_queue_lock = threading.RLock()
         self.executable = Queue.Queue()
 
-        self.WorkerLog = WorkerLog
+        self.log = open(logpath+'/process.log','w+')
         self.hook = hook
-        self.logFile = logfile
         self.initial = []
         if(type(initial) == types.ListType):
             self.initial.extend(initial)
@@ -59,7 +69,9 @@ class Process_withENV(threading.Thread):
         self.process = subprocess.Popen(['bash'], stdin=self.stdin, stdout=self.stdout, stderr=subprocess.STDOUT,preexec_fn=os.setsid)
         self.pid = self.process.pid
 
-        self.logFile.write('@Process: create process for tasks, pid= %d\n' %self.pid)
+        #self.logFile.write('@Process: create process for tasks, pid= %d\n' %self.pid)\
+        self.log.write('@Process: create process for tasks, pid=%d'%self.pid)
+        self.log.flush()
         #print "<after create and write log>"
 
         self.timeout = timeout
@@ -75,8 +87,28 @@ class Process_withENV(threading.Thread):
         self.ignoreFail = False
         self.stop_flag = False
 
-    def set_exe(self,command_list):
-        assert type(command_list) == types.ListType
+    def set_task(self,task, genLog=True):
+        command_list=[]
+        if task:
+            tmp_list, errmsg= task.genCommand()
+            if errmsg:
+                self.log.write(errmsg)
+            command_list = []
+            for comm in tmp_list:
+                if not comm.endswith('\n'):
+                    comm+='\n'
+                command_list.append(comm)
+                if comm != 'exit\n':
+                    command_list.append('echo "recode:$?"\n')
+
+        if genLog:
+            commpack = CommandPack(command_list,task_log=task.res_dir+'/task_'+task.tid+'_log.log')
+        else:
+            commpack = CommandPack(command_list,proc_log=self.log)
+        self.executable.put(commpack)
+        self.log.write('[Proc] Add task command=%s, logfile=%s'%(commpack.command,commpack.task_log+'|'+commpack.proc_log))
+        self.log.flush()
+        '''
         self.exec_queue_lock.acquire()
         try:
             for comm in command_list:
@@ -88,6 +120,7 @@ class Process_withENV(threading.Thread):
                #     self.executable.put('echo "recode:$?"\n')
         finally:
             self.exec_queue_lock.release()
+        '''
 
     def stop(self,force=False):
         self.stop_flag = True
@@ -105,7 +138,8 @@ class Process_withENV(threading.Thread):
             return -1
         if self.initial is None:
             return 0
-        self.WorkerLog.debug("<process>@init: initial comm = %s"%self.initial)
+        self.log.write("<process>@init: initial comm = %s"%self.initial)
+        self.log.flush()
         for comm in self.initial:
             if comm[-1] != '\n':
                 comm+='\n'
@@ -114,8 +148,10 @@ class Process_withENV(threading.Thread):
         while True:
             fs = select.select([self.process.stdout],[],[],10)
             if not fs[0]:
-                self.logFile.write('@Process initial timeout')
-                self.logFile.flush()
+                #self.logFile.write('@Process initial timeout')
+                #self.logFile.flush()
+                self.log.write('[ERROR]@Process initial timeout')
+                self.log.flush()
                 return -2
             if self.process.stdout in fs[0]:
                 data = os.read(self.process.stdout.fileno(), 1024)
@@ -124,20 +160,16 @@ class Process_withENV(threading.Thread):
                     recode = ds[-1].split("recode")[-1][1:]
                     return int(recode)
                 else:
-                    self.logFile.write('[Setup_INFO] %s'%data)
-                    self.logFile.flush()
+                    #self.logFile.write('[Setup_INFO] %s'%data)
+                    #self.logFile.flush()
+                    self.log.write('[Setup_INFO] %s'%data)
+                    self.log.flush()
             else:
                 return 1
 
-    def finalize_and_cleanup(self, command):
-        if command:
-            if type(command) == types.ListType:
-                self.set_exe(command)
-            elif type(command) == types.StringType:
-                self.set_exe([command])
-            else:
-                self.logFile.write('[Uninstall_INFO] Cannot recognize command %s, skip it\n'%command)
-        self.set_exe(["exit"])
+    def finalize_and_cleanup(self, task):
+        task.boot.append('exit')
+        self.set_task(task,genLog=False)
 
     def run(self):
         while not self.stop_flag:
@@ -145,72 +177,85 @@ class Process_withENV(threading.Thread):
                 self.exec_queue_lock.acquire()
                 #print "<process> executable size = %d"%self.executable.qsize()
                 if not self.executable.empty():
-                    script = self.executable.get()
+                    commpack = self.executable.get()
                     self.exec_queue_lock.release()
-                    print "<process> get script=%s"%script
-                    if script == 'exit':
-                        self.WorkerLog.debug("[Proc] Ready to exit")
-                        break
-                    if "recode" not in script:
-                        self.start_time = time.time()
-                        self.logFile.write('\n' + '*' * 20 + ' script "%s" Running log ' % script[:-1] + '*' * 20 + '\n')
-                        self.logFile.flush()
-                    self.process.stdin.write(script)
-                    self.process.stdin.write('echo "recode:$?"\n')
-                    while True:
-                        fs = select.select([self.process.stdout],[],[],self.timeout)
-                        if not fs[0]:
-                            # No response
-                            self.status = status.ANR
-                            self.logFile.write('[Proc] Task no response, ready to kill')
-                            self.end = time.time()
-                            if self.hook and callable(self.hook):
-                                self.hook(self.status,self.recode, self.start_time, self.end)
-                            self._kill_task()
-                            tmp_list=[]
-                            while not self.executable.empty():
-                                tmp_list.append(self.executable.get())
-                            self.process = self._restart()
-                            if tmp_list:
-                                self.set_exe(tmp_list)
+                    for script in commpack.command_list:
+                        print "<process> get script=%s"%script
+                        logfile = None
+                        if commpack.task_log:
+                            logfile = open(commpack.task_log,'w+')
+                        elif commpack.proc_log:
+                            logfile = commpack.proc_log
+
+                        if script == 'exit':
+                            logfile.write("[Proc] Ready to exit")
+                            logfile.flush()
+                            self.stop_flag=True
                             break
-                        data = os.read(self.process.stdout.fileno(),1024)
-                        if not data:
-                            print "<proc> No data output ,break"
-                            break
-                        st = data.split("\n")
-                        if len(st) >= 2 and "recode" in st[-2]:
-                            self.end = time.time()
-                            for line in st[:-2]:
-                                self.logFile.write(line)
-                                self.logFile.flush()
-                            self.recode = st[-2][-1]
-                            self.logFile.write("\nreturn code = %s"%self.recode)
-                            self.logFile.write("\nstart time = %s \nend time = %s\n\n"%(time.asctime(time.localtime(self.start_time)), time.asctime(time.localtime(self.end))))
-                            self.logFile.flush()
-                            if int(self.recode) == 0:
-                                self.status = status.SUCCESS
-                            if self.hook and callable(self.hook):
-                                self.hook(self.status, self.recode, self.start_time, self.end)
-                            break
-                        elif (not self.ignoreFail) and (self.logParser and (not self._parseLog(data))):
-                            self.status = status.FAIL
-                            self.recode = -1
-                            self.end = time.time()
-                            if self.hook and callable(self.hook):
-                                self.hook(self.status, self.recode, self.start_time, self.end)
-                            #self._kill_task()
-                            #self.process = self._restart()
-                            break
-                        else:
-                            self.logFile.write(data)
-                            self.logFile.flush()
+                        if "recode" not in script:
+                            self.start_time = time.time()
+                            logfile.write('\n' + '*' * 20 + ' script "%s" Running log ' % script[:-1] + '*' * 20 + '\n')
+                            logfile.flush()
+                        self.process.stdin.write(script)
+                        self.process.stdin.write('echo "recode:$?"\n')
+                        while True:
+                            fs = select.select([self.process.stdout],[],[],self.timeout)
+                            if not fs[0]:
+                                # No response
+                                self.status = status.ANR
+                                logfile.write('[Proc] Task no response, ready to kill')
+                                logfile.flush()
+                                self.end = time.time()
+                                if self.hook and callable(self.hook):
+                                    self.hook(self.status,self.recode, self.start_time, self.end)
+                                self._kill_task()
+                                #tmp_list=[]
+                                #while not self.executable.empty():
+                                #    tmp_list.append(self.executable.get())
+                                #self.process = self._restart()
+                                #if tmp_list:
+                                #    self.set_exe(tmp_list)
+                                break
+                            data = os.read(self.process.stdout.fileno(),1024)
+                            if not data:
+                                print "<proc> No data output ,break"
+                                break
+                            st = data.split("\n")
+                            if len(st) >= 2 and "recode" in st[-2]:
+                                self.end = time.time()
+                                for line in st[:-2]:
+                                    logfile.write(line)
+                                    logfile.flush()
+                                self.recode = st[-2][-1]
+                                logfile.write("\n\n\nreturn code = %s"%self.recode)
+                                logfile.write("\nstart time = %s \nend time = %s\n\n"%(time.asctime(time.localtime(self.start_time)), time.asctime(time.localtime(self.end))))
+                                logfile.flush()
+                                if int(self.recode) == 0:
+                                    self.status = status.SUCCESS
+                                if self.hook and callable(self.hook):
+                                    self.hook(self.status, self.recode, self.start_time, self.end)
+                                break
+                            elif (not self.ignoreFail) and (self.logParser and (not self._parseLog(data))):
+                                self.status = status.FAIL
+                                self.recode = -1
+                                self.end = time.time()
+                                if self.hook and callable(self.hook):
+                                    self.hook(self.status, self.recode, self.start_time, self.end)
+                                #self._kill_task()
+                                #self.process = self._restart()
+                                break
+                            else:
+                                logfile.write(data)
+                                logfile.flush()
+
+                        if commpack.task_log:
+                            logfile.close()
 
                 else:
                     self.exec_queue_lock.release()
                     time.sleep(1)
             except Exception,e:
-                self.logFile.write('@Process catch error: %s'%e.message)
+                self.log.write('@Process catch error: %s'%e.message)
                 print traceback.format_exc()
 
         self._burnProcess()
@@ -223,18 +268,23 @@ class Process_withENV(threading.Thread):
         import os, signal
         self.process.stdout.flush()
         pgrp = os.getpgid(self.pid)
-        self.logFile.write('[Proc] kill pid=%d\n' % pgrp)
+        #self.logFile.write('[Proc] kill pid=%d\n' % pgrp)
+        self.log.write('[Proc] kill pid=%d\n' % pgrp)
         try:
             os.killpg(pgrp,signal.SIGHUP)
             self.process.wait()
         except:
-            self.logFile.write('[Proc] KILLError: %s'%traceback.format_exc())
+            #self.logFile.write('[Proc] KILLError: %s'%traceback.format_exc())
+            self.log.write('[Error] KILLError: %s'%traceback.format_exc())
+        self.log.flush()
 
     def _restart(self):
         proc = subprocess.Popen(['bash'], shell=self.shell, stdin=self.stdin, stdout=self.stdout, stderr=subprocess.STDOUT,preexec_fn=os.setsid)
         self.pid = proc.pid
-        self.logFile.write('[Proc] Restart a new process,pid=%d'%self.pid)
-        self.logFile.flush()
+        #self.logFile.write('[Proc] Restart a new process,pid=%d'%self.pid)
+        #self.logFile.flush()
+        self.log.write('[Proc] Restart a new process,pid=%d'%self.pid)
+        self.log.flush()
 
         return proc
 
@@ -243,7 +293,9 @@ class Process_withENV(threading.Thread):
         return result
 
     def _burnProcess(self):
-        self.WorkerLog.debug('[Proc] Terminate Process....')
+        #self.WorkerLog.debug('[Proc] Terminate Process....')
+        self.log.write('[Proc] Terminate Process....')
+        self.log.flush()
         self.process.terminate()
         self.process.wait()
 

@@ -130,8 +130,9 @@ class Task:
     def getdata(self):
         return self.data
 
-    def genCommand(self,log):
+    def genCommand(self):
         comm_list=[]
+        errmsg=None
         comm=None
         if type(self.data) == types.StringType:
             comm = self.boot+' '+self.data
@@ -146,11 +147,11 @@ class Task:
                         comm+= ' '+self.args[k]
                     comm_list.append(comm)
                 else:
-                    log.error('[Task] Gen Command Fail, cannot find boot script <%d> for data <%s>'%k,data)
+                    errmsg='[Task] Gen Command Fail, cannot find boot script <%d> for data <%s>'%(k,data)
                 comm=None
         else:
-            log.error('[Task] Cannot recognize the boot<%s> and data<%s>'%(self.boot,self.data))
-        return comm_list
+            errmsg = '[Task] Cannot recognize the boot<%s> and data<%s>'%(self.boot,self.data)
+        return comm_list,errmsg
 
 
 
