@@ -8,6 +8,7 @@ import subprocess
 import Queue
 import traceback
 from Parser import Parser
+from python.Task import Task
 import python.Util.logger as logger
 
 
@@ -26,7 +27,7 @@ class status:
 
 class CommandPack:
     def __init__(self, command, task_log=None, proc_log=None):
-        self.command = []
+        self.command=[]
         if type(command) == types.ListType:
             self.command.extend(command)
         else:
@@ -96,8 +97,6 @@ class Process_withENV(threading.Thread):
                 if not comm.endswith('\n'):
                     comm+='\n'
                 command_list.append(comm)
-            if 'exit\n' not in command_list:
-                command_list.append('echo "recode:$?"\n')
 
         if genLog:
             commpack = CommandPack(command_list,task_log=task.res_dir+'/task_'+str(task.tid)+'_log.log')
@@ -126,6 +125,8 @@ class Process_withENV(threading.Thread):
         if force:
             self._kill_task()
         self.process.wait()
+
+
 
 
     def initialize(self):
@@ -175,20 +176,27 @@ class Process_withENV(threading.Thread):
         self.set_task(task,genLog=False)
 
     def run(self):
+        script_list = []
         while not self.stop_flag:
             try:
                 self.exec_queue_lock.acquire()
                 if not self.executable.empty():
                     commpack = self.executable.get()
                     self.exec_queue_lock.release()
-                    for script in commpack.command:
-                        print "<process> get script=%s"%script
-                        logfile = None
-                        if commpack.task_log:
-                            logfile = open(commpack.task_log,'w+')
-                        elif commpack.proc_log:
-                            logfile = commpack.proc_log
+                    # for one task ,multi script
+                    # get script list from commpack
+                    script_list = commpack.command
+                    logfile = None
+                    if commpack.task_log:
+                        logfile = open(commpack.task_log, 'w+')
+                    elif commpack.proc_log:
+                        logfile = commpack.proc_log
 
+                    index = 0
+                    while len(script_list) != 0:
+                        script = script_list[index]
+                        index+=1
+                        print "<process> get script=%s"%script
                         if script == 'exit':
                             logfile.write("[Proc] Ready to exit")
                             logfile.flush()
@@ -199,7 +207,7 @@ class Process_withENV(threading.Thread):
                             logfile.write('\n' + '*' * 20 + ' script "%s" Running log ' % script[:-1] + '*' * 20 + '\n')
                             logfile.flush()
                         self.process.stdin.write(script)
-                        self.process.stdin.write('echo "recode:$?"\n')
+                        self.process.stdin.write('echo "@recode:$?"\n')
                         while True:
                             fs = select.select([self.process.stdout],[],[],self.timeout)
                             if not fs[0]:
@@ -217,40 +225,50 @@ class Process_withENV(threading.Thread):
                                 #self.process = self._restart()
                                 #if tmp_list:
                                 #    self.set_exe(tmp_list)
+                                script_list=[]
                                 break
                             data = os.read(self.process.stdout.fileno(),1024)
                             if not data:
-                                print "<proc> No data output ,break"
+                                logfile.write("<proc> No data output ,break")
+                                logfile.flush()
+                                script_list = []
                                 break
                             st = data.split("\n")
-                            if len(st) >= 2 and "recode" in st[-2]:
-                                self.end = time.time()
-                                for line in st[:-2]:
+                            #if len(st) >= 2 and "recode" in st[-2]:
+                            fin_flag = False
+                            for line in st:
+                                if "@recode" in st:
+                                    fin_flag = True
+                                    self.end = time.time()
+                                    self.recode = line[line.find("@recode=")+8:]
+                                    logfile.write("\n\n\nreturn code = %s"%self.recode)
+                                    logfile.write("\nstart time = %s \nend time = %s\n\n"%(time.asctime(time.localtime(self.start_time)), time.asctime(time.localtime(self.end))))
+                                    logfile.flush()
+                                    if int(self.recode) == 0:
+                                        self.status = status.SUCCESS
+                                    if self.hook and callable(self.hook):
+                                        self.hook(self.status, self.recode, self.start_time, self.end)
+                                    break
+
+                                elif (not self.ignoreFail) and (self.logParser and (not self._parseLog(line))):
+                                    fin_flag = True
+                                    self.status = status.FAIL
+                                    self.recode = -1
+                                    self.end = time.time()
+                                    if self.hook and callable(self.hook):
+                                        self.hook(self.status, self.recode, self.start_time, self.end)
+                                    #self._kill_task()
+                                    #self.process = self._restart()
+                                    script_list = []
+                                    break
+                                else:
                                     logfile.write(line)
                                     logfile.flush()
-                                self.recode = st[-2][-1]
-                                logfile.write("\n\n\nreturn code = %s"%self.recode)
-                                logfile.write("\nstart time = %s \nend time = %s\n\n"%(time.asctime(time.localtime(self.start_time)), time.asctime(time.localtime(self.end))))
-                                logfile.flush()
-                                if int(self.recode) == 0:
-                                    self.status = status.SUCCESS
-                                if self.hook and callable(self.hook):
-                                    self.hook(self.status, self.recode, self.start_time, self.end)
+                            if fin_flag:
                                 break
-                            elif (not self.ignoreFail) and (self.logParser and (not self._parseLog(data))):
-                                self.status = status.FAIL
-                                self.recode = -1
-                                self.end = time.time()
-                                if self.hook and callable(self.hook):
-                                    self.hook(self.status, self.recode, self.start_time, self.end)
-                                #self._kill_task()
-                                #self.process = self._restart()
-                                break
-                            else:
-                                logfile.write(data)
-                                logfile.flush()
 
                         if commpack.task_log:
+                            logfile.flush()
                             logfile.close()
 
                 else:
@@ -289,6 +307,9 @@ class Process_withENV(threading.Thread):
         self.log.flush()
 
         return proc
+
+    def _cleanup_process(self):
+
 
     def _parseLog(self,data):
         result,self.fatalline = self.logParser.parse(data)

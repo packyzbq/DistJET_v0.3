@@ -533,6 +533,8 @@ class Worker(BaseThread):
             return 0
 
     def terminate(self):
+        self.proc_log.flush()
+        self.proc_log.close()
         self.process.stop(force=True)
         self.stop()
 
