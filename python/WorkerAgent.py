@@ -499,7 +499,9 @@ class Worker(BaseThread):
             pass
         else:
             self.process = Process_withENV(init_task.boot,Config.Config.getCFGattr('Rundir')+'/log',hook=self.task_done)
+            print '<worker has create process>'
             ret = self.process.initialize()
+            print '<worker process init ret=%d>'%ret
             if ret == 0:
                 self.initialized = True
                 self.status = WorkerStatus.INITIALIZED
@@ -555,18 +557,23 @@ class Worker(BaseThread):
 
 
     def run(self):
+        init_try = 0
         while not self.get_stop_flag():
             while not self.initialized and not self.setup_flag:
                 self.cond.acquire()
                 self.cond.wait()
                 self.cond.release()
             if not self.initialized:
-                #print "<worker_%d> setup process"%self.id
-                ret = self.setup(self.workeragent.iniExecutor)
-                #print "<worker_%d> self.process =%s"%(self.id,self.process is None)
-                self.workeragent.setup_done(self.id,ret)
-                if ret != 0:
-                    continue
+                if init_try < Config.Config.getPolicyattr('INITIAL_TRY_TIME'):
+                    init_try+=1
+                    #print "<worker_%d> setup process"%self.id
+                    ret = self.setup(self.workeragent.iniExecutor)
+                    #print "<worker_%d> self.process =%s"%(self.id,self.process is None)
+                    self.workeragent.setup_done(self.id,ret)
+                    if ret != 0:
+                        continue
+                else:
+                    break
             self.process.start()
             # ask for tasks
             tmptime=0 # times of ask tasks

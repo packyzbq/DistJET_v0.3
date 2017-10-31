@@ -65,14 +65,12 @@ class Process_withENV(threading.Thread):
 
         self.stdout = subprocess.PIPE
         self.stdin = subprocess.PIPE
-        print "<init=%s>"%self.initial
         self.process = subprocess.Popen(['bash'], stdin=self.stdin, stdout=self.stdout, stderr=subprocess.STDOUT,preexec_fn=os.setsid)
         self.pid = self.process.pid
 
         #self.logFile.write('@Process: create process for tasks, pid= %d\n' %self.pid)\
-        self.log.write('@Process: create process for tasks, pid=%d'%self.pid)
+        self.log.write('@Process: create process for tasks, pid=%d\n'%self.pid)
         self.log.flush()
-        #print "<after create and write log>"
 
         self.timeout = timeout
         self.recode = None
@@ -92,22 +90,23 @@ class Process_withENV(threading.Thread):
         if task:
             tmp_list, errmsg= task.genCommand()
             if errmsg:
-                self.log.write(errmsg)
+                self.log.write(errmsg+'\n')
             command_list = []
             for comm in tmp_list:
                 if not comm.endswith('\n'):
                     comm+='\n'
                 command_list.append(comm)
-                if comm != 'exit\n':
-                    command_list.append('echo "recode:$?"\n')
+            if 'exit\n' not in command_list:
+                command_list.append('echo "recode:$?"\n')
 
         if genLog:
-            commpack = CommandPack(command_list,task_log=task.res_dir+'/task_'+task.tid+'_log.log')
+            commpack = CommandPack(command_list,task_log=task.res_dir+'/task_'+str(task.tid)+'_log.log')
         else:
             commpack = CommandPack(command_list,proc_log=self.log)
         self.executable.put(commpack)
-        self.log.write('[Proc] Add task command=%s, logfile=%s'%(commpack.command,commpack.task_log+'|'+commpack.proc_log))
+        self.log.write('[Proc] Add task command=%s, logfile=%s\n'%(commpack.command,str(commpack.task_log)+'|'+str(commpack.proc_log)))
         self.log.flush()
+        print 'set task %s'%commpack.command
         '''
         self.exec_queue_lock.acquire()
         try:
@@ -138,7 +137,7 @@ class Process_withENV(threading.Thread):
             return -1
         if self.initial is None:
             return 0
-        self.log.write("<process>@init: initial comm = %s"%self.initial)
+        self.log.write("<process>@init: initial comm = %s\n"%self.initial)
         self.log.flush()
         for comm in self.initial:
             if comm[-1] != '\n':
@@ -150,7 +149,7 @@ class Process_withENV(threading.Thread):
             if not fs[0]:
                 #self.logFile.write('@Process initial timeout')
                 #self.logFile.flush()
-                self.log.write('[ERROR]@Process initial timeout')
+                self.log.write('[ERROR]@Process initial timeout\n')
                 self.log.flush()
                 return -2
             if self.process.stdout in fs[0]:
@@ -162,24 +161,27 @@ class Process_withENV(threading.Thread):
                 else:
                     #self.logFile.write('[Setup_INFO] %s'%data)
                     #self.logFile.flush()
-                    self.log.write('[Setup_INFO] %s'%data)
+                    self.log.write('[Setup_INFO] %s\n'%data)
                     self.log.flush()
             else:
                 return 1
 
     def finalize_and_cleanup(self, task):
-        task.boot.append('exit')
+        if task and type(task)!=types.StringType:
+            task.boot.append('exit')
+        else:
+            task = Task(-1)
+            task.boot.append('exit')
         self.set_task(task,genLog=False)
 
     def run(self):
         while not self.stop_flag:
             try:
                 self.exec_queue_lock.acquire()
-                #print "<process> executable size = %d"%self.executable.qsize()
                 if not self.executable.empty():
                     commpack = self.executable.get()
                     self.exec_queue_lock.release()
-                    for script in commpack.command_list:
+                    for script in commpack.command:
                         print "<process> get script=%s"%script
                         logfile = None
                         if commpack.task_log:
@@ -255,7 +257,7 @@ class Process_withENV(threading.Thread):
                     self.exec_queue_lock.release()
                     time.sleep(1)
             except Exception,e:
-                self.log.write('@Process catch error: %s'%e.message)
+                self.log.write('@Process catch error: %s\n'%e.message)
                 print traceback.format_exc()
 
         self._burnProcess()
@@ -275,7 +277,7 @@ class Process_withENV(threading.Thread):
             self.process.wait()
         except:
             #self.logFile.write('[Proc] KILLError: %s'%traceback.format_exc())
-            self.log.write('[Error] KILLError: %s'%traceback.format_exc())
+            self.log.write('[Error] KILLError: %s\n'%traceback.format_exc())
         self.log.flush()
 
     def _restart(self):
@@ -283,7 +285,7 @@ class Process_withENV(threading.Thread):
         self.pid = proc.pid
         #self.logFile.write('[Proc] Restart a new process,pid=%d'%self.pid)
         #self.logFile.flush()
-        self.log.write('[Proc] Restart a new process,pid=%d'%self.pid)
+        self.log.write('[Proc] Restart a new process,pid=%d\n'%self.pid)
         self.log.flush()
 
         return proc
@@ -294,10 +296,11 @@ class Process_withENV(threading.Thread):
 
     def _burnProcess(self):
         #self.WorkerLog.debug('[Proc] Terminate Process....')
-        self.log.write('[Proc] Terminate Process....')
+        self.log.write('[Proc] Terminate Process....\n')
         self.log.flush()
         self.process.terminate()
         self.process.wait()
+        self.log.close()
 
 def hook(status, recode, start_time, end_time):
     print 'hook method called, status= %s, recode=%s'%(str(status),str(recode))

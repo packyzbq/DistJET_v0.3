@@ -23,7 +23,7 @@ class JunoApp(IApplication):
         if not self.JUNOTOP or os.path.exists(self.JUNOTOP):
             self.log.info('[JunoAPP] Cannot find JUNOTOP:%s ,use default'%self.JUNOTOP)
             self.JUNOTOP = self._findJunoTop()
-        return ['source %s'%self.JUNOTOP]
+        return ['. %s/setup.sh'%self.JUNOTOP]
 
     def _setJunoTop(self,path):
         if os.path.exists(path):
@@ -37,6 +37,9 @@ class JunoApp(IApplication):
         out.reverse()
         for basename in out:
             if 'branch' not in basename:
-                return junodir+'/'+basename
+                if 'Pre' in basename:
+                    return junodir+'/Pre-Release/'+basename
+                else:
+                    return junodir+'/Release/'+basename
 
 
