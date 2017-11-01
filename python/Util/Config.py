@@ -36,7 +36,8 @@ class Config(object):
         'TASK_ATTEMPT_TIME': 1,
         'INITIAL_TRY_TIME': 3,
         'FIN_TRY_TIME': 3,
-        'WORKER_SYNC_QUIT': True
+        'WORKER_SYNC_QUIT': True,
+        'IGNORE_TASK_FAIL': True
     }
 
     __loaded = False

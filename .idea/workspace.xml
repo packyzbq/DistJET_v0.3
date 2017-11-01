@@ -4,6 +4,7 @@
     <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/Process/Process.py" afterPath="$PROJECT_DIR$/python/Process/Process.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/Util/Config.py" afterPath="$PROJECT_DIR$/python/Util/Config.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/WorkerAgent.py" afterPath="$PROJECT_DIR$/python/WorkerAgent.py" />
     </list>
     <ignored path="DistJET_v0.3.iws" />
@@ -29,16 +30,15 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="WorkerAgent.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="WorkerAgent.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-833">
-              <caret line="536" column="29" selection-start-line="536" selection-start-column="29" selection-end-line="536" selection-end-column="29" />
+            <state relative-caret-position="272">
+              <caret line="528" column="8" selection-start-line="528" selection-start-column="8" selection-end-line="528" selection-end-column="8" />
               <folding>
                 <element signature="e#21605#22578#0" expanded="false" />
-                <element signature="e#22620#23517#0" expanded="false" />
-                <element signature="e#23555#24050#0" expanded="false" />
-                <element signature="e#27061#28072#0" expanded="false" />
+                <element signature="e#23615#24110#0" expanded="false" />
+                <element signature="e#27206#28217#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -56,24 +56,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Process.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Process.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="441">
-              <caret line="311" column="8" selection-start-line="311" selection-start-column="8" selection-end-line="311" selection-end-column="8" />
+            <state relative-caret-position="502">
+              <caret line="106" column="24" selection-start-line="106" selection-start-column="24" selection-end-line="106" selection-end-column="24" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
-                <element signature="e#1186#2640#0" expanded="false" />
-                <element signature="e#2692#3938#0" expanded="false" />
-                <element signature="e#3980#4077#0" expanded="false" />
-                <element signature="e#5808#11286#0" expanded="false" />
-                <element signature="e#11324#11858#0" expanded="false" />
-                <element signature="e#11892#12281#0" expanded="false" />
-                <element signature="e#12363#12435#0" expanded="false" />
-                <element signature="e#12473#12694#0" expanded="false" />
-                <element signature="e#12748#12823#0" expanded="false" />
-                <element signature="e#12849#12956#0" expanded="false" />
-                <element signature="e#12989#13755#0" expanded="false" />
+                <element signature="e#11465#11999#0" expanded="false" />
+                <element signature="e#12033#12422#0" expanded="false" />
+                <element signature="e#12497#12569#0" expanded="false" />
+                <element signature="e#12607#12828#0" expanded="false" />
+                <element signature="e#12882#12957#0" expanded="false" />
+                <element signature="e#12983#13090#0" expanded="false" />
+                <element signature="e#13123#13889#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -82,8 +78,8 @@
       <file leaf-file-name="Config.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/Util/Config.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-759">
-              <caret line="36" column="25" selection-start-line="36" selection-start-column="9" selection-end-line="36" selection-end-column="25" />
+            <state relative-caret-position="483">
+              <caret line="39" column="25" selection-start-line="39" selection-start-column="9" selection-end-line="39" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -198,12 +194,12 @@
         <option value="$PROJECT_DIR$/python/Util/Package.py" />
         <option value="$PROJECT_DIR$/python/JobMaster.py" />
         <option value="$PROJECT_DIR$/Application/UnitTest/config.ini" />
-        <option value="$PROJECT_DIR$/python/Util/Config.py" />
         <option value="$PROJECT_DIR$/python/IScheduler.py" />
         <option value="$PROJECT_DIR$/python/IApplication/JunoApp.py" />
         <option value="$PROJECT_DIR$/python/IAppManager.py" />
         <option value="$PROJECT_DIR$/python/Task.py" />
         <option value="$PROJECT_DIR$/python/Process/Parser.py" />
+        <option value="$PROJECT_DIR$/python/Util/Config.py" />
         <option value="$PROJECT_DIR$/python/WorkerAgent.py" />
         <option value="$PROJECT_DIR$/python/Process/Process.py" />
       </list>
@@ -899,7 +895,14 @@
       <option name="project" value="LOCAL" />
       <updated>1509360810443</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="need add cleanup and check process">
+      <created>1509448488166</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1509448488166</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -977,7 +980,8 @@
     <MESSAGE value="add task fail function" />
     <MESSAGE value="add proc debug log" />
     <MESSAGE value="change Process log output, fix inittask None bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="change Process log output, fix inittask None bug" />
+    <MESSAGE value="need add cleanup and check process" />
+    <option name="LAST_COMMIT_MESSAGE" value="need add cleanup and check process" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1354,14 +1358,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/Util/Config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-759">
-          <caret line="36" column="25" selection-start-line="36" selection-start-column="9" selection-end-line="36" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/python/Task.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="436">
@@ -1391,36 +1387,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
+    <entry file="file://$PROJECT_DIR$/python/Util/Config.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-833">
-          <caret line="536" column="29" selection-start-line="536" selection-start-column="29" selection-end-line="536" selection-end-column="29" />
-          <folding>
-            <element signature="e#21605#22578#0" expanded="false" />
-            <element signature="e#22620#23517#0" expanded="false" />
-            <element signature="e#23555#24050#0" expanded="false" />
-            <element signature="e#27061#28072#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="483">
+          <caret line="39" column="25" selection-start-line="39" selection-start-column="9" selection-end-line="39" selection-end-column="25" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="441">
-          <caret line="311" column="8" selection-start-line="311" selection-start-column="8" selection-end-line="311" selection-end-column="8" />
+        <state relative-caret-position="502">
+          <caret line="106" column="24" selection-start-line="106" selection-start-column="24" selection-end-line="106" selection-end-column="24" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-            <element signature="e#1186#2640#0" expanded="false" />
-            <element signature="e#2692#3938#0" expanded="false" />
-            <element signature="e#3980#4077#0" expanded="false" />
-            <element signature="e#5808#11286#0" expanded="false" />
-            <element signature="e#11324#11858#0" expanded="false" />
-            <element signature="e#11892#12281#0" expanded="false" />
-            <element signature="e#12363#12435#0" expanded="false" />
-            <element signature="e#12473#12694#0" expanded="false" />
-            <element signature="e#12748#12823#0" expanded="false" />
-            <element signature="e#12849#12956#0" expanded="false" />
-            <element signature="e#12989#13755#0" expanded="false" />
+            <element signature="e#11465#11999#0" expanded="false" />
+            <element signature="e#12033#12422#0" expanded="false" />
+            <element signature="e#12497#12569#0" expanded="false" />
+            <element signature="e#12607#12828#0" expanded="false" />
+            <element signature="e#12882#12957#0" expanded="false" />
+            <element signature="e#12983#13090#0" expanded="false" />
+            <element signature="e#13123#13889#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="528" column="8" selection-start-line="528" selection-start-column="8" selection-end-line="528" selection-end-column="8" />
+          <folding>
+            <element signature="e#21605#22578#0" expanded="false" />
+            <element signature="e#23615#24110#0" expanded="false" />
+            <element signature="e#27206#28217#0" expanded="false" />
           </folding>
         </state>
       </provider>

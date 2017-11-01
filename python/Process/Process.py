@@ -257,6 +257,8 @@ class Process_withENV(threading.Thread):
                                     self.end = time.time()
                                     if self.hook and callable(self.hook):
                                         self.hook(self.status, self.recode, self.start_time, self.end)
+                                    logfile.write("\n\n\n @execute error, stop running")
+                                    logfile.flush()
                                     #self._kill_task()
                                     #self.process = self._restart()
                                     script_list = []
@@ -308,7 +310,7 @@ class Process_withENV(threading.Thread):
 
         return proc
 
-    def _cleanup_process(self):
+    #def _cleanup_process(self):
 
 
     def _parseLog(self,data):

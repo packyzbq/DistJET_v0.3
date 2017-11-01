@@ -498,7 +498,7 @@ class Worker(BaseThread):
             #TODO
             pass
         else:
-            self.process = Process_withENV(init_task.boot,Config.Config.getCFGattr('Rundir')+'/log',hook=self.task_done)
+            self.process = Process_withENV(init_task.boot,Config.Config.getCFGattr('Rundir')+'/log',hook=self.task_done,ignoreFaile=Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
             print '<worker has create process>'
             ret = self.process.initialize()
             print '<worker process init ret=%d>'%ret
@@ -597,7 +597,7 @@ class Worker(BaseThread):
                 self.running_task = None
                 self.workeragent.task_done(self.finish_task)
                 self.finish_task = None
-
+            wlog.debug('[Worker_%d] Finalize task = %s'%self.workeragent.finExecutor)
             ret = self.finalize(self.workeragent.finExecutor)
             self.workeragent.finalize_done(self.id,ret)
             self.process.stop()
