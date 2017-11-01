@@ -4,7 +4,6 @@
     <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/Process/Process.py" afterPath="$PROJECT_DIR$/python/Process/Process.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/WorkerAgent.py" afterPath="$PROJECT_DIR$/python/WorkerAgent.py" />
     </list>
     <ignored path="DistJET_v0.3.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,12 +32,12 @@
         <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-861">
-              <caret line="421" column="31" selection-start-line="421" selection-start-column="31" selection-end-line="421" selection-end-column="31" />
+              <caret line="422" column="0" selection-start-line="422" selection-start-column="0" selection-end-line="422" selection-end-column="0" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
                 <element signature="e#21872#22845#0" expanded="false" />
-                <element signature="e#26140#28078#0" expanded="false" />
-                <element signature="e#28126#29137#0" expanded="false" />
+                <element signature="e#26158#28096#0" expanded="false" />
+                <element signature="e#28144#29155#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -69,16 +68,17 @@
       <file leaf-file-name="Process.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="769">
-              <caret line="87" column="0" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+            <state relative-caret-position="1278">
+              <caret line="261" column="32" selection-start-line="261" selection-start-column="32" selection-end-line="261" selection-end-column="37" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
-                <element signature="e#12398#12787#0" expanded="false" />
-                <element signature="e#12862#12934#0" expanded="false" />
-                <element signature="e#12972#13193#0" expanded="false" />
-                <element signature="e#13247#13322#0" expanded="false" />
-                <element signature="e#13348#13455#0" expanded="false" />
-                <element signature="e#13488#14254#0" expanded="false" />
+                <element signature="e#11349#13498#1" expanded="false" />
+                <element signature="e#14524#14913#0" expanded="false" />
+                <element signature="e#14988#15060#0" expanded="false" />
+                <element signature="e#15098#15319#0" expanded="false" />
+                <element signature="e#15373#15448#0" expanded="false" />
+                <element signature="e#15474#15581#0" expanded="false" />
+                <element signature="e#15614#16380#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -366,7 +366,6 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/Application/UnitTest/UnitTestApp.py</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/python/Process/Process.py</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/python/WorkerAgent.py</PATH>
         </FILE-GROUP>
@@ -906,7 +905,14 @@
       <option name="project" value="LOCAL" />
       <updated>1509503000838</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="fix bug of finalize error and ignore fail task">
+      <created>1509517189028</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1509517189028</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -986,7 +992,8 @@
     <MESSAGE value="change Process log output, fix inittask None bug" />
     <MESSAGE value="need add cleanup and check process" />
     <MESSAGE value="sync for debug" />
-    <option name="LAST_COMMIT_MESSAGE" value="sync for debug" />
+    <MESSAGE value="fix bug of finalize error and ignore fail task" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix bug of finalize error and ignore fail task" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1403,28 +1410,29 @@
     <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-861">
-          <caret line="421" column="31" selection-start-line="421" selection-start-column="31" selection-end-line="421" selection-end-column="31" />
+          <caret line="422" column="0" selection-start-line="422" selection-start-column="0" selection-end-line="422" selection-end-column="0" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
             <element signature="e#21872#22845#0" expanded="false" />
-            <element signature="e#26140#28078#0" expanded="false" />
-            <element signature="e#28126#29137#0" expanded="false" />
+            <element signature="e#26158#28096#0" expanded="false" />
+            <element signature="e#28144#29155#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="769">
-          <caret line="87" column="0" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+        <state relative-caret-position="1278">
+          <caret line="261" column="32" selection-start-line="261" selection-start-column="32" selection-end-line="261" selection-end-column="37" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-            <element signature="e#12398#12787#0" expanded="false" />
-            <element signature="e#12862#12934#0" expanded="false" />
-            <element signature="e#12972#13193#0" expanded="false" />
-            <element signature="e#13247#13322#0" expanded="false" />
-            <element signature="e#13348#13455#0" expanded="false" />
-            <element signature="e#13488#14254#0" expanded="false" />
+            <element signature="e#11349#13498#1" expanded="false" />
+            <element signature="e#14524#14913#0" expanded="false" />
+            <element signature="e#14988#15060#0" expanded="false" />
+            <element signature="e#15098#15319#0" expanded="false" />
+            <element signature="e#15373#15448#0" expanded="false" />
+            <element signature="e#15474#15581#0" expanded="false" />
+            <element signature="e#15614#16380#0" expanded="false" />
           </folding>
         </state>
       </provider>
