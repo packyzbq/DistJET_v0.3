@@ -498,7 +498,8 @@ class Worker(BaseThread):
             #TODO
             pass
         else:
-            self.process = Process_withENV(init_task.boot,Config.Config.getCFGattr('Rundir')+'/log',hook=self.task_done,ignoreFaile=Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
+            print "### if ignore fail: "+str(Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
+            self.process = Process_withENV(init_task.boot,Config.Config.getCFGattr('Rundir')+'/log',hook=self.task_done,ignoreFail=Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
             print '<worker has create process>'
             ret = self.process.initialize()
             print '<worker process init ret=%d>'%ret
@@ -527,10 +528,12 @@ class Worker(BaseThread):
         #    self.log.error('[Worker_%d] Task is empty, cannot execute. Task=<%s>'%(self.id,task.toDict()))
 
     def finalize(self, fin_task):
-        self.log.debug('[Worker_%d] Ready to finalize'%self.id)
+        self.log.debug('[Worker_%d] Ready to finalize, fin_task=%s'%(self.id,type(fin_task)))
         self.process.finalize_and_cleanup(fin_task)
-        if fin_task is None:
+        if fin_task is None or type(fin_task)==types.StringType:
             return 0
+        else:
+            return -1
 
     def terminate(self):
         self.proc_log.flush()
@@ -597,7 +600,7 @@ class Worker(BaseThread):
                 self.running_task = None
                 self.workeragent.task_done(self.finish_task)
                 self.finish_task = None
-            wlog.debug('[Worker_%d] Finalize task = %s'%self.workeragent.finExecutor)
+            wlog.debug('[Worker_%d] Finalize task = %s'%(self.id,self.workeragent.finExecutor))
             ret = self.finalize(self.workeragent.finExecutor)
             self.workeragent.finalize_done(self.id,ret)
             self.process.stop()

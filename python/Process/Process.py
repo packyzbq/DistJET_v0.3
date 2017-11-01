@@ -40,7 +40,7 @@ class Process_withENV(threading.Thread):
     """
     start process with setup env,
     """
-    def __init__(self,initial,logpath,shell=True, timeout=None,ignoreFaile=False, hook=None):
+    def __init__(self,initial,logpath,shell=True, timeout=None,ignoreFail=False, hook=None):
         """
         :param initial: the command of setup
         :param shell:
@@ -52,7 +52,8 @@ class Process_withENV(threading.Thread):
         #print self.start
 
         self.shell = shell
-        self.ignoreFail = ignoreFaile
+        self.ignoreFail = ignoreFail
+        print "@Process: ignoreFail = %s"%str(self.ignoreFail)
         self.exec_queue_lock = threading.RLock()
         self.executable = Queue.Queue()
 
@@ -250,13 +251,14 @@ class Process_withENV(threading.Thread):
                                         self.hook(self.status, self.recode, self.start_time, self.end)
                                     break
 
-                                elif (not self.ignoreFail) and (self.logParser and (not self._parseLog(line))):
+                                elif not self.ignoreFail and (self.logParser and (not self._parseLog(line))):
                                     fin_flag = True
                                     self.status = status.FAIL
                                     self.recode = -1
                                     self.end = time.time()
                                     if self.hook and callable(self.hook):
                                         self.hook(self.status, self.recode, self.start_time, self.end)
+                                    logfile.write(line)
                                     logfile.write("\n\n\n @execute error, stop running")
                                     logfile.flush()
                                     #self._kill_task()
