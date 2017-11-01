@@ -372,8 +372,11 @@ class WorkerAgent:
                                 self.cond_list[wid].notify()
                                 self.cond_list[wid].release()
                         #time.sleep(0.1)
+                    else:
+                        self.stop()     
+
                 wlog.debug('[Agent] All worker status = %s'%self.worker_status)
-            self.stop()
+            #self.stop()
             wlog.debug('[Agent] remains %d alive thread, [%s]' % (threading.active_count(), threading.enumerate()))
         except KeyboardInterrupt:
             self.stop()
@@ -617,7 +620,9 @@ class Worker(BaseThread):
                 self.finish_task = None
             wlog.debug('[Worker_%d] Finalize task = %s'%(self.id,self.workeragent.finExecutor))
             ret = self.finalize(self.workeragent.finExecutor)
-            self.workeragent.finalize_done(self.id,ret)
+            #self.workeragent.finalize_done(self.id,ret)
+            while self.finialized:
+                time.sleep(0.1)
             self.process.stop()
             wlog.info("[Worker_%d] Stop..."%self.id)
             self.stop()

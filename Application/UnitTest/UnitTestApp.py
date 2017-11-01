@@ -10,7 +10,15 @@ class UnitTestApp(JunoApp):
         self.task_reslist={}
         self.app_boot.append("$JUNOTESTROOT/python/JunoTest/junotest UnitTest")
         self.setStatus('boot') 
+
     def split(self):
+        self.data[0]=[]
+        self.data[0].append('Tutorial')
+        self.data[0].append('Cf252')
+        self.setStatus('data')
+        return self.data
+
+    def split_bak(self):
         rc = subprocess.Popen(["python",os.environ['JUNOTESTROOT']+"/python/JunoTest/junotest","UnitTest","list"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         unitcase, err = rc.communicate()
         if err:

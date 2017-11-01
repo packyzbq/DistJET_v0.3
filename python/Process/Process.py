@@ -196,7 +196,7 @@ class Process_withENV(threading.Thread):
                     if commpack.finalize_flag:
                         self.hook = self.finalize_callback
                     index = 0
-                    while len(script_list) != 0:
+                    while len(script_list) != 0 and len(script_list) > index:
                         script = script_list[index]
                         index+=1
                         print "<process> get script=%s"%script
@@ -250,7 +250,7 @@ class Process_withENV(threading.Thread):
                                 line = st[-1]
                             if "@recode" in line:
                                 self.end = time.time()
-                                self.recode = line[line.find("@recode=")+8:]
+                                self.recode = line[line.find("@recode:")+8:]
                                 logfile.write("\n\n\nreturn code = %s" % self.recode)
                                 logfile.write("\nstart time = %s \nend time = %s\n\n" % (
                                 time.asctime(time.localtime(self.start_time)), time.asctime(time.localtime(self.end))))
@@ -363,6 +363,8 @@ class Process_withENV(threading.Thread):
         self.log.flush()
         self.process.terminate()
         self.process.wait()
+        self.log.write('[Proc] Process ends...\n')
+        self.log.flush()
         self.log.close()
 
 def hook(status, recode, start_time, end_time):
