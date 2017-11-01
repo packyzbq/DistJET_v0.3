@@ -505,7 +505,7 @@ class Worker(BaseThread):
             pass
         else:
             print "### if ignore fail: "+str(Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
-            self.process = Process_withENV(init_task.boot,Config.Config.getCFGattr('Rundir')+'/log',task_callback=self.task_done, finalize_callback=,ignoreFail=Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
+            self.process = Process_withENV(init_task.boot,Config.Config.getCFGattr('Rundir')+'/log',task_callback=self.task_done, finalize_callback=self.finalize_done,ignoreFail=Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
             print '<worker has create process>'
             ret = self.process.initialize()
             print '<worker process init ret=%d>'%ret

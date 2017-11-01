@@ -232,13 +232,20 @@ class Process_withENV(threading.Thread):
                                 break
                             data = os.read(self.process.stdout.fileno(),1024)
                             if not data:
-                                logfile.write("<proc> No data output ,break")
+                                logfile.write("[proc] No data output ,break")
                                 logfile.flush()
                                 script_list = []
                                 break
+                            logfile.write(data)
+                            logfile.flush()
                             st = data.split("\n")
                             #if len(st) >= 2 and "recode" in st[-2]:
                             fin_flag = False
+                            
+						    # no log parse 
+                            if (len(st)>=2 and "@recode" in st[-2]) or (st[-1]!="" and "@recode" in st[-1])
+                                self.end = time.time()
+
                             for line in st:
                                 if "@recode" in st:
                                     fin_flag = True
@@ -267,9 +274,9 @@ class Process_withENV(threading.Thread):
                                     #self.process = self._restart()
                                     script_list = []
                                     break
-                                else:
-                                    logfile.write(line)
-                                    logfile.flush()
+                                #else:
+                                #    logfile.write(line)
+                                #    logfile.flush()
                             if fin_flag:
                                 break
 
