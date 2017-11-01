@@ -4,6 +4,7 @@ import subprocess
 import threading
 import time
 import traceback
+import types
 
 import IR_Buffer_Module as IM
 
@@ -362,6 +363,9 @@ class WorkerAgent:
                         for wid, worker in self.worker_list.items():
                             if self.worker_status[wid] != WorkerStatus.RUNNING and not worker.fin_flag:
                                 worker.fin_flag = True
+                            if self.worker_status[wid] == WorkerStatus.FINALIZE_FAIL:
+                                wlog.info('[Agent] Worker %d finalize error, force stop'%wid)
+                                self.worker_list[wid].terminate()
                             if self.worker_status[wid] == WorkerStatus.IDLE:
                                 wlog.debug('[Agent] Wake up idle worker %d'%wid)
                                 self.cond_list[wid].acquire()
@@ -411,10 +415,12 @@ class WorkerAgent:
                 self.initial_flag = True
             wlog.debug('[Agent] Feed back app init result')
             self.heartbeat.acquire_queue.put({Tags.APP_INI: {'recode': retcode, 'errmsg': errmsg}})
+
     def finalize_done(self,wid,retcode, errmsg=None):
         if retcode != 0:
             self.worker_status[wid] = WorkerStatus.FINALIZE_FAIL
-            wlog.error('[Error] Worker %s finalize error, error msg = %s' % (wid, errmsg))
+            wlog.error('[Agent-Error] Worker %s finalize error, error msg = %s' % (wid, errmsg))
+
         else:
             self.worker_status[wid] = WorkerStatus.FINALIZED
             self.remove_worker(wid)
@@ -499,7 +505,7 @@ class Worker(BaseThread):
             pass
         else:
             print "### if ignore fail: "+str(Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
-            self.process = Process_withENV(init_task.boot,Config.Config.getCFGattr('Rundir')+'/log',hook=self.task_done,ignoreFail=Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
+            self.process = Process_withENV(init_task.boot,Config.Config.getCFGattr('Rundir')+'/log',task_callback=self.task_done, finalize_callback=,ignoreFail=Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
             print '<worker has create process>'
             ret = self.process.initialize()
             print '<worker process init ret=%d>'%ret
@@ -550,7 +556,7 @@ class Worker(BaseThread):
 
     def task_done(self, stu, retcode, start_time, end_time):
         self.log.info('[Worker_%d] Task %s finish, status=%s'%(self.id, str(self.running_task.tid),status.describe(stu)))
-        if status == status.SUCCESS:
+        if stu == status.SUCCESS:
             self.running_task.complete(start_time,end_time)
         else:
             self.running_task.fail(start_time,end_time,status.describe(stu))
@@ -559,6 +565,15 @@ class Worker(BaseThread):
         self.cond.acquire()
         self.cond.notify()
         self.cond.release()
+
+    def finalize_done(self,stu, retcode, start_time,end_time):
+        self.log.info('[Worker_%d] Process finalize, status=%s'%(self.id,status.describe(stu)))
+        if stu == status.SUCCESS:
+            self.finialized = True
+            self.status = WorkerStatus.FINALIZED
+        else:
+            self.status = WorkerStatus.FINALIZE_FAIL
+        self.workeragent.finalize_done(self.id,retcode,status.describe(stu))
 
 
     def run(self):

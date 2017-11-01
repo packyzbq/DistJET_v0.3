@@ -26,7 +26,7 @@ class status:
             return status.DES[stat]
 
 class CommandPack:
-    def __init__(self, command, task_log=None, proc_log=None):
+    def __init__(self, command, task_log=None, proc_log=None, finalize_flag=False):
         self.command=[]
         if type(command) == types.ListType:
             self.command.extend(command)
@@ -34,13 +34,14 @@ class CommandPack:
             self.command.append(command)
         self.task_log = task_log
         self.proc_log = proc_log
+        self.finalize_flag = finalize_flag
 
 #FIXME start a sh process, cannot know when the command finished
 class Process_withENV(threading.Thread):
     """
     start process with setup env,
     """
-    def __init__(self,initial,logpath,shell=True, timeout=None,ignoreFail=False, hook=None):
+    def __init__(self,initial,logpath,shell=True, timeout=None,ignoreFail=False, task_callback=None, finalize_callback=None):
         """
         :param initial: the command of setup
         :param shell:
@@ -58,7 +59,8 @@ class Process_withENV(threading.Thread):
         self.executable = Queue.Queue()
 
         self.log = open(logpath+'/process.log','w+')
-        self.hook = hook
+        self.hook = task_callback
+        self.finalize_callback = finalize_callback
         self.initial = []
         if(type(initial) == types.ListType):
             self.initial.extend(initial)
@@ -84,7 +86,6 @@ class Process_withENV(threading.Thread):
         self.fatalLine = None
         self.logParser = Parser()
 
-        self.ignoreFail = False
         self.stop_flag = False
 
     def set_task(self,task, genLog=True):
@@ -102,7 +103,7 @@ class Process_withENV(threading.Thread):
         if genLog:
             commpack = CommandPack(command_list,task_log=task.res_dir+'/task_'+str(task.tid)+'_log.log')
         else:
-            commpack = CommandPack(command_list,proc_log=self.log)
+            commpack = CommandPack(command_list,proc_log=self.log, finalize_flag=True)
         self.executable.put(commpack)
         self.log.write('[Proc] Add task command=%s, logfile=%s\n'%(commpack.command,str(commpack.task_log)+'|'+str(commpack.proc_log)))
         self.log.flush()
@@ -192,7 +193,8 @@ class Process_withENV(threading.Thread):
                         logfile = open(commpack.task_log, 'w+')
                     elif commpack.proc_log:
                         logfile = commpack.proc_log
-
+                    if commpack.finalize_flag:
+                        self.hook = self.finalize_callback
                     index = 0
                     while len(script_list) != 0:
                         script = script_list[index]
