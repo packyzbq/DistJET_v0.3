@@ -200,6 +200,7 @@ class WorkerAgent:
         self.heartcond = threading.Condition()
         self.heartbeat = HeartbeatThread(self.client, self, self.heartcond)
 
+        self.list_lock=threading.RLock()
         self.worker_list = {}
         self.worker_status={}
         self.cond_list = {}
@@ -269,12 +270,14 @@ class WorkerAgent:
 
                                 # notify worker initialize
                                 wlog.info('[Agent] Start up worker and initialize')
+                                self.list_lock.acquire()
                                 for i in range(self.capacity):
                                     self.cond_list[i]=threading.Condition()
                                     self.worker_list[i]=Worker(i, self, self.cond_list[i], worker_class=self.worker_class)
                                     self.worker_status[i] = WorkerStatus.NEW
                                     wlog.debug('[Agent] Worker %s start' % i)
                                     self.worker_list[i].start()
+                                self.list_lock.release()
 
                                 # notify the heartbeat thread
                                 wlog.debug('[WorkerAgent] Wake up the heartbeat thread')
@@ -291,6 +294,7 @@ class WorkerAgent:
                             for task in tasklist:
                                 self.task_queue.put(task)
                             count = len(tasklist)
+                            self.list_lock.acquire()
                             for worker_id, st in self.worker_status.items():
                                 if st == WorkerStatus.IDLE:
                                     wlog.debug('[Agent] Worker %s IDLE, wake up worker' % worker_id)
@@ -300,6 +304,7 @@ class WorkerAgent:
                                     count-=1
                                     if count == 0:
                                         break
+                            self.list_lock.release()
                             self.task_acquire = False
                         # remove task, v={flag:F/V, list:[tid]}
                         elif int(k) == Tags.TASK_REMOVE:
@@ -312,11 +317,13 @@ class WorkerAgent:
                         # master disconnect ack
                         elif int(k) == Tags.LOGOUT:
                             wlog.debug('[WorkerAgent] Receive LOGOUT msg = %s' % v)
+                            self.list_lock.acquire()
                             for i in range(len(self.worker_list)):
                                 if self.worker_status[i] == WorkerStatus.FINALIZED:
                                     self.cond_list[i].acquire()
                                     self.cond_list[i].notify()
                                     self.cond_list[i].release()
+                            self.list_lock.release()
                             # TODO remove worker from list
                             #self.__should_stop = True
                             self.stop()
@@ -324,6 +331,7 @@ class WorkerAgent:
                         # force worker to stop
                         elif int(k) == Tags.WORKER_STOP:
                             wlog.debug('[Agent] Receive WORKER_STOP msg = %s' % v)
+                            self.list_lock.acquire()
                             for i in self.worker_status.keys():
                                 if self.worker_status[i] == WorkerStatus.RUNNING:
                                     self.worker_list[i].terminate()
@@ -331,6 +339,7 @@ class WorkerAgent:
                                     self.cond_list[i].acquire()
                                     self.cond_list[i].notify()
                                     self.cond_list[i].release()
+                            self.list_lock.release()
 
                         # app finalize v=None/[Taskobj]
                         elif int(k) == Tags.APP_FIN:
@@ -362,6 +371,7 @@ class WorkerAgent:
                     if len(self.worker_list) != 0:
                         #TODO wait for all worker finalized, handle maybe finalize task infinte loop
                         wlog.debug('[Agent] set fin_flag for all workers')
+                        self.list_lock.acquire()
                         for wid, worker in self.worker_list.items():
                             if self.worker_status[wid] != WorkerStatus.RUNNING and not worker.fin_flag:
                                 worker.fin_flag = True
@@ -373,6 +383,7 @@ class WorkerAgent:
                                 self.cond_list[wid].acquire()
                                 self.cond_list[wid].notify()
                                 self.cond_list[wid].release()
+                        self.list_lock.release()
                         #time.sleep(0.1)
                     #else:
                     #    self.stop()
@@ -395,9 +406,11 @@ class WorkerAgent:
             # TODO add solution
 
     def remove_worker(self,wid):
+        self.list_lock.acquire()
         self.worker_list.pop(wid)
         self.worker_status.pop(wid)
         self.cond_list.pop(wid)
+        self.list_lock.release()
 
     def getTask(self):
         if not self.task_queue.empty():

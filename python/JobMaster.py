@@ -246,10 +246,10 @@ class JobMaster(IJobMaster):
                                 '[Master] Assign task %s to worker %d' % (tid_list, recv_dict['wid']))
                             self.command_q.put({MPI_Wrapper.Tags.TASK_ADD: task_list})
                     if recv_dict.has_key(MPI_Wrapper.Tags.APP_FIN):
-                        v = recv_dict[str(MPI_Wrapper.Tags.APP_FIN)]
+                        v = recv_dict[MPI_Wrapper.Tags.APP_FIN]
                         master_log.debug('[Master] From worker %s receive a APP_FIN msg = %s' % (recv_dict['wid'], v))
                         if v['recode'] == status.SUCCESS:
-                            self.task_scheduler.worker_finalized()
+                            self.task_scheduler.worker_finalized(recv_dict['wid'])
                             master_log.debug('[Master] Have finalized worker %s'%recv_dict['wid'])
                             # TODO if more app need to be done
                             # no more app need to do, logout worker
