@@ -318,7 +318,9 @@ class WorkerAgent:
                                     self.cond_list[i].notify()
                                     self.cond_list[i].release()
                             # TODO remove worker from list
-                            self.__should_stop = True
+                            #self.__should_stop = True
+                            self.stop()
+                            break
                         # force worker to stop
                         elif int(k) == Tags.WORKER_STOP:
                             wlog.debug('[Agent] Receive WORKER_STOP msg = %s' % v)
@@ -372,8 +374,8 @@ class WorkerAgent:
                                 self.cond_list[wid].notify()
                                 self.cond_list[wid].release()
                         #time.sleep(0.1)
-                    else:
-                        self.stop()     
+                    #else:
+                    #    self.stop()
 
                 wlog.debug('[Agent] All worker status = %s'%self.worker_status)
             #self.stop()
@@ -423,11 +425,11 @@ class WorkerAgent:
         if retcode != 0:
             self.worker_status[wid] = WorkerStatus.FINALIZE_FAIL
             wlog.error('[Agent-Error] Worker %s finalize error, error msg = %s' % (wid, errmsg))
-
         else:
             self.worker_status[wid] = WorkerStatus.FINALIZED
             self.remove_worker(wid)
             wlog.debug('[Agent] Worker %s finalized, remove from list'%wid)
+        self.heartbeat.acquire_queue.put({Tags.APP_FIN: {'recode':retcode,'errmsg':errmsg}})
 
     def getRuntasklist(self):
         rtask_list={}
