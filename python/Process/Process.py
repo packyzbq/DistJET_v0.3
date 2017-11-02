@@ -90,7 +90,7 @@ class Process_withENV(threading.Thread):
 
     def set_task(self,task, genLog=True):
         command_list=[]
-        if task:
+        if genLog:
             tmp_list, errmsg= task.genCommand()
             if errmsg:
                 self.log.write(errmsg+'\n')
@@ -99,6 +99,8 @@ class Process_withENV(threading.Thread):
                 if not comm.endswith('\n'):
                     comm+='\n'
                 command_list.append(comm)
+        else:
+            command_list.extend(task.boot)
 
         if genLog:
             commpack = CommandPack(command_list,task_log=task.res_dir+'/task_'+str(task.tid)+'_log.log')
@@ -107,7 +109,7 @@ class Process_withENV(threading.Thread):
         self.executable.put(commpack)
         self.log.write('[Proc] Add task command=%s, logfile=%s\n'%(commpack.command,str(commpack.task_log)+'|'+str(commpack.proc_log)))
         self.log.flush()
-        print 'set task %s'%commpack.command
+        #print 'set task %s'%commpack.command
         '''
         self.exec_queue_lock.acquire()
         try:
@@ -123,12 +125,14 @@ class Process_withENV(threading.Thread):
         '''
 
     def stop(self,force=False):
+        print "someone call stop\n"
         self.stop_flag = True
         if force:
             self._kill_task()
         self.process.wait()
 
-
+    def wait(self):
+        self.process.wait()
 
 
     def initialize(self):
@@ -171,10 +175,11 @@ class Process_withENV(threading.Thread):
 
     def finalize_and_cleanup(self, task):
         if task and type(task)!=types.StringType:
-            task.boot.append('exit')
+            task.boot.append('#exit#')
         else:
             task = Task(-1)
-            task.boot.append('exit')
+            task.boot.append('#exit#')
+        print "finalize task boot = %s"%task.boot
         self.set_task(task,genLog=False)
 
     def run(self):
@@ -195,17 +200,22 @@ class Process_withENV(threading.Thread):
                         logfile = commpack.proc_log
                     if commpack.finalize_flag:
                         self.hook = self.finalize_callback
+                    #fin_flag = commpack.finzlize_flag
+                    print "script_list = %s"%script_list
                     index = 0
                     while len(script_list) != 0 and len(script_list) > index:
                         script = script_list[index]
                         index+=1
                         print "<process> get script=%s"%script
-                        if script == 'exit':
-                            logfile.write("[Proc] Ready to exit")
+                        if '#exit#' in script:
+                            print "<process> exiting..."
+                            if index == 1 and self.hook and callable(self.hook):
+                                self.hook(status.SUCCESS,0,0,0)
+                            logfile.write("[Proc] Ready to exit\n")
                             logfile.flush()
                             self.stop_flag=True
                             break
-                        if "recode" not in script:
+                        elif "recode" not in script:
                             self.start_time = time.time()
                             logfile.write('\n' + '*' * 20 + ' script "%s" Running log ' % script[:-1] + '*' * 20 + '\n')
                             logfile.flush()
@@ -315,7 +325,7 @@ class Process_withENV(threading.Thread):
 
                 else:
                     self.exec_queue_lock.release()
-                    time.sleep(1)
+                    time.sleep(0.1)
             except Exception,e:
                 self.log.write('@Process catch error: %s\n'%e.message)
                 print traceback.format_exc()
@@ -377,7 +387,7 @@ def add(proc,comm):
         time.sleep(2)
 
 if __name__ == '__main__':
-    comm = ['$JUNOTESTROOT/python/JunoTest/junotest UnitTest Tutorial\n','$JUNOTESTROOT/python/JunoTest/junotest UnitTest JunoTest\n','$JUNOTESTROOT/python/JunoTest/junotest UnitTest Cf252\n','exit']
+    comm = ['$JUNOTESTROOT/python/JunoTest/junotest UnitTest Tutorial\n','$JUNOTESTROOT/python/JunoTest/junotest UnitTest JunoTest\n','$JUNOTESTROOT/python/JunoTest/junotest UnitTest Cf252\n','#exit#']
     setup = 'source /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre2/setup.sh'
     import logging
     log = logging.getLogger('test.log')

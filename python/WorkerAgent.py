@@ -507,7 +507,7 @@ class Worker(BaseThread):
             #TODO
             pass
         else:
-            print "### if ignore fail: "+str(Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
+            #print "### if ignore fail: "+str(Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
             self.process = Process_withENV(init_task.boot,Config.Config.getCFGattr('Rundir')+'/log',task_callback=self.task_done, finalize_callback=self.finalize_done,ignoreFail=Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
             print '<worker has create process>'
             ret = self.process.initialize()
@@ -623,7 +623,8 @@ class Worker(BaseThread):
             #self.workeragent.finalize_done(self.id,ret)
             while self.finialized:
                 time.sleep(0.1)
-            self.process.stop()
+            #self.process.stop()
+            self.process.wait()
             wlog.info("[Worker_%d] Stop..."%self.id)
             self.stop()
         wlog.debug('[Worker_%d] Exit run method'%self.id)
