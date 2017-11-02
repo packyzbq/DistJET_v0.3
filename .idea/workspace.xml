@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/WorkerAgent.py" afterPath="$PROJECT_DIR$/python/WorkerAgent.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/IScheduler.py" afterPath="$PROJECT_DIR$/python/IScheduler.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/JobMaster.py" afterPath="$PROJECT_DIR$/python/JobMaster.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/WorkerRegistry.py" afterPath="$PROJECT_DIR$/python/WorkerRegistry.py" />
     </list>
     <ignored path="DistJET_v0.3.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,20 +30,18 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="WorkerAgent.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="WorkerAgent.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1982">
-              <caret line="322" column="33" selection-start-line="322" selection-start-column="33" selection-end-line="322" selection-end-column="33" />
+            <state relative-caret-position="226">
+              <caret line="335" column="77" selection-start-line="335" selection-start-column="77" selection-end-line="335" selection-end-column="77" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
-                <marker date="1509603422012" expanded="false" signature="22022:28431" ph="..." />
-                <marker date="1509603422012" expanded="false" signature="23111:24218" ph="..." />
-                <marker date="1509603422012" expanded="false" signature="24247:24751" ph="..." />
-                <marker date="1509603422012" expanded="false" signature="24786:25054" ph="..." />
-                <marker date="1509603422012" expanded="false" signature="25080:25198" ph="..." />
-                <marker date="1509603422012" expanded="false" signature="25219:25397" ph="..." />
-                <marker date="1509603422012" expanded="false" signature="28474:29490" ph="..." />
+                <marker date="1509607718733" expanded="false" signature="23748:24855" ph="..." />
+                <marker date="1509607718733" expanded="false" signature="24884:25388" ph="..." />
+                <marker date="1509607718733" expanded="false" signature="25423:25691" ph="..." />
+                <marker date="1509607718733" expanded="false" signature="25856:26034" ph="..." />
+                <marker date="1509607718733" expanded="false" signature="29111:30127" ph="..." />
               </folding>
             </state>
           </provider>
@@ -50,8 +50,8 @@
       <file leaf-file-name="JobMaster.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="537">
-              <caret line="258" column="58" selection-start-line="258" selection-start-column="58" selection-end-line="258" selection-end-column="58" />
+            <state relative-caret-position="280">
+              <caret line="292" column="94" selection-start-line="292" selection-start-column="94" selection-end-line="292" selection-end-column="94" />
               <folding>
                 <element signature="e#5968#7191#0" expanded="false" />
                 <element signature="e#7304#7800#0" expanded="false" />
@@ -59,7 +59,20 @@
                 <element signature="e#8150#8340#0" expanded="false" />
                 <element signature="e#8433#9792#0" expanded="false" />
                 <element signature="e#9886#11944#0" expanded="false" />
-                <element signature="e#13253#14989#0" expanded="false" />
+                <element signature="e#13351#15087#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Process.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="126" column="8" selection-start-line="126" selection-start-column="8" selection-end-line="126" selection-end-column="8" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+                <element signature="e#16238#17006#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -69,87 +82,17 @@
         <entry file="file://$PROJECT_DIR$/python/WorkerRegistry.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="285">
-              <caret line="200" column="8" selection-start-line="200" selection-start-column="8" selection-end-line="200" selection-end-column="8" />
+              <caret line="142" column="8" selection-start-line="142" selection-start-column="8" selection-end-line="142" selection-end-column="8" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BaseThread.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/python/BaseThread.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="460">
-              <caret line="21" column="8" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="logger.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/python/Util/logger.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="44" />
-              <folding>
-                <element signature="e#0#14#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Process.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="523">
-              <caret line="212" column="44" selection-start-line="212" selection-start-column="44" selection-end-line="212" selection-end-column="44" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-                <element signature="e#16238#17006#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Config.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/python/Util/Config.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="32" column="16" selection-start-line="32" selection-start-column="16" selection-end-line="32" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IAppManager.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/python/IAppManager.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="354">
-              <caret line="154" column="42" selection-start-line="154" selection-start-column="42" selection-end-line="154" selection-end-column="42" />
-              <folding>
-                <element signature="e#0#12#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Task.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/python/Task.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="141" column="47" selection-start-line="141" selection-start-column="47" selection-end-line="141" selection-end-column="47" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-                <element signature="e#314#1254#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IScheduler.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="IScheduler.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/python/IScheduler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="269" column="8" selection-start-line="269" selection-start-column="8" selection-end-line="269" selection-end-column="8" />
+            <state relative-caret-position="446">
+              <caret line="83" column="20" selection-start-line="83" selection-start-column="20" selection-end-line="83" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -175,7 +118,6 @@
         <option value="$PROJECT_DIR$/python/MPI_Wrapper.py" />
         <option value="$PROJECT_DIR$/../DistJET_v2/python/WorkerAgent.py" />
         <option value="$PROJECT_DIR$/python/Util/HealthDetect.py" />
-        <option value="$PROJECT_DIR$/python/WorkerRegistry.py" />
         <option value="$PROJECT_DIR$/python/BaseThread.py" />
         <option value="$PROJECT_DIR$/Application/UnitTest/UTestApp.py" />
         <option value="$PROJECT_DIR$/Application/UnitTest/__init__.py" />
@@ -188,9 +130,7 @@
         <option value="$PROJECT_DIR$/bin/worker.py" />
         <option value="$PROJECT_DIR$/bin/master.py" />
         <option value="$PROJECT_DIR$/python/Util/Package.py" />
-        <option value="$PROJECT_DIR$/python/JobMaster.py" />
         <option value="$PROJECT_DIR$/Application/UnitTest/config.ini" />
-        <option value="$PROJECT_DIR$/python/IScheduler.py" />
         <option value="$PROJECT_DIR$/python/IApplication/JunoApp.py" />
         <option value="$PROJECT_DIR$/python/IAppManager.py" />
         <option value="$PROJECT_DIR$/python/Task.py" />
@@ -198,6 +138,9 @@
         <option value="$PROJECT_DIR$/python/Util/Config.py" />
         <option value="$PROJECT_DIR$/python/Process/Process.py" />
         <option value="$PROJECT_DIR$/python/WorkerAgent.py" />
+        <option value="$PROJECT_DIR$/python/WorkerRegistry.py" />
+        <option value="$PROJECT_DIR$/python/JobMaster.py" />
+        <option value="$PROJECT_DIR$/python/IScheduler.py" />
       </list>
     </option>
   </component>
@@ -365,7 +308,7 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/Process/Process.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/JobMaster.py</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/python/WorkerAgent.py</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
@@ -918,7 +861,14 @@
       <option name="project" value="LOCAL" />
       <updated>1509521210512</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="add worker finalize and stop">
+      <created>1509603435943</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1509603435943</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -999,7 +949,8 @@
     <MESSAGE value="sync for debug" />
     <MESSAGE value="fix bug of finalize error and ignore fail task" />
     <MESSAGE value="fix process" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix process" />
+    <MESSAGE value="add worker finalize and stop" />
+    <option name="LAST_COMMIT_MESSAGE" value="add worker finalize and stop" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1374,17 +1325,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="523">
-          <caret line="212" column="44" selection-start-line="212" selection-start-column="44" selection-end-line="212" selection-end-column="44" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-            <element signature="e#16238#17006#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/python/BaseThread.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="460">
@@ -1393,26 +1333,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/IScheduler.py">
+    <entry file="file://$PROJECT_DIR$/python/WorkerRegistry.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
-          <caret line="269" column="8" selection-start-line="269" selection-start-column="8" selection-end-line="269" selection-end-column="8" />
+          <caret line="142" column="8" selection-start-line="142" selection-start-column="8" selection-end-line="142" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/WorkerRegistry.py">
+    <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
-          <caret line="200" column="8" selection-start-line="200" selection-start-column="8" selection-end-line="200" selection-end-column="8" />
-          <folding />
+          <caret line="126" column="8" selection-start-line="126" selection-start-column="8" selection-end-line="126" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#16238#17006#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="335" column="77" selection-start-line="335" selection-start-column="77" selection-end-line="335" selection-end-column="77" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+            <marker date="1509607718733" expanded="false" signature="23748:24855" ph="..." />
+            <marker date="1509607718733" expanded="false" signature="24884:25388" ph="..." />
+            <marker date="1509607718733" expanded="false" signature="25423:25691" ph="..." />
+            <marker date="1509607718733" expanded="false" signature="25856:26034" ph="..." />
+            <marker date="1509607718733" expanded="false" signature="29111:30127" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="537">
-          <caret line="258" column="58" selection-start-line="258" selection-start-column="58" selection-end-line="258" selection-end-column="58" />
+        <state relative-caret-position="280">
+          <caret line="292" column="94" selection-start-line="292" selection-start-column="94" selection-end-line="292" selection-end-column="94" />
           <folding>
             <element signature="e#5968#7191#0" expanded="false" />
             <element signature="e#7304#7800#0" expanded="false" />
@@ -1420,25 +1378,16 @@
             <element signature="e#8150#8340#0" expanded="false" />
             <element signature="e#8433#9792#0" expanded="false" />
             <element signature="e#9886#11944#0" expanded="false" />
-            <element signature="e#13253#14989#0" expanded="false" />
+            <element signature="e#13351#15087#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
+    <entry file="file://$PROJECT_DIR$/python/IScheduler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1982">
-          <caret line="322" column="33" selection-start-line="322" selection-start-column="33" selection-end-line="322" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-            <marker date="1509603422012" expanded="false" signature="22022:28431" ph="..." />
-            <marker date="1509603422012" expanded="false" signature="23111:24218" ph="..." />
-            <marker date="1509603422012" expanded="false" signature="24247:24751" ph="..." />
-            <marker date="1509603422012" expanded="false" signature="24786:25054" ph="..." />
-            <marker date="1509603422012" expanded="false" signature="25080:25198" ph="..." />
-            <marker date="1509603422012" expanded="false" signature="25219:25397" ph="..." />
-            <marker date="1509603422012" expanded="false" signature="28474:29490" ph="..." />
-          </folding>
+        <state relative-caret-position="446">
+          <caret line="83" column="20" selection-start-line="83" selection-start-column="20" selection-end-line="83" selection-end-column="20" />
+          <folding />
         </state>
       </provider>
     </entry>

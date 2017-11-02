@@ -260,6 +260,7 @@ class JobMaster(IJobMaster):
                                 self.command_q.put({MPI_Wrapper.Tags.APP_FIN:self.task_scheduler.uninstall_worker()})
                             else:
                                 # over the refinalize times, force to shutdown
+                                self.task_scheduler.worker_finalized(recv_dict['wid'])
                                 self.command_q.put({MPI_Wrapper.Tags.WORKER_STOP:''})
 
                 while not self.command_q.empty():

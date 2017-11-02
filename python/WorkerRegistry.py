@@ -140,6 +140,19 @@ class WorkerRegistry:
                     self.lock.release()
                 return True ,None
 
+    def terminate_worker(self,wid):
+        wentry = self.get_entry(wid)
+        if wentry.w_uuid in self.alive_workers:
+            if wentry.getStatus() == WorkerStatus.FINALIZED:
+                self.alive_workers.remove(wentry.w_uuid)
+                return True
+            else:
+                wRegistery_log.error('worker %d is not finalized, status=%s'%(wid,wentry.getStatus()))
+                return False
+        else:
+            wRegistery_log.error('Cannot find worker %d'%wid)
+            return False
+
     def get_entry(self,wid):
         if self.__all_workers.has_key(wid):
             return self.__all_workers[wid]
