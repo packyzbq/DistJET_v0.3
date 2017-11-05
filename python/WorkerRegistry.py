@@ -234,7 +234,7 @@ class WorkerRegistry:
             wentry = self.get_by_uuid(uuid)
             if str(wentry.wid) in exp or int(wentry.wid) in exp:
                 continue
-            elif wentry.status in [WorkerStatus.RUNNING, WorkerStatus.INITILAZED]:
+            elif wentry.status in [WorkerStatus.RUNNING, WorkerStatus.INITIALIZED]:
                 wRegistery_log.info('[Registry] worker %s is in status=%s, cannot finalize'%(wentry.wid, wentry.status))
                 flag = False
                 return flag

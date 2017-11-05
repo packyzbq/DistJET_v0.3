@@ -156,6 +156,7 @@ class WorkerAgent:
         self.uuid = str(uuid_mod.uuid4())
         if name is None:
             name = self.uuid
+        print "my name = %s"%self.uuid
         global wlog
         wlog = logger.getLogger('Worker_%s'%name)
         self.worker_class = None
@@ -363,7 +364,7 @@ class WorkerAgent:
                 # ask for one task
                 ask_flag = False
                 for stu in self.worker_status.values():
-                    if stu != WorkerStatus.RUNNING:
+                    if stu == WorkerStatus.IDLE:
                         ask_flag = True
                         break
                 if not self.task_acquire and ask_flag and not self.fin_flag and len(self.worker_list) != 0:
