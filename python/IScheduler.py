@@ -81,7 +81,7 @@ class IScheduler:
             flag = False
             for k in self.scheduled_task_list.keys():
                 if len(self.scheduled_task_list[k]) != 0:
-                    scheduler_log.debug('worker %d has task %s'%(k,self.scheduled_task_list[k]))
+                    #scheduler_log.debug('worker %d has task %s'%(k,self.scheduled_task_list[k]))
                     flag = True
                     break
         return flag

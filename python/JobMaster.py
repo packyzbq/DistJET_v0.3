@@ -192,7 +192,8 @@ class JobMaster(IJobMaster):
                         #TODO add monitor
                         pass
                     if recv_dict.has_key('ctime'):
-                        self.worker_registry.setContacttime(recv_dict['uuid'],recv_dict['ctime'])
+                        if (not recv_dict.has_key('flag')) or (recv_dict.has_key('flag') and recv_dict['flag'] != 'LP'):
+                            self.worker_registry.setContacttime(recv_dict['uuid'],recv_dict['ctime'])
                     if recv_dict.has_key('wstatus'):
                         self.worker_registry.setStatus(recv_dict['wid'],recv_dict['status'])
                         master_log.debug('[Master] Set worker %s status = %s' % (recv_dict['wid'], recv_dict['wstatus']))
