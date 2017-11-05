@@ -191,6 +191,8 @@ class SimpleTaskScheduler(IScheduler):
         if not self.scheduled_task_list.has_key(wid):
             self.scheduled_task_list[wid] = []
         if self.task_todo_queue.empty():
+            # FIXME: now worker ask for one task each time
+            # TODO: need a select algothm to choose from which worker pull back tasks
             # pull idle task back from worker and assign to other worker
             # try pull back task
             for workerid, worker_task_list in self.scheduled_task_list.items():

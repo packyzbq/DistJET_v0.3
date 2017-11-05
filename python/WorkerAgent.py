@@ -360,7 +360,14 @@ class WorkerAgent:
                     self.app_fin_flag = True
 
                 #ask for new task
-                if not self.task_acquire and self.task_queue.empty() and not self.fin_flag and len(self.worker_list) != 0:
+                # ask for one task
+                ask_flag = False
+                for stu in self.worker_status.values():
+                    if stu != WorkerStatus.RUNNING:
+                        ask_flag = True
+                        break
+                if not self.task_acquire and ask_flag and not self.fin_flag and len(self.worker_list) != 0:
+                #if not self.task_acquire and self.task_queue.empty() and not self.fin_flag and len(self.worker_list) != 0:
                     wlog.debug('[Agent] Worker need more tasks, ask for new task')
                     self.heartbeat.acquire_queue.put({Tags.TASK_ADD:1})
                     self.task_acquire = True
