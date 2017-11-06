@@ -1,6 +1,6 @@
 from python.IApplication.JunoApp import JunoApp
 from python.Task import TaskStatus
-from python.Task import Task
+import getpass
 import os
 import subprocess
 
@@ -64,3 +64,8 @@ class UnitTestApp(JunoApp):
                     return False
                 else:
                     return True
+
+    def uninstall(self):
+        comm = 'ps -ef|grep %s|grep "python /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6"|grep -v grep| awk %s|xargs kill'%(getpass.getuser(),"'{print $2}'")
+        self.log.info("[UnitTest] Uninstall command = %s"%comm)
+        return [comm]

@@ -37,7 +37,7 @@ import python.WorkerAgent as WA
 capacity = int(sys.argv[1])
 worker_module_path = None
 
-agent = WA.WorkerAgent(capacity)
+agent = WA.WorkerAgent(capacity=capacity)
 agent.run()
 
 import threading
