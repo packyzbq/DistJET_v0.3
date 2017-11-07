@@ -231,7 +231,8 @@ class JobMaster(IJobMaster):
                                     else:
                                         # finalize all worker
                                         master_log.debug('[Master] All worker have done, finalize all worker')
-                                        self.command_q.put({MPI_Wrapper.Tags.APP_FIN: '', 'extra': []})
+                                        comm_list = self.task_scheduler.uninstall_worker()
+                                        self.command_q.put({MPI_Wrapper.Tags.APP_FIN: comm_list, 'extra': []})
                                 else:
                                     master_log.debug('[Master] There are still running worker, halt')
                                     self.command_q.put({MPI_Wrapper.Tags.WORKER_HALT: ''})
