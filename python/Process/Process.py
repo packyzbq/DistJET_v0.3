@@ -59,7 +59,7 @@ class Process_withENV(threading.Thread):
         self.exec_queue_lock = threading.RLock()
         self.executable = Queue.Queue()
 
-        self.log = open(logpath+'/process.log','w+')
+        self.log = open(logpath,'w+')
         self.hook = task_callback
         self.finalize_callback = finalize_callback
         self.initial = []

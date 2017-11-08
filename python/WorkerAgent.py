@@ -520,7 +520,7 @@ class Worker(BaseThread):
         if worker_class:
             self.worker_obj = worker_class(self.log)
             self.log.debug('[Worker_%s] Create Worker object %s'%(self.id,self.worker_obj.__class__.__name__))
-        self.proc_log = open("%s/worker_%d.log"%(self.workeragent.cfg.getCFGattr("Rundir"),self.id),'w+')
+        #self.proc_log = open("%s/worker_%d.log"%(self.workeragent.cfg.getCFGattr("Rundir"),self.id),'w+')
         self.log.debug('[Worker_%s] Worker Process log path:%s/worker_%d.log'%(self.id,self.workeragent.cfg.getCFGattr("Rundir"),self.id))
 
         self.process = None
@@ -533,8 +533,14 @@ class Worker(BaseThread):
             pass
         else:
             #print "### if ignore fail: "+str(Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
-            self.process = Process_withENV(init_task.boot,Config.Config.getCFGattr('Rundir')+'/log',task_callback=self.task_done, finalize_callback=self.finalize_done,ignoreFail=Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
+            self.process = Process_withENV(init_task.boot,
+                                           Config.Config.getCFGattr('Rundir')+'/log/process_%d_%d.log'%(self.workeragent.wid,self.id),
+                                           task_callback=self.task_done,
+                                           finalize_callback=self.finalize_done,
+                                           ignoreFail=Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
             print '<worker has create process>'
+            self.status = WorkerStatus.INITIALIZING
+            self.workeragent.set_status(self.id,self.status)
             ret = self.process.initialize()
             print '<worker process init ret=%d>'%ret
             if ret == 0:
@@ -570,8 +576,8 @@ class Worker(BaseThread):
             return -1
 
     def terminate(self):
-        self.proc_log.flush()
-        self.proc_log.close()
+        #self.proc_log.flush()
+        #self.proc_log.close()
         self.process.stop(force=True)
         self.stop()
 
@@ -644,7 +650,9 @@ class Worker(BaseThread):
                 self.workeragent.task_done(self.finish_task)
                 self.finish_task = None
             wlog.debug('[Worker_%d] Finalize task = %s'%(self.id,self.workeragent.finExecutor))
-            ret = self.finalize(self.workeragent.finExecutor)
+            self.finalize(self.workeragent.finExecutor)
+            self.status = WorkerStatus.FINALIZING
+            self.workeragent.set_status(self.id, self.status)
             #self.workeragent.finalize_done(self.id,ret)
             while self.finialized:
                 time.sleep(0.1)
