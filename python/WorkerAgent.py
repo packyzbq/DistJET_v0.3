@@ -398,7 +398,7 @@ class WorkerAgent:
                     #else:
                     #    self.stop()
 
-                wlog.debug('[Agent] All worker status = %s'%WorkerStatus.desc(self.worker_status))
+                wlog.debug('[Agent] All worker status = %s'%self.worker_status)
             #self.stop()
             wlog.debug('[Agent] remains %d alive thread, [%s]' % (threading.active_count(), threading.enumerate()))
         except KeyboardInterrupt:

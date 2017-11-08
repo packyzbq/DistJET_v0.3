@@ -17,7 +17,7 @@ class WorkerStatus:
     FINALIZED,
     FINALIZING,
     FINALIZE_FAIL,
-    IDLE) = range(0,10)
+    IDLE) = range(0,11)
     des = {
         NEW: "NEW",
         INITIALIZING: "INITIALIZING",

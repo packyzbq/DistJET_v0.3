@@ -26,7 +26,8 @@ class status:
             return status.DES[stat]
 
 class CommandPack:
-    def __init__(self, command, task_log=None, proc_log=None, finalize_flag=False):
+    def __init__(self, tid, command, task_log=None, proc_log=None,finalize_flag=False):
+        self.tid = tid
         self.command=[]
         if type(command) == types.ListType:
             self.command.extend(command)
@@ -103,9 +104,9 @@ class Process_withENV(threading.Thread):
             command_list.extend(task.boot)
 
         if genLog:
-            commpack = CommandPack(command_list,task_log=task.res_dir+'/task_'+str(task.tid)+'_log.log')
+            commpack = CommandPack(task.tid,command_list,task_log=task.res_dir+'/task_'+str(task.tid)+'_log.log')
         else:
-            commpack = CommandPack(command_list,proc_log=self.log, finalize_flag=True)
+            commpack = CommandPack(task.tid,command_list,proc_log=self.log, finalize_flag=True)
         self.executable.put(commpack)
         self.log.write('[Proc] Add task command=%s, logfile=%s\n'%(commpack.command,str(commpack.task_log)+'|'+str(commpack.proc_log)))
         self.log.flush()
@@ -217,16 +218,18 @@ class Process_withENV(threading.Thread):
                             break
                         elif "recode" not in script:
                             self.start_time = time.time()
-                            logfile.write('\n' + '*' * 20 + ' script "%s" Running log ' % script[:-1] + '*' * 20 + '\n')
+                            if commpack.tid != -1:
+                                logfile.write('\n' + '*' * 20 + ' script "%s" Running log ' % script[:-1] + '*' * 20 + '\n')
                             logfile.flush()
                         self.process.stdin.write(script)
-                        self.process.stdin.write('echo "@recode:$?"\n')
+                        if commpack.tid != -1:
+                            self.process.stdin.write('echo "@recode:$?"\n')
                         while True:
                             fs = select.select([self.process.stdout],[],[],self.timeout)
                             if not fs[0]:
                                 # No response
                                 self.status = status.ANR
-                                logfile.write('[Proc] Task no response, ready to kill')
+                                logfile.write('[Proc] Task no response, ready to kill\n')
                                 logfile.flush()
                                 self.end = time.time()
                                 if self.hook and callable(self.hook):
@@ -242,11 +245,13 @@ class Process_withENV(threading.Thread):
                                 break
                             data = os.read(self.process.stdout.fileno(),1024)
                             if not data:
-                                logfile.write("[proc] No data output ,break")
+                                logfile.write("[proc] No data output ,break\n")
                                 logfile.flush()
                                 script_list = []
                                 break
-                            logfile.write(data)
+                            if commpack.tid == -1:
+                                logfile.write('[FINALIZE INFO]:')
+                            logfile.write(data+'\n')
                             logfile.flush()
                             st = data.split("\n")
                             #if len(st) >= 2 and "recode" in st[-2]:

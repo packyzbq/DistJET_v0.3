@@ -68,4 +68,4 @@ class UnitTestApp(JunoApp):
     def uninstall(self):
         comm = 'ps -ef|grep %s|grep "python /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6"|grep -v grep| awk %s|xargs kill'%(getpass.getuser(),"'{print $2}'")
         self.log.info("[UnitTest] Uninstall command = %s"%comm)
-        return [comm]
+        return ['ps -ef|grep %s|grep -v grep'%getpass.getuser()]
