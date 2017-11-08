@@ -275,21 +275,21 @@ class JobMaster(IJobMaster):
                             master_log.debug('[Master] Send msg = %s, tag=%s, uuid=%s' % (
                             send_dict, tag, self.worker_registry.alive_workers))
                             for uuid in self.worker_registry.alive_workers:
-                                send_str=Pack.pack2json({'uuid':uuid,'dict':send_str})
-                                self.server.send_string(send_str, len(send_str), str(uuid), tag)
+                                send_final=Pack.pack2json({'uuid':uuid,'dict':send_str})
+                                self.server.send_string(send_final, len(send_final), str(uuid), tag)
                         elif send_dict.has_key('extra') and send_dict['extra']:
                             tmplist = send_dict['extra']
                             del (send_dict['extra'])
                             send_str = Pack.pack_obj(send_dict)
                             master_log.debug('[Master] Send msg = %s' % send_dict)
                             for uuid in tmplist:
-                                send_str=Pack.pack2json({'uuid':uuid,'dict':send_str})
-                                self.server.send_string(send_str, len(send_str), uuid, tag)
+                                send_final=Pack.pack2json({'uuid':uuid,'dict':send_final})
+                                self.server.send_string(send_final, len(send_final), uuid, tag)
                         else:
                             send_str = Pack.pack_obj(send_dict)
                             master_log.debug('[Master] Send to worker %s msg = %s' % (current_uuid, send_dict))
-                            send_str = Pack.pack2json({'uuid':current_uuid,'dict':send_str})
-                            self.server.send_string(send_str, len(send_str), current_uuid, tag)
+                            send_final = Pack.pack2json({'uuid':current_uuid,'dict':send_str})
+                            self.server.send_string(send_final, len(send_final), current_uuid, tag)
                 # master stop condition
                 # time.sleep(1)
                 if not self.task_scheduler.has_more_work() and not self.task_scheduler.has_scheduled_work():

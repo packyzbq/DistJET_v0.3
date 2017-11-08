@@ -219,8 +219,9 @@ class WorkerAgent:
                         continue
                     message = msg.sbuf[0:msg.size]
                     try:
-                        wlog.debug('[Agent] Receive new message =%s'%Package.unpack_from_json(message))
-                        recv_dict = Package.unpack_obj(Package.unpack_from_json(message)['dict'])
+                        tmp_obj = Package.unpack_from_json(message)['dict']
+                        #wlog.debug('tmp_obj=%s'%tmp_obj)
+                        recv_dict = Package.unpack_obj(tmp_obj)
                     except:
                         wlog.error('[WorkerAgent] Error occurs when parse msg, <%s>'%traceback.format_exc())
                     for k,v in recv_dict.items():
