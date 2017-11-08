@@ -7,15 +7,35 @@ import traceback
 from Util.Config import Config
 
 class WorkerStatus:
-    NEW = -1
-    INITIALIZED = 0
-    INITIALIZE_FAIL = 1
-    IDLE = 7
-    RUNNING = 2
-    ERROR = 3
-    LOST = 4
-    FINALIZED = 5
-    FINALIZE_FAIL = 6
+    (NEW,
+    INITIALIZED,
+    INITIALIZING,
+    INITIALIZE_FAIL,
+    RUNNING,
+    ERROR,
+    LOST,
+    FINALIZED,
+    FINALIZING,
+    FINALIZE_FAIL,
+    IDLE) = range(0,10)
+    des = {
+        NEW: "NEW",
+        INITIALIZING: "INITIALIZING",
+        INITIALIZE_FAIL:"INITIALIZE_FAIL",
+        RUNNING:"RUNNING",
+        ERROR:"ERROR",
+        LOST:"LOST",
+        FINALIZED:"FINALIZED",
+        FINALIZING:"FINALIZING",
+        FINALIZE_FAIL:"FINALIZE_FAIL",
+        IDLE:"IDLE"
+    }
+    @staticmethod
+    def desc(status):
+        if WorkerStatus.des.has_key(status):
+            return WorkerStatus.des[status]
+        else:
+            return None
 
 class WorkerEntry:
     def __init__(self, wid, w_uuid, max_capacity):
