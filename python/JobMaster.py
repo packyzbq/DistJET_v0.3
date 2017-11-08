@@ -231,15 +231,15 @@ class JobMaster(IJobMaster):
                                     else:
                                         # finalize all worker
                                         master_log.debug('[Master] All worker have done, finalize all worker')
-                                        comm_list = self.task_scheduler.uninstall_worker()
-                                        self.command_q.put({MPI_Wrapper.Tags.APP_FIN: comm_list, 'extra': []})
+                                        fin_task = self.task_scheduler.uninstall_worker()
+                                        self.command_q.put({MPI_Wrapper.Tags.APP_FIN: fin_task, 'extra': []})
                                 else:
                                     master_log.debug('[Master] There are still running worker, halt')
                                     self.command_q.put({MPI_Wrapper.Tags.WORKER_HALT: ''})
                             else:
                                 master_log.info('[Master] Finalize worker %s'%recv_dict['wid'])
-                                comm_list = self.task_scheduler.uninstall_worker()
-                                self.command_q.put({MPI_Wrapper.Tags.APP_FIN: comm_list})
+                                fin_task = self.task_scheduler.uninstall_worker()
+                                self.command_q.put({MPI_Wrapper.Tags.APP_FIN: fin_task})
 
                         else:
                             # assign tasks to worker
