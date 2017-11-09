@@ -397,7 +397,6 @@ class WorkerAgent:
                         #time.sleep(0.1)
                     #else:
                     #    self.stop()
-
                 wlog.debug('[Agent] All worker status = %s'%self.worker_status)
             #self.stop()
             wlog.debug('[Agent] remains %d alive thread, [%s]' % (threading.active_count(), threading.enumerate()))

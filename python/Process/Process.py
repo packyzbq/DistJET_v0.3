@@ -207,6 +207,8 @@ class Process_withENV(threading.Thread):
                     while len(script_list) != 0 and len(script_list) > index:
                         script = script_list[index]
                         index+=1
+                        if '#exit#' not in script and not script.endswith('\n'):
+                            script+='\n'
                         print "<process> get script=%s"%script
                         if '#exit#' in script:
                             print "<process> exiting..."
