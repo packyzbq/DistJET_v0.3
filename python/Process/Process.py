@@ -276,14 +276,14 @@ class Process_withENV(threading.Thread):
                                     script_list =[]
                                 logfile.write("\n\n\nreturn code = %s" % self.recode)
                                 logfile.flush()
-                                if index == sc_len-1 or int(self.recode) != 0:
+                                if index == sc_len or int(self.recode) != 0:
                                     self.end = time.time()
                                     logfile.write("\nstart time = %s \nend time = %s\n\n" % (
                                     time.asctime(time.localtime(self.start_time)), time.asctime(time.localtime(self.end))))
                                     logfile.flush()
                                     if self.hook and callable(self.hook):
                                         self.hook(self.status, self.recode, self.start_time, self.end)
-                                    break
+                                break
                             elif not self.ignoreFail and (self.logParser and (not self._parseLog(data))):
                                 self.status = status.FAIL
                                 self.recode = -1
