@@ -203,6 +203,7 @@ class Process_withENV(threading.Thread):
                         self.hook = self.finalize_callback
                     #fin_flag = commpack.finzlize_flag
                     print "script_list = %s"%script_list
+                    sc_len = len(script_list)
                     index = 0
                     while len(script_list) != 0 and len(script_list) > index:
                         script = script_list[index]
@@ -212,8 +213,8 @@ class Process_withENV(threading.Thread):
                         print "<process> get script=%s"%script
                         if '#exit#' in script:
                             print "<process> exiting..."
-                            if index == 1 and self.hook and callable(self.hook):
-                                self.hook(status.SUCCESS,0,0,0)
+                            if self.hook and callable(self.hook):
+                                self.hook(status.SUCCESS,0,self.start,self.end)
                             logfile.write("[Proc] Ready to exit\n")
                             logfile.flush()
                             self.stop_flag=True
@@ -266,17 +267,23 @@ class Process_withENV(threading.Thread):
                             else:
                                 line = st[-1]
                             if "@recode" in line:
-                                self.end = time.time()
                                 self.recode = line[line.find("@recode:")+8:]
-                                logfile.write("\n\n\nreturn code = %s" % self.recode)
-                                logfile.write("\nstart time = %s \nend time = %s\n\n" % (
-                                time.asctime(time.localtime(self.start_time)), time.asctime(time.localtime(self.end))))
-                                logfile.flush()
                                 if int(self.recode) == 0:
                                     self.status = status.SUCCESS
-                                if self.hook and callable(self.hook):
-                                    self.hook(self.status, self.recode, self.start_time, self.end)
-                                break
+                                else:
+                                    self.status = status.FAIL
+                                    self.end = time.time()
+                                    script_list =[]
+                                logfile.write("\n\n\nreturn code = %s" % self.recode)
+                                logfile.flush()
+                                if index == sc_len-1 or int(self.recode) != 0:
+                                    self.end = time.time()
+                                    logfile.write("\nstart time = %s \nend time = %s\n\n" % (
+                                    time.asctime(time.localtime(self.start_time)), time.asctime(time.localtime(self.end))))
+                                    logfile.flush()
+                                    if self.hook and callable(self.hook):
+                                        self.hook(self.status, self.recode, self.start_time, self.end)
+                                    break
                             elif not self.ignoreFail and (self.logParser and (not self._parseLog(data))):
                                 self.status = status.FAIL
                                 self.recode = -1
