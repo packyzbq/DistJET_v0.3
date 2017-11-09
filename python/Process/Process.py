@@ -224,8 +224,8 @@ class Process_withENV(threading.Thread):
                                 logfile.write('\n' + '*' * 20 + ' script "%s" Running log ' % script[:-1] + '*' * 20 + '\n')
                             logfile.flush()
                         self.process.stdin.write(script)
-                        if commpack.tid != -1:
-                            self.process.stdin.write('echo "@recode:$?"\n')
+                        #if commpack.tid != -1:
+                        self.process.stdin.write('echo "@recode:$?"\n')
                         while True:
                             fs = select.select([self.process.stdout],[],[],self.timeout)
                             if not fs[0]:
