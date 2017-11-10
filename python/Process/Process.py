@@ -1,6 +1,7 @@
 import time
 import types
 import os,sys
+import getpass
 sys.path.append(os.environ['DistJETPATH'])
 import threading
 import select
@@ -245,12 +246,14 @@ class Process_withENV(threading.Thread):
                                 #if tmp_list:
                                 #    self.set_exe(tmp_list)
                                 script_list=[]
+                                self._clean_process()
                                 break
                             data = os.read(self.process.stdout.fileno(),1024)
                             if not data:
                                 logfile.write("[proc] No data output ,break\n")
                                 logfile.flush()
                                 script_list = []
+                                self._clean_process()
                                 break
                             if commpack.tid == -1:
                                 logfile.write('[FINALIZE INFO]:')
@@ -283,6 +286,7 @@ class Process_withENV(threading.Thread):
                                     logfile.flush()
                                     if self.hook and callable(self.hook):
                                         self.hook(self.status, self.recode, self.start_time, self.end)
+                                self._clean_process()
                                 break
                             elif not self.ignoreFail and (self.logParser and (not self._parseLog(data))):
                                 self.status = status.FAIL
@@ -296,6 +300,7 @@ class Process_withENV(threading.Thread):
                                 # self._kill_task()
                                 # self.process = self._restart()
                                 script_list = []
+                                self._clean_process()
                                 break
                             '''
                             for line in st:
@@ -346,7 +351,10 @@ class Process_withENV(threading.Thread):
 
         self._burnProcess()
 
-
+    def _clean_process(self):
+        rc = subprocess.Popen(['ps -ef|grep %s | grep -v grep| awk \'{if($3==1 && $8!="hydra_nameserver") print $2}\'|xargs kill'%getpass.getuser()],shell=True)
+        rc.wait()
+        self.log.write('\n [Proc]Clean up process...\n')
 
     def _kill_task(self):
         if not self.process:

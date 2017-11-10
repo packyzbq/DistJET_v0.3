@@ -52,6 +52,9 @@ class WatchDogThread(BaseThread):
             if idleworker:
                 control_log.warning('Find Idle timeout worker %s'%idleworker)
                 # TODO: do something to reduce the resource
+
+            if not lostworker and not idleworker:
+                control_log.debug('No lost worker and idle worker')
             if self.master.cfg.getPolicyattr('CONTROL_DELAY'):
                 time.sleep(self.master.cfg.getPolicyattr('CONTROL_DELAY'))
             else:
