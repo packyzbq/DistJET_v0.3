@@ -274,6 +274,8 @@ class WorkerRegistry:
     def setStatus(self,wid,status):
         wid = int(wid)
         wentry = self.get_entry(wid)
+        if status == WorkerStatus.IDLE and wentry.status != status:
+            wentry.idle_time = time.time()
         if wentry.alive:
             wentry.alive_lock.acquire()
             wentry.status = status
@@ -294,7 +296,7 @@ class WorkerRegistry:
         """
         lostworker = []
         for w in self.__all_workers.values():
-            if w.isLost():
+            if w.w_uuid in self.alive_workers and w.isLost():
                 lostworker.append(w.wid)
                 w.alive = False
                 self.alive_workers.remove(w.w_uuid)
@@ -309,7 +311,7 @@ class WorkerRegistry:
             for w in self.__all_workers.values():
                 if w.alive and w.worker_status == WorkerStatus.IDLE:
                     if w.idle_time != 0:
-                        if time.time()-w.idle_time > Config.getPolicyattr('IDLE_WORKER_TIMEOUT'):
+                        if Config.getPolicyattr('IDLE_WORKER_TIME') and time.time()-w.idle_time > Config.getPolicyattr('IDLE_WORKER_TIMEOUT'):
                             list.append(w.wid)
                     else:
                         w.idle_time = time.time()

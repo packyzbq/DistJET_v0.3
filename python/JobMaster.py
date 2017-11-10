@@ -6,7 +6,7 @@ import traceback
 
 from Util import logger
 
-control_log = logger.getLogger('Control_Log')
+control_log = logger.getLogger('WatchDog_Log')
 master_log = logger.getLogger('Master')
 
 import IR_Buffer_Module as IM
@@ -27,13 +27,13 @@ from python.Util.Config import Config, set_inipath
 
 
 
-class ControlThread(BaseThread):
+class WatchDogThread(BaseThread):
     """
     monitor the worker registry to manage worker
     """
 
     def __init__(self, master):
-        BaseThread.__init__(self, 'ControlThread')
+        BaseThread.__init__(self, 'WatchDog')
         self.master = master
         self.processing = False
 
@@ -47,7 +47,15 @@ class ControlThread(BaseThread):
                 for wid in lostworker:
                     self.master.remove_worker(wid)
 
-            time.sleep(self.master.cfg.getPolicyattr('CONTROL_DELAY'))
+            # check idle timeout worker
+            idleworker = self.master.worker_registry.checkIDLETimeout()
+            if idleworker:
+                control_log.warning('Find Idle timeout worker %s'%idleworker)
+                # TODO: do something to reduce the resource
+            if self.master.cfg.getPolicyattr('CONTROL_DELAY'):
+                time.sleep(self.master.cfg.getPolicyattr('CONTROL_DELAY'))
+            else:
+                time.sleep(0.1)
 
     def activateProcessing(self):
         self.processing = True
@@ -78,7 +86,7 @@ class JobMaster(IJobMaster):
 
         self.recv_buffer = IM.IRecv_buffer()
 
-        self.control_thread = ControlThread(self)
+        self.control_thread = WatchDogThread(self)
 
         self.applications = applications  # list
 
@@ -147,12 +155,13 @@ class JobMaster(IJobMaster):
         pass
 
     def startProcessing(self):
+        self.control_thread.start()
         try:
             while not self.__stop:
                 current_uuid=None
                 msg = self.recv_buffer.get()
                 if msg.tag!= -1:
-                    master_log.debug('[Master] Receive msg = %s' % msg.sbuf[:msg.size])
+                    #master_log.debug('[Master] Receive msg = %s' % msg.sbuf[:msg.size])
                     if msg.tag == MPI_Wrapper.Tags.MPI_DISCONNECT:
                         master_log.info("[Master] Agent disconnect")
                         continue
