@@ -212,12 +212,18 @@ class SimpleTaskScheduler(IScheduler):
 
         else:
             # assign 1 task once
-            if not self.task_todo_queue.empty():
+            task = None
+            while not self.task_todo_queue.empty():
                 tid = self.task_todo_queue.get()
                 task = self.get_task(tid)
-                task.assign(wid)
-                task_list.append(task)
-                self.scheduled_task_list[wid].append(tid)
+                if isinstance(task,Task.ChainTask) and task.father_len() != 0:
+                    self.task_todo_queue.put(tid)
+                    continue
+                else:
+                    break
+            task.assign(wid)
+            task_list.append(task)
+            self.scheduled_task_list[wid].append(tid)
             # assign tasks depends on the capacity of task
             #while room >= 1 and not self.task_todo_queue.empty():
             #    tid = self.task_todo_queue.get()

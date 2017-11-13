@@ -1,5 +1,5 @@
 from python.IApplication.JunoApp import JunoApp
-from python.Task import TaskStatus
+from python.Task import TaskStatus,Task
 import getpass
 import os
 import subprocess
@@ -16,7 +16,14 @@ class UnitTestApp(JunoApp):
         self.data[0].append('Tutorial')
         self.data[0].append('Cf252')
         self.setStatus('data')
-        return self.data
+        task_list = []
+        for data in self.data:
+            task = Task(-1)
+            task.boot = self.app_boot
+            task.data = data
+            task_list.append(task)
+
+        return task_list
 
     def split_bak(self):
         rc = subprocess.Popen(["python",os.environ['JUNOTESTROOT']+"/python/JunoTest/junotest","UnitTest","list"],stdout=subprocess.PIPE, stderr=subprocess.PIPE)

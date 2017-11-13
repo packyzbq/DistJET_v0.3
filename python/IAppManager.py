@@ -123,10 +123,16 @@ class IAppManager:
 class SimpleAppManager(IAppManager):
     def create_task(self, appid):
         app = self.applist[appid]
+        task_list = app.split()
         data = app.split()
         app.log.debug('after split')
         self.tid = 0
-        task_list = {}
+        task_dict = {}
+        for task in task_list:
+            task.tid = self.tid
+            task_dict[self.tid] = task
+            self.tid+=1
+        '''
         for k, v in data.items():
             for data_value in v:
             # create tasks, and store in task_queue
@@ -136,11 +142,13 @@ class SimpleAppManager(IAppManager):
             # self.task_queue.put(task)
                 task_list[task.tid] = task
                 appmgr_log.debug('[AppMgr] Create Task: %s'%task.toDict())
+        '''
         if len(task_list) == 0 and len(data) == 0:
             appmgr_log.error('[AppMgr]: Create 0 task, check app split() method')
             return None
         else:
-            return task_list
+            appmgr_log.info('[AppMgr]: Create %d task'%(len(task_dict)))
+            return task_dict
 
     def setup_app(self,appid=None):
         if not appid:

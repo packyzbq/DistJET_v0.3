@@ -154,7 +154,7 @@ class IApplication(object):
     def split(self):
         """
         this method needs to be overwrite by user to split data into key-value pattern
-        :return: k-v data, data/ k-v task, task
+        :return: task[]
         """
         raise NotImplementedError
 
