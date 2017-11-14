@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/DistJET_v0.3.iml" afterPath="$PROJECT_DIR$/.idea/DistJET_v0.3.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/ProdApp/ProdApp.py" afterPath="$PROJECT_DIR$/Application/ProdApp/ProdApp.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/Task.py" afterPath="$PROJECT_DIR$/python/Task.py" />
     </list>
     <ignored path="DistJET_v0.3.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -881,7 +877,14 @@
       <option name="project" value="LOCAL" />
       <updated>1510301974885</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="test for ProdApp">
+      <created>1510643261852</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1510643261852</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -943,7 +946,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix some mechnisim" />
     <MESSAGE value="add master worker start bin" />
     <MESSAGE value="add master_start bin" />
     <MESSAGE value="add and fix start_worker bin&#10;" />
@@ -968,7 +970,8 @@
     <MESSAGE value="sync for test" />
     <MESSAGE value="test finalize" />
     <MESSAGE value="add watch dog thread" />
-    <option name="LAST_COMMIT_MESSAGE" value="add watch dog thread" />
+    <MESSAGE value="test for ProdApp" />
+    <option name="LAST_COMMIT_MESSAGE" value="test for ProdApp" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
