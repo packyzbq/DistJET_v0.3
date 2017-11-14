@@ -55,8 +55,15 @@ class Task:
     """
     The object split from application. Include a tracer to record the history
     """
-    def __init__(self, tid):
-        self.tid = tid
+    task_id = 0
+
+    def __init__(self, tid=None):
+        if tid:
+            self.tid = tid
+            Task.task_id = self.tid+1
+        else:
+            self.tid = Task.task_id
+            Task.task_id+=1
         self.status = TaskStatus.NEW
         self.history = [TaskDetail()]
         self.attemptime=0
