@@ -163,7 +163,7 @@ class Task:
 
 
 class ChainTask(Task):
-    def __init__(self,tid):
+    def __init__(self,tid=None):
         Task.__init__(tid)
         self._father = set()
         self._child = set()
