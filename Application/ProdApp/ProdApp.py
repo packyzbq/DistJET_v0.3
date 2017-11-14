@@ -1,7 +1,8 @@
+import sys,os
+sys.path.append(os.environ['DistJETPATH'])
 from python.IApplication.JunoApp import JunoApp
 from python.Task import ChainTask
 import python.Util.Config as Config
-import os
 import subprocess
 
 def MakeandCD(path):
@@ -11,18 +12,18 @@ def MakeandCD(path):
 
 class ProdApp(JunoApp):
     def __init__(self,rootdir, name, config_path=None):
+        if not config_path or not os.path.exists(os.path.abspath(config_path)):
+            #self.log.warning('[ProdApp] Cannot find config file = %s, use default'%config_path)
+            config_path = os.environ['DistJETPATH']+'/Application/ProdApp/config.ini' 
         super(ProdApp,self).__init__(rootdir,name,config_path)
         self.task_reslist={}
         self.workflow=[]
         self.driver_dir = []
-        self.driver={}
+        self.driver={} # driver_name: scripts_list
         self.sample_list=[]
-        self.njob = self.cfg.get('njobs')
 
-        if not config_path or not os.path.exists(os.path.abspath(config_path)):
-            self.log.warning('[ProdApp] Cannot find config file = %s, use default'%config_path)
-            config_path = os.environ['DistJETPATH']+'/Application/ProdApp/config.ini'
         self.cfg = Config.AppConf(config_path,'ProdApp')
+        self.njob = self.cfg.get('njobs')
         if self.cfg.get('sample_list') is not None:
             self.sample_list.extend(self.cfg.get('sample_list').strip().split(' '))
         else:
@@ -38,14 +39,16 @@ class ProdApp(JunoApp):
     def split(self):
         task_list = []
         for sample in self.sample_list:
-
+            driver = self.cfg.get('driver',sec=sample)
             # gen boot command
-            chain_script = self.driver.get(self.cfg.get('driver',sec=sample))
+            chain_script = self._find_driver_script(driver_name=driver)
             if not chain_script:
                 self.log.warning('WARN: Can not find specify driver: %s for sample:%s, skip simaple' % (
                 self.cfg.get('driver', sec=sample), sample))
                 continue
-            scripts = self.cfg.get('scripts',sec=sample).strip().split()
+            scripts = self.cfg.get('scripts',sec=sample)
+            if scripts:
+                scripts = scripts.strip().split()
             if not scripts:
                 scripts = chain_script
             elif not set(chain_script.keys()) > set(scripts):
@@ -54,7 +57,11 @@ class ProdApp(JunoApp):
 
             topdir = self.cfg.get('topdir',sec=sample)
             if not topdir:
-                topdir = Config.Config.getCFGattr('Rundir')+'/'+sample
+                rundir = Config.Config.getCFGattr('Rundir')
+                if not rundir:
+                    rundir = os.getcwd()
+                    print 'rundir = %s'%rundir
+                topdir = rundir+'/'+sample
                 self.log.warning('WARN: Top dir is None, use default: %s'%(topdir))
             if not os.path.exists(topdir):
                 os.mkdir(topdir)
@@ -65,10 +72,11 @@ class ProdApp(JunoApp):
             tags = self.cfg.get('tags',sec=sample).strip().split(' ')
             workflow = self.cfg.get('workflow',sec=sample).strip().split(' ')
 
-            seed = self.cfg.get('seed',sec=sample)
+            seed_base = int(self.cfg.get('seed',sec=sample))
             maxevt = self.cfg.get('evtmax',sec=sample)
-            assert seed is not None or maxevt is not None
-            task_njob = maxevt/self.njob
+            seed_offset = 0
+            assert seed_base is not None or maxevt is not None
+            task_njob = int(maxevt)/int(self.njob)
             for spt in scripts:
                 worksubdir = None
                 if 'uniform' in spt:
@@ -80,20 +88,27 @@ class ProdApp(JunoApp):
                     os.mkdir(task_resdir)
                 MakeandCD(sample_dir+'/'+worksubdir)
                 pre_task = None
-                for wf in workflow:
-                    for tag in tags:
-                        args = self._gen_args(sample,seed,task_njob,tag,wf,worksubdir)
-                        self.log.info('bash %s %s'%(spt,args))
-                        os.system('bash %s %s'%(chain_script[spt],args))
-                        tmp_task = ChainTask()
-                        tmp_task.boot = "bash %s/run-%s-%s.sh"%(os.getcwd()+"/"+tag+'/'+wf,wf,seed)
-                        tmp_task.res_dir = task_resdir
-                        if wf != 'detsim':
-                            tmp_task.set_father(pre_task)
-                        pre_task = tmp_task
-                        self.log.debug('[ProdApp] Creat task : %s'%tmp_task.toDict())
-                        task_list.append(tmp_task)
-                pre_task = None
+                for tag in tags:
+                    while True:
+                        if seed_offset > int(maxevt)+task_njob:
+                            break
+                        for wf in workflow:
+                            if seed_offset < maxevt:
+                                args = self._gen_args(sample,str(seed_base+seed_offset),str(task_njob),tag,wf,worksubdir)
+                            elif seed_offset < maxevt+task_njob:
+                                args = self._gen_args(sample,str(seed_base+seed_offset),str(maxevt+task_njob-seed_offset),tag,wf,worksubdir)
+                            #self.log.info('bash %s %s'%(spt,args))
+                            os.system('bash %s %s'%(chain_script[spt],args))
+                            tmp_task = ChainTask()
+                            tmp_task.boot = "bash %s/run-%s-%s.sh"%(os.getcwd()+"/"+tag+'/'+wf,wf,seed_base+seed_offset)
+                            tmp_task.res_dir = task_resdir
+                            if wf != 'detsim':
+                                tmp_task.set_father(pre_task)
+                            pre_task = tmp_task
+                            self.log.debug('[ProdApp] Creat task : %s'%tmp_task.toDict())
+                            task_list.append(tmp_task)
+                        seed_offset += task_njob
+                        pre_task = None
 
         os.chdir(self.res_dir)
         return task_list
@@ -117,7 +132,6 @@ class ProdApp(JunoApp):
         user_extra_dir.append(top_driver_dir)
         # get driver list
         for dd in user_extra_dir:
-            print "searching on %s"%dd
             # check directory exists or not
             if not os.path.exists(dd):
                 self.log.warning("WARN: %s does not exist" % dd)
@@ -172,5 +186,6 @@ class ProdApp(JunoApp):
 
 if __name__ == '__main__':
     app = ProdApp("/afs/ihep.ac.cn/users/z/zhaobq/workerSpace/DistJET_v0.3/Application/ProdApp/",'ProdApp')
+    app.res_dir = "/afs/ihep.ac.cn/users/z/zhaobq/workerSpace/DistJET_v0.3/Application/ProdApp/test"
     tasklist = app.split()
     print tasklist

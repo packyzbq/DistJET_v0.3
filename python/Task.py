@@ -51,7 +51,7 @@ class TaskDetail:
         self.time_end = time_term
         self.info = 'Cancel'
 
-class Task:
+class Task(object):
     """
     The object split from application. Include a tracer to record the history
     """
@@ -164,7 +164,8 @@ class Task:
 
 class ChainTask(Task):
     def __init__(self,tid=None):
-        Task.__init__(tid)
+        #Task.__init__(tid=tid)
+        super(ChainTask,self).__init__(tid)
         self._father = set()
         self._child = set()
 
