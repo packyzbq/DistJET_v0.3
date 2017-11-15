@@ -142,7 +142,7 @@ class Task(object):
         errmsg=None
         comm=None
         if type(self.data) == types.StringType:
-            comm = self.boot+' '+self.data
+            comm = self.boot[0]+' '+self.data
             if self.args:
                 comm+=' '+self.args
             comm_list.append(comm)
@@ -204,3 +204,13 @@ class ChainTask(Task):
 
     def get_child_list(self):
         return self._child
+    
+    def toDict(self):
+        tmpdict = {}
+        tmpdict['boot'] = self.boot
+        tmpdict['data'] = self.data
+        tmpdict['args'] = self.args
+        tmpdict['resdir'] = self.res_dir
+        tmpdict['father'] = self._father
+        return tmpdict
+

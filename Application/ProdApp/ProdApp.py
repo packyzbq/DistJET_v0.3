@@ -74,10 +74,11 @@ class ProdApp(JunoApp):
 
             seed_base = int(self.cfg.get('seed',sec=sample))
             maxevt = self.cfg.get('evtmax',sec=sample)
-            seed_offset = 0
             assert seed_base is not None or maxevt is not None
             task_njob = int(maxevt)/int(self.njob)
-            for spt in scripts:
+            print "scripts = %s"%scripts
+            for spt in scripts.keys():
+                seed_offset = 0
                 worksubdir = None
                 if 'uniform' in spt:
                     worksubdir = 'uniform'
