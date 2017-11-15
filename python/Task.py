@@ -92,6 +92,7 @@ class Task(object):
 
     def toDict(self):
         tmpdict = {}
+        tmpdict['tid'] = self.tid
         tmpdict['boot'] = self.boot
         tmpdict['data'] = self.data
         tmpdict['args'] = self.args
@@ -141,10 +142,10 @@ class Task(object):
         comm_list=[]
         errmsg=None
         comm=None
-        if type(self.data) == types.StringType:
-            comm = self.boot[0]+' '+self.data
+        if not self.data:
+            comm = self.boot[0]
             if self.args:
-                comm+=' '+self.args
+                comm += self.args[0]
             comm_list.append(comm)
         elif type(self.data) == types.DictType:
             for k, data in self.data.items():
@@ -155,7 +156,6 @@ class Task(object):
                     comm_list.append(comm)
                 else:
                     errmsg='[Task] Gen Command Fail, cannot find boot script <%d> for data <%s>'%(k,data)
-                comm=None
         else:
             errmsg = '[Task] Cannot recognize the boot<%s> and data<%s>'%(self.boot,self.data)
         return comm_list,errmsg
@@ -207,6 +207,7 @@ class ChainTask(Task):
     
     def toDict(self):
         tmpdict = {}
+        tmpdict['tid'] = self.tid
         tmpdict['boot'] = self.boot
         tmpdict['data'] = self.data
         tmpdict['args'] = self.args

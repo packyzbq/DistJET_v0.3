@@ -101,7 +101,8 @@ class ProdApp(JunoApp):
                             #self.log.info('bash %s %s'%(spt,args))
                             os.system('bash %s %s'%(chain_script[spt],args))
                             tmp_task = ChainTask()
-                            tmp_task.boot = "bash %s/run-%s-%s.sh"%(os.getcwd()+"/"+tag+'/'+wf,wf,seed_base+seed_offset)
+                            tmp_task.boot.append("bash %s/run-%s-%s.sh"%(os.getcwd()+"/"+tag+'/'+wf,wf,seed_base+seed_offset))
+                            #tmp_task.boot = "bash %s/run-%s-%s.sh"%(os.getcwd()+"/"+tag+'/'+wf,wf,seed_base+seed_offset)
                             tmp_task.res_dir = task_resdir
                             if wf != 'detsim':
                                 tmp_task.set_father(pre_task)

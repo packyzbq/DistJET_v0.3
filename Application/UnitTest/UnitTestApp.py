@@ -17,12 +17,11 @@ class UnitTestApp(JunoApp):
         self.data[0].append('Cf252')
         self.setStatus('data')
         task_list = []
-        for data in ['Tutorial','Cf252']:
+        for data in self.data.values():
             task = Task()
             task.boot = self.app_boot
-            task.data = data
+            task.data[0] = data
             task_list.append(task)
-            print "task id=%d, task data = %s"%(task.tid, task.data)
 
         return task_list
 
