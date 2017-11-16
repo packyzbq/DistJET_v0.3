@@ -144,14 +144,14 @@ class Task(object):
         comm=None
         if not self.data:
             comm = self.boot[0]
-            if self.args:
+            if self.args.has_key(0):
                 comm += self.args[0]
             comm_list.append(comm)
         elif type(self.data) == types.DictType:
             for k, data in self.data.items():
                 if self.boot[k]:
                     comm = self.boot[k]+' '+data
-                    if self.args[k]:
+                    if self.args.has_key(k) and self.args[k]:
                         comm+= ' '+self.args[k]
                     comm_list.append(comm)
                 else:

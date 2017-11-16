@@ -124,14 +124,13 @@ class SimpleAppManager(IAppManager):
     def create_task(self, appid):
         app = self.applist[appid]
         task_list = app.split()
-        data = app.split()
+        #data = app.split()
         app.log.debug('after split')
-        self.tid = 0
+        
         task_dict = {}
         for task in task_list:
-            task.tid = self.tid
-            task_dict[self.tid] = task
-            self.tid+=1
+           appmgr_log.info('[AppMgr] Get task %s'%task.toDict()) 
+           task_dict[task.tid] = task
         '''
         for k, v in data.items():
             for data_value in v:

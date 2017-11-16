@@ -105,6 +105,7 @@ class Process_withENV(threading.Thread):
             command_list.extend(task.boot)
 
         if genLog:
+            print "res_dir=%s, tid=%s"%(task.res_dir,str(task.tid))
             commpack = CommandPack(task.tid,command_list,task_log=task.res_dir+'/task_'+str(task.tid)+'_log.log')
         else:
             commpack = CommandPack(task.tid,command_list,proc_log=self.log, finalize_flag=True)

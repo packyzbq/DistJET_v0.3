@@ -3,6 +3,7 @@ from python.Task import TaskStatus,Task
 import getpass
 import os
 import subprocess
+import types
 
 class UnitTestApp(JunoApp):
     def __init__(self,rootdir, name, config_path=None):
@@ -17,10 +18,11 @@ class UnitTestApp(JunoApp):
         self.data[0].append('Cf252')
         self.setStatus('data')
         task_list = []
-        for data in self.data.values():
+        for data in self.data[0]:
             task = Task()
             task.boot = self.app_boot
             task.data[0] = data
+            task.res_dir = self.res_dir
             task_list.append(task)
 
         return task_list
@@ -49,12 +51,18 @@ class UnitTestApp(JunoApp):
     def merge(self, tasklist):
         for task in tasklist.values():
             with open(self.res_dir+'/summary.log','a+') as resfile:
+                data = ''
+                if type(task.data) == types.DictType:
+                    for d in task.data.values():
+                        data+=d+' '
+                else:
+                    data = task.data
                 if task.status == TaskStatus.COMPLETED:
-                    resfile.writelines(str(task.tid)+' '+task.data+'  SUCCESS\n')
+                    resfile.writelines(str(task.tid)+' '+data+'  SUCCESS\n')
                     #resfile.writelines(task.toString())
                     resfile.flush()
                 else:
-                    resfile.writelines(str(task.tid)+' '+task.data+'  FAIL\n')
+                    resfile.writelines(str(task.tid)+' '+data+'  FAIL\n')
                     resfile.flush()
 
 
