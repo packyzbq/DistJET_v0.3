@@ -22,6 +22,9 @@ class ProdApp(JunoApp):
         self.driver={} # driver_name: scripts_list
         self.sample_list=[]
 
+        self.setStatus('boot')
+        self.setStatus('data')
+	    
         self.cfg = Config.AppConf(config_path,'ProdApp')
         self.njob = self.cfg.get('njobs')
         if self.cfg.get('sample_list') is not None:
