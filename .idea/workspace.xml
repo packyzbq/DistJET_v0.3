@@ -146,13 +146,13 @@
       <file leaf-file-name="JobMaster.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="409">
-              <caret line="252" column="38" selection-start-line="252" selection-start-column="38" selection-end-line="252" selection-end-column="38" />
+            <state relative-caret-position="272">
+              <caret line="194" column="53" selection-start-line="194" selection-start-column="40" selection-end-line="194" selection-end-column="53" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
                 <element signature="e#894#1847#0" expanded="false" />
-                <element signature="e#13526#14355#0" expanded="false" />
-                <element signature="e#14399#14613#0" expanded="false" />
+                <element signature="e#13526#14369#0" expanded="false" />
+                <element signature="e#14413#14627#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -1099,7 +1099,14 @@
       <option name="project" value="LOCAL" />
       <updated>1510909258162</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="fix new thread bug">
+      <created>1510909903005</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1510909903005</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1171,7 +1178,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add keyInterrupt stop and default config.ini" />
     <MESSAGE value="change communication format" />
     <MESSAGE value="fix task add bug" />
     <MESSAGE value="add app config, fix juno env bug, add task empty detect log" />
@@ -1196,7 +1202,8 @@
     <MESSAGE value="change gen_boot  and test" />
     <MESSAGE value="add ProdApp run() script" />
     <MESSAGE value="add handler thread" />
-    <option name="LAST_COMMIT_MESSAGE" value="add handler thread" />
+    <MESSAGE value="fix new thread bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix new thread bug" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1605,13 +1612,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="409">
-          <caret line="252" column="38" selection-start-line="252" selection-start-column="38" selection-end-line="252" selection-end-column="38" />
+        <state relative-caret-position="272">
+          <caret line="194" column="53" selection-start-line="194" selection-start-column="40" selection-end-line="194" selection-end-column="53" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
             <element signature="e#894#1847#0" expanded="false" />
-            <element signature="e#13526#14355#0" expanded="false" />
-            <element signature="e#14399#14613#0" expanded="false" />
+            <element signature="e#13526#14369#0" expanded="false" />
+            <element signature="e#14413#14627#0" expanded="false" />
           </folding>
         </state>
       </provider>

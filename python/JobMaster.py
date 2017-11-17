@@ -290,7 +290,7 @@ class JobMaster(IJobMaster):
             worker_module_path = self.appmgr.current_app.specifiedWorker
             send_dict = {'wid': worker.wid, 'appid': self.task_scheduler.appid,
                          'init': self.task_scheduler.setup_worker(), 'uuid': w_uuid, 'wmp': worker_module_path}
-            self.command_q.put({MPI_Wrapper.Tags.MPI_REGISTY_ACK: send_dict})
+            self.command_q.put({MPI_Wrapper.Tags.MPI_REGISTY_ACK: send_dict,'uuid':w_uuid})
             # send_str = MSG_wrapper(wid=worker.wid,appid=self.task_scheduler.appid, init=self.task_scheduler.init_worker())
             # self.server.send_string(send_str, len(send_str), w_uuid, MPI_Wrapper.Tags.MPI_REGISTY_ACK)
 
@@ -388,12 +388,12 @@ class JobMaster(IJobMaster):
 
     def finalize_worker(self, uuid):
         tmp_dict = self.task_scheduler.fin_worker()
-        self.command_q.put({MPI_Wrapper.Tags.APP_FIN: tmp_dict, 'extra': [uuid]})
+        self.command_q.put({MPI_Wrapper.Tags.APP_FIN: tmp_dict, 'extra': [uuid],'uuid':uuid})
 
     def try_pullback(self,wid, tid):
         master_log.debug('[Master] Try pull back task %s from worker %s'%(tid,wid))
         uuid = self.worker_registry.get_entry(wid).w_uuid
-        send_dict = {MPI_Wrapper.Tags.TASK_REMOVE: tid, 'extra': [uuid]}
+        send_dict = {MPI_Wrapper.Tags.TASK_REMOVE: tid, 'extra': [uuid],'uuid':uuid}
         self.command_q.put(send_dict)
 
 
