@@ -213,5 +213,6 @@ class ChainTask(Task):
         tmpdict['args'] = self.args
         tmpdict['resdir'] = self.res_dir
         tmpdict['father'] = self._father
+        tmpdict['child'] = self._child
         return tmpdict
 

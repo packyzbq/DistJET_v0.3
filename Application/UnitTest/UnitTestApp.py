@@ -1,5 +1,5 @@
 from python.IApplication.JunoApp import JunoApp
-from python.Task import TaskStatus,Task
+from python.Task import TaskStatus,Task,ChainTask
 import getpass
 import os
 import subprocess
@@ -13,6 +13,23 @@ class UnitTestApp(JunoApp):
         self.setStatus('boot') 
 
     def split(self):
+        task_list = []
+
+        task1 = ChainTask()
+        task1.boot = self.app_boot
+        task1.data[0] = "Tutorial"
+        task1.res_dir = self.res_dir
+        task_list.append(task1)
+        
+        task2 = ChainTask()
+        task2.boot = self.app_boot
+        task2.data[0] = "Cf252"
+        task2.res_dir = self.res_dir
+        task_list.append(task2)
+
+        task1.set_child(task2)
+        task2.set_father(task1)
+        '''
         self.data[0]=[]
         self.data[0].append('Tutorial')
         self.data[0].append('Cf252')
@@ -24,7 +41,7 @@ class UnitTestApp(JunoApp):
             task.data[0] = data
             task.res_dir = self.res_dir
             task_list.append(task)
-
+        '''
         return task_list
 
     def split_bak(self):

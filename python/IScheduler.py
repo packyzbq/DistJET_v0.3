@@ -246,9 +246,10 @@ class SimpleTaskScheduler(IScheduler):
         scheduler_log.debug('[Scheduler] Task %s complete, remove form scheduled_task_list, now = %s' % (tid, self.scheduled_task_list))
         self.completed_queue.put(task)
         # update chain task
+        print type(task)
         if isinstance(task,Task.ChainTask):
-            for child_id in task.get_child_list():
-                child = self.task_list(child_id)
+            for child in task.get_child_list():
+                #child = self.task_list(child_id)
                 child.remove_father(task.tid)
                 if child.father_len == 0:
                     self.task_todo_queue.put(child)

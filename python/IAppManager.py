@@ -142,7 +142,7 @@ class SimpleAppManager(IAppManager):
                 task_list[task.tid] = task
                 appmgr_log.debug('[AppMgr] Create Task: %s'%task.toDict())
         '''
-        if len(task_list) == 0 and len(data) == 0:
+        if len(task_list) == 0: #and len(data) == 0:
             appmgr_log.error('[AppMgr]: Create 0 task, check app split() method')
             return None
         else:

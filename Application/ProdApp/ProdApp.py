@@ -114,6 +114,8 @@ class ProdApp(JunoApp):
                             tmp_task.res_dir = task_resdir
                             if wf != 'detsim':
                                 tmp_task.set_father(pre_task)
+                            if pre_task:
+                                pre_task.set_child(tmp_task)
                             pre_task = tmp_task
                             self.log.debug('[ProdApp] Creat task : %s'%tmp_task.toDict())
                             task_list.append(tmp_task)
