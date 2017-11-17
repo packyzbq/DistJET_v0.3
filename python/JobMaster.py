@@ -1,8 +1,8 @@
 import Queue
-import datetime
 import time
 import os
 import traceback
+import threading
 
 from Util import logger
 
@@ -66,22 +66,25 @@ class WatchDogThread(BaseThread):
 
 
 class HandlerThread(BaseThread):
-    def __init__(self, master,cond,lock):
+    def __init__(self, master,cond):
         BaseThread.__init__(self,'Handler')
         self.master = master
         self.message_queue = Queue.Queue()
         self.uuid_queue = Queue.Queue()
         self.cond = cond
-        self.lock = lock
         self.sleep_flag = False
 
     def setMessage(self,message,uuid):
         self.message_queue.put(message)
         self.uuid_queue.put(uuid)
 
+    def isSleep(self):
+        return self.sleep_flag
+
     def run(self):
         handler_log.info('Handler thread start...')
         while not self.get_stop_flag():
+            self.sleep_flag = False
             if self.message_queue.empty():
                 self.sleep_flag = True
                 self.cond.acquire()
@@ -224,7 +227,9 @@ class JobMaster(IJobMaster):
         self.recv_buffer = IM.IRecv_buffer()
 
         self.control_thread = WatchDogThread(self)
-        self.handler = HandlerThread(self)
+
+        self.handler_cond = threading.Condition()
+        self.handler = HandlerThread(self,self.handler_cond)
 
         self.applications = applications  # list
 
@@ -261,6 +266,10 @@ class JobMaster(IJobMaster):
             master_log.info('[Master] Control Thread has joined')
         if self.handler and self.handler.isAlive():
             self.handler.stop()
+            if self.handler.isSleep():
+                self.handler_cond.acquire()
+                self.handler_cond.notify()
+                self.handler_cond.release()
             self.handler.join()
             master_log.info('[Master] Handler Thread has joined')
 
@@ -318,6 +327,10 @@ class JobMaster(IJobMaster):
                     master_log.debug('[Master] Receive message from %s'%current_uuid)
                     # pass message to handler thread
                     self.handler.setMessage(msg,current_uuid)
+                    if self.handler.isSleep():
+                        self.handler_cond.acquire()
+                        self.handler_cond.notify()
+                        self.handler_cond.release()
 
 
 
