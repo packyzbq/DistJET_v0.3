@@ -51,7 +51,12 @@ class ProdApp(JunoApp):
                 continue
             scripts = self.cfg.get('scripts',sec=sample)
             if scripts:
-                scripts = scripts.strip().split()
+                script_list = scripts.strip().split()
+                scripts = {}
+                for scp in script_list:
+                    if scp in chain_script.keys():
+                        scripts[scp] = chain_script[scp]
+       
             if not scripts:
                 scripts = chain_script
             elif not set(chain_script.keys()) > set(scripts):
