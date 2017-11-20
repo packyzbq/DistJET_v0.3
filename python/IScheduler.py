@@ -72,7 +72,10 @@ class IScheduler:
         """
         #if not self.task_todo_queue.empty():
             #scheduler_log.debug('task_todo_quue has task num = %d'%self.task_todo_queue.qsize())
-        return not self.task_todo_queue.empty()
+        if self.task_todo_queue.empty():
+            return not self.completed_queue.qsize() == len(self.task_list)
+        else:
+            return True
 
     def has_scheduled_work(self,wid=None):
         if wid:
@@ -250,7 +253,8 @@ class SimpleTaskScheduler(IScheduler):
         if isinstance(task,Task.ChainTask):
             for child in task.get_child_list():
                 #child = self.task_list(child_id)
-                child.remove_father(task.tid)
+                if not child.remove_father(task):
+                    scheduler_log.error("[Scheduler] Remove father %s error, father list = %s"%(task,child.get_father_len()))
                 if child.father_len == 0:
                     self.task_todo_queue.put(child)
                     scheduler_log.debug('[Scheduler] ChainTask %s add to todo list'%child.tid)
