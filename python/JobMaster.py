@@ -159,7 +159,7 @@ class HandlerThread(BaseThread):
                         # according to Policy ,check other worker status and idle worker
                         if Config.getPolicyattr('WORKER_SYNC_QUIT'):
                             if self.master.worker_registry.checkIdle(exp=[recv_dict['wid']]):  # exp=[recv_dict['wid']]
-                                if self.master.__all_final_flag:
+                                if self.master.get_all_final():
                                     master_log.info('[Master] Have send all finalize msg, skip this')
                                 else:
                                     # finalize all worker
@@ -257,6 +257,9 @@ class JobMaster(IJobMaster):
             exit()
 
         self.__stop = False
+	
+    def get_all_final(self):
+        return self.__all_final_flag
 
     def stop(self):
         # TaskScheduler is not a thread
