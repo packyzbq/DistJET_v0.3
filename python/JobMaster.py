@@ -153,8 +153,18 @@ class HandlerThread(BaseThread):
                 if recv_dict.has_key(MPI_Wrapper.Tags.TASK_ADD):
                     v = recv_dict[MPI_Wrapper.Tags.TASK_ADD]
                     master_log.debug('[Master] From worker %s receive a TASK_ADD msg = %s' % (recv_dict['wid'], v))
-                    task_list = self.master.task_scheduler.assignTask(recv_dict['wid'])
-                    if not task_list:
+                    if self.master.task_scheduler.has_more_work():
+                        task_list = self.master.task_scheduler.assignTask(recv_dict['wid'])
+                        if not task_list:
+                            master_log.info('[Master] There are pre Chain Task need to be done, worker wait')
+                        else:
+                            # assign tasks to worker
+                            tid_list = [task.tid for task in task_list]
+                            master_log.info(
+                                '[Master] Assign task %s to worker %d' % (tid_list, recv_dict['wid']))
+                            self.master.command_q.put({MPI_Wrapper.Tags.TASK_ADD: task_list, 'uuid': current_uuid})
+
+                    else:
                         master_log.debug('[Master] No more task to do')
                         # according to Policy ,check other worker status and idle worker
                         if Config.getPolicyattr('WORKER_SYNC_QUIT'):
@@ -174,12 +184,7 @@ class HandlerThread(BaseThread):
                             fin_task = self.master.task_scheduler.uninstall_worker()
                             self.master.command_q.put({MPI_Wrapper.Tags.APP_FIN: fin_task,'uuid':current_uuid})
 
-                    else:
-                        # assign tasks to worker
-                        tid_list = [task.tid for task in task_list]
-                        master_log.info(
-                            '[Master] Assign task %s to worker %d' % (tid_list, recv_dict['wid']))
-                        self.master.command_q.put({MPI_Wrapper.Tags.TASK_ADD: task_list,'uuid':current_uuid})
+
                 if recv_dict.has_key(MPI_Wrapper.Tags.APP_FIN):
                     v = recv_dict[MPI_Wrapper.Tags.APP_FIN]
                     master_log.debug('[Master] From worker %s receive a APP_FIN msg = %s' % (recv_dict['wid'], v))
@@ -336,7 +341,8 @@ class JobMaster(IJobMaster):
                         self.handler_cond.release()
 
 
-
+                # print worker status
+                master_log.debug('[Master] Worker status = %s'%self.worker_registry.get_worker_status())
 
                 while not self.command_q.empty():
                     send_dict = self.command_q.get()

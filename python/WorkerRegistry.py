@@ -225,6 +225,12 @@ class WorkerRegistry:
     def get_worker_list(self):
         return self.__all_workers.values()
 
+    def get_worker_status(self):
+        status = {}
+        for wid,entry in self.__all_workers.items():
+            status[wid] = entry.status
+        return status
+
     def get_capacity(self, wid):
         return self.__all_workers[wid].max_capacity
 
