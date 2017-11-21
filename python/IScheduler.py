@@ -259,15 +259,17 @@ class SimpleTaskScheduler(IScheduler):
         self.completed_queue.put(task)
         # update chain task
         print type(task)
+        self.updateTask(task)
         if isinstance(task,Task.ChainTask):
             for child in task.get_child_list():
                 #child = self.task_list(child_id)
                 child.remove_father(task)
-                scheduler_log.info("[Scheduler] Remove father %s , father list = %s"%(task,child.get_father_list()))
+                #scheduler_log.info("[Scheduler] Remove father %s , father list = %s"%(task,child.get_father_list()))
                 if child.father_len() == 0:
                     self.task_todo_queue.put(child.tid)
                     scheduler_log.debug('[Scheduler] ChainTask %s add to todo list'%(child.tid))
-                    scheduler_log.debug("[Scheduler] Task Compare: child:<%s>, task:<%s>"%(child.toDict(),self.get_task(child.tid).toDict()))
+                self.updateTask(child)
+                #scheduler_log.debug("[Scheduler] Task Compare: child:<%s>, task:<%s>"%(child.toDict(),self.get_task(child.tid).toDict()))
 
     def task_failed(self, wid, task):
         wid = int(wid)
@@ -282,6 +284,7 @@ class SimpleTaskScheduler(IScheduler):
         else:
             scheduler_log.info('[Scheduler] Task %s execute times is limited, ignore'%tid)
             self.completed_queue.put(task)
+        self.updateTask(task)
 
     def worker_initialized(self, wid):
         entry = self.worker_registry.get_entry(wid)
@@ -320,7 +323,7 @@ class SimpleTaskScheduler(IScheduler):
                 w.lock.release()
 
     def updateTask(self,task):
-        if not task or isinstance(task,Task):
+        if not task: #or isinstance(task,Task.Task):
             return False
         if self.task_list.has_key(task.tid):
             self.task_list[task.tid] = task
