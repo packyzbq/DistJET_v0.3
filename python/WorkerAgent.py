@@ -88,6 +88,7 @@ class HeartbeatThread(BaseThread):
                     send_dict['Task'].append(task)
                 send_dict['uuid'] = self.worker_agent.uuid
                 send_dict['wid'] = self.worker_agent.wid
+                send_dict['wstatus'] = self.worker_agent.get_status()
                 send_dict['health'] = self.worker_agent.health_info()
                 send_dict['rTask'] = self.worker_agent.getRuntasklist()
                 send_dict['ctime'] = time.time()
@@ -491,7 +492,8 @@ class WorkerAgent:
     def set_status(self, wid, status):
         self.worker_status[wid] = status
 
-
+    def get_status(self):
+        return self.worker_status[0] if self.worker_status.has_key(0) else None
 
 
 

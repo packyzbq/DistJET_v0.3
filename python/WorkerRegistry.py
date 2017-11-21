@@ -277,15 +277,15 @@ class WorkerRegistry:
         if status == WorkerStatus.IDLE and wentry.status != status:
             wentry.idle_time = time.time()
         if wentry.alive:
-            wentry.alive_lock.acquire()
+            wentry.lock.acquire()
             wentry.status = status
-            wentry.alive_lock.release()
+            wentry.lock.release()
         else:
             wRegistery_log.warning('[Registry] Worker %s is not alive')
-            wentry.alive_lock.acquire()
+            wentry.lock.acquire()
             wentry.alive = True
             wentry.status = status
-            wentry.alive_lock.release()
+            wentry.lock.release()
             self.alive_workers.add(wentry.w_uuid)
 
 
