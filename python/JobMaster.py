@@ -191,9 +191,13 @@ class HandlerThread(BaseThread):
                     if v['recode'] == status.SUCCESS:
                         self.master.task_scheduler.worker_finalized(recv_dict['wid'])
                         master_log.debug('[Master] Have finalized worker %s' % recv_dict['wid'])
-                        # TODO if more app need to be done
-                        # no more app need to do, logout worker
-                        self.master.command_q.put({MPI_Wrapper.Tags.LOGOUT: '','uuid':current_uuid})
+                        # if more app need to be done, wait for old app finish and load new app
+                        if self.master.appmgr.has_next_app():
+                            #self.master.command_q.put({MPI_Wrapper.Tags.WORKER_HALT:'','uuid':current_uuid})
+                            self.master.acquire_newApp()
+                        else:
+                            # no more app need to do, logout worker
+                            self.master.command_q.put({MPI_Wrapper.Tags.LOGOUT: '','uuid':current_uuid})
                     else:
                         master_log.error('worker %d finalize error, errmsg=%s' % (recv_dict['wid'], v['errmsg']))
                         if self.master.worker_registry.worker_refin(recv_dict['wid']):
@@ -245,15 +249,7 @@ class JobMaster(IJobMaster):
         # TODO(optional) load customed AppManager
         self.appmgr = SimpleAppManager(apps=self.applications)
         #master_log.debug('[Master] Appmgr has instanced')
-        if not self.appmgr.runflag:
-            # appmgr load task error, exit
-            return
-        # self.task_scheduler = IScheduler.SimpleScheduler(self.appmgr,self.worker_registry)
-        if self.appmgr.get_current_app():
-            self.task_scheduler = self.appmgr.get_current_app().scheduler(self, self.appmgr, self.worker_registry)
-        else:
-            self.task_scheduler = IScheduler.SimpleScheduler(self, self.appmgr, self.worker_registry)
-        self.task_scheduler.appid = self.appmgr.get_current_appid()
+
         self.server = MPI_Wrapper.Server(self.recv_buffer, self.svc_name)
         ret = self.server.initialize()
         if ret != 0:
@@ -261,10 +257,14 @@ class JobMaster(IJobMaster):
             # TODO add error handler
             exit()
 
+        self.__newApp_flag = False
         self.__stop = False
 	
     def get_all_final(self):
         return self.__all_final_flag
+
+    def acquire_newApp(self):
+        self.__newApp_flag = True
 
     def stop(self):
         # TaskScheduler is not a thread
@@ -315,6 +315,8 @@ class JobMaster(IJobMaster):
         pass
 
     def startProcessing(self):
+        #load app
+        self.load_app()
         self.control_thread.start()
         self.handler.start()
         try:
@@ -376,10 +378,26 @@ class JobMaster(IJobMaster):
                             send_final = Pack.pack2json({'uuid':current_uuid,'dict':send_str})
                             self.server.send_string(send_final, len(send_final), current_uuid, tag)
                 # master stop condition
+
                 # time.sleep(1)
                 if not self.task_scheduler.has_more_work() and not self.task_scheduler.has_scheduled_work():
+                    #TODO: app finalize/merge need to be a single module
                     self.appmgr.finalize_app()
-                    if not self.appmgr.has_next_app() and self.worker_registry.size() == 0:
+                    # has more app need to be done
+                    if self.appmgr.has_next_app():
+                        self.load_app(napp=True)
+                        init_comm = self.task_scheduler.setup_worker()
+                        send_dict = {'appid': self.task_scheduler.appid,
+                                     'init': init_comm,
+                                     'flag':'NEWAPP'}
+                        for uuid in self.worker_registry.alive_workers:
+                            send_dict['uuid'] = uuid
+                            send_dict['wid'] = self.worker_registry.get_by_uuid(uuid).wid
+                            send_str = Pack.pack_obj(send_dict)
+                            send_final = Pack.pack2json({'uuid':uuid,'dict':send_str})
+                            self.server.send_string(send_final,len(send_final),uuid,MPI_Wrapper.Tags.MPI_REGISTY_ACK)
+
+                    elif not self.appmgr.has_next_app() and self.worker_registry.size() == 0:
                         master_log.info("[Master] Application done, logout workers")
                         if self.worker_registry.hasAlive():
                             #TODO logout/disconnect worker -- force stop?
@@ -388,8 +406,23 @@ class JobMaster(IJobMaster):
                                 self.server.send_string(stop_line,len(stop_line),uuid,MPI_Wrapper.Tags.WORKER_STOP)
                             continue
                         self.stop()
+
+
         except KeyboardInterrupt, Exception:
             self.stop()
+
+    def load_app(self,napp=False):
+        if not self.appmgr.runflag:
+            # appmgr load task error, exit
+            return False
+        # self.task_scheduler = IScheduler.SimpleScheduler(self.appmgr,self.worker_registry)
+        if napp:
+            self.appmgr.next_app()
+        if self.appmgr.get_current_app():
+            self.task_scheduler = self.appmgr.get_current_app().scheduler(self, self.appmgr, self.worker_registry)
+        else:
+            self.task_scheduler = IScheduler.SimpleScheduler(self, self.appmgr, self.worker_registry)
+        self.task_scheduler.appid = self.appmgr.get_current_appid()
 
 
     def getRunFlag(self):

@@ -355,10 +355,10 @@ class WorkerAgent:
 
                         elif int(k) == Tags.WORKER_HALT:
                             wlog.debug('[Agent] Receive WORKER_HALT command')
-                            self.haltflag=True
+                            self.halt_flag=True
                     continue
                 if self.initial_flag and len(self.worker_list) == 0 and not self.app_fin_flag:
-                    self.haltflag = False
+                    self.halt_flag = False
                     self.heartbeat.acquire_queue.put({Tags.APP_FIN: {'wid': self.wid, 'recode': status.SUCCESS, 'result': None}})
                     wlog.debug('[Agent] Send APP_FIN msg for logout/newApp')
                     self.app_fin_flag = True
