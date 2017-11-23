@@ -46,6 +46,7 @@ class WatchDogThread(BaseThread):
             if lostworker:
                 control_log.warning('Lost worker = %s' % lostworker)
                 for wid in lostworker:
+                    #TODO: maybe use other method to deal with the lost worker
                     self.master.remove_worker(wid)
 
             # check idle timeout worker

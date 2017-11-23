@@ -143,22 +143,19 @@ class WorkerRegistry:
             wRegistery_log.warning('attempt to remove not registered worker: wid=%d', wid)
             return False,None
         else:
-            if w_uuid in self.alive_workers:
-                # finalize worker
-                wRegistery_log.info('attempt to remove alive worker: wid=%d',wid)
-                return False,w_uuid
-            else:
-                wRegistery_log.info('worker removed: wid=%d',wid)
-                try:
-                    self.lock.acquire()
-                    del(self.__all_workers[wid])
-                    del(self.__all_workers_uuid[w_uuid])
-                except KeyError:
-                    wRegistery_log.warning('[WorkerRegistry]: can not find worker when remove worker=%d, uuid=%s', wid, w_uuid)
-                    return False, None
-                finally:
-                    self.lock.release()
-                return True ,None
+            wRegistery_log.info('worker removed: wid=%d',wid)
+            try:
+                self.lock.acquire()
+                del(self.__all_workers[wid])
+                del(self.__all_workers_uuid[w_uuid])
+                if w_uuid in self.alive_workers:
+                    self.alive_workers.remove(w_uuid)
+            except KeyError:
+                wRegistery_log.warning('[WorkerRegistry]: can not find worker when remove worker=%d, uuid=%s', wid, w_uuid)
+                return False, None
+            finally:
+                self.lock.release()
+            return True ,None
 
     def terminate_worker(self,wid):
         wentry = self.get_entry(wid)
