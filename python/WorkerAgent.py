@@ -244,6 +244,7 @@ class WorkerAgent:
                                 self.fin_flag = False
                                 self.app_fin_flag = False
                                 self.halt_flag = False
+                                self.task_acquire = False
                             else:
                                 wlog.debug('[WorkerAgent] Receive Registry_ACK msg = %s' % v)
                             worker_path = v['wmp']

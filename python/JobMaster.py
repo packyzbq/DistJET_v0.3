@@ -384,7 +384,7 @@ class JobMaster(IJobMaster):
                     #TODO: app finalize/merge need to be a single module
                     self.appmgr.finalize_app()
                     #check all worker finalized
-                    if self.worker_registry.checkFinalize():
+                    if self.worker_registry.checkFinalize() and self.__newApp_flag:
                         # has more app need to be done
                         if self.appmgr.has_next_app():
                             self.load_app(napp=True)
@@ -399,7 +399,9 @@ class JobMaster(IJobMaster):
                                 send_dict['wid'] = self.worker_registry.get_by_uuid(uuid).wid
                                 send_str = Pack.pack_obj({MPI_Wrapper.Tags.MPI_REGISTY_ACK:send_dict})
                                 send_final = Pack.pack2json({'uuid':uuid,'dict':send_str})
+                                master_log.debug('[Master] Send new App message') 
                                 self.server.send_string(send_final,len(send_final),uuid,MPI_Wrapper.Tags.MPI_REGISTY_ACK)
+                            self.__newApp_flag = False
 
                     elif not self.appmgr.has_next_app() and self.worker_registry.size() == 0:
                         master_log.info("[Master] Application done, logout workers")

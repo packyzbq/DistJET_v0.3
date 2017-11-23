@@ -164,7 +164,7 @@ class WorkerRegistry:
         wentry = self.get_entry(wid)
         if wentry.w_uuid in self.alive_workers:
             if wentry.getStatus() == WorkerStatus.FINALIZED:
-                self.alive_workers.remove(wentry.w_uuid)
+                #self.alive_workers.remove(wentry.w_uuid)
                 return True
             else:
                 wRegistery_log.error('worker %d is not finalized, status=%s'%(wid,wentry.getStatus()))
@@ -269,7 +269,7 @@ class WorkerRegistry:
     def checkFinalize(self,exp=[]):
         for uuid in self.alive_workers:
             entry = self.get_by_uuid(uuid)
-            if entry.status != WorkerStatus.FINALIZED:
+            if entry.status and entry.status != WorkerStatus.FINALIZED:
                 return False
         return True
 
