@@ -383,21 +383,23 @@ class JobMaster(IJobMaster):
                 if not self.task_scheduler.has_more_work() and not self.task_scheduler.has_scheduled_work():
                     #TODO: app finalize/merge need to be a single module
                     self.appmgr.finalize_app()
-                    # has more app need to be done
-                    if self.appmgr.has_next_app():
-                        self.load_app(napp=True)
-                        init_comm = self.task_scheduler.setup_worker()
-                        worker_path = self.appmgr.current_app.specifiedWorker
-                        send_dict = {'appid': self.task_scheduler.appid,
-                                     'init': init_comm,
-                                     'flag':'NEWAPP',
-									 'wmp':worker_path}
-                        for uuid in self.worker_registry.alive_workers:
-                            send_dict['uuid'] = uuid
-                            send_dict['wid'] = self.worker_registry.get_by_uuid(uuid).wid
-                            send_str = Pack.pack_obj({MPI_Wrapper.Tags.MPI_REGISTY_ACK:send_dict})
-                            send_final = Pack.pack2json({'uuid':uuid,'dict':send_str})
-                            self.server.send_string(send_final,len(send_final),uuid,MPI_Wrapper.Tags.MPI_REGISTY_ACK)
+                    #check all worker finalized
+                    if self.worker_registry.checkFinalize():
+                        # has more app need to be done
+                        if self.appmgr.has_next_app():
+                            self.load_app(napp=True)
+                            init_comm = self.task_scheduler.setup_worker()
+                            worker_path = self.appmgr.current_app.specifiedWorker
+                            send_dict = {'appid': self.task_scheduler.appid,
+                                         'init': init_comm,
+                                         'flag':'NEWAPP',
+                                         'wmp':worker_path}
+                            for uuid in self.worker_registry.alive_workers:
+                                send_dict['uuid'] = uuid
+                                send_dict['wid'] = self.worker_registry.get_by_uuid(uuid).wid
+                                send_str = Pack.pack_obj({MPI_Wrapper.Tags.MPI_REGISTY_ACK:send_dict})
+                                send_final = Pack.pack2json({'uuid':uuid,'dict':send_str})
+                                self.server.send_string(send_final,len(send_final),uuid,MPI_Wrapper.Tags.MPI_REGISTY_ACK)
 
                     elif not self.appmgr.has_next_app() and self.worker_registry.size() == 0:
                         master_log.info("[Master] Application done, logout workers")

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="add app chain">
+    <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/JobMaster.py" afterPath="$PROJECT_DIR$/python/JobMaster.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/WorkerAgent.py" afterPath="$PROJECT_DIR$/python/WorkerAgent.py" />
     </list>
     <ignored path="DistJET_v0.3.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,13 +31,16 @@
       <file leaf-file-name="WorkerAgent.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="631">
-              <caret line="273" column="0" selection-start-line="273" selection-start-column="0" selection-end-line="273" selection-end-column="0" />
+            <state relative-caret-position="2240">
+              <caret line="379" column="36" selection-start-line="379" selection-start-column="24" selection-end-line="379" selection-end-column="36" />
               <folding>
+                <element signature="e#13185#14271#0" expanded="false" />
                 <element signature="e#14421#14862#0" expanded="false" />
                 <element signature="e#14966#15657#0" expanded="false" />
                 <element signature="e#15790#16434#0" expanded="false" />
                 <element signature="e#16573#16833#0" expanded="false" />
+                <element signature="e#17616#17714#0" expanded="false" />
+                <element signature="e#17839#18146#0" expanded="false" />
                 <element signature="e#24425#25860#0" expanded="false" />
               </folding>
             </state>
@@ -48,8 +50,8 @@
       <file leaf-file-name="WorkerRegistry.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/WorkerRegistry.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="377">
-              <caret line="183" column="24" selection-start-line="183" selection-start-column="24" selection-end-line="183" selection-end-column="24" />
+            <state relative-caret-position="285">
+              <caret line="268" column="8" selection-start-line="268" selection-start-column="8" selection-end-line="268" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -71,8 +73,8 @@
       <file leaf-file-name="IAppManager.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/IAppManager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="30" column="47" selection-start-line="30" selection-start-column="47" selection-end-line="30" selection-end-column="47" />
+            <state relative-caret-position="285">
+              <caret line="166" column="8" selection-start-line="166" selection-start-column="8" selection-end-line="166" selection-end-column="8" />
               <folding>
                 <element signature="e#1165#1357#0" expanded="false" />
                 <element signature="e#1403#1539#0" expanded="false" />
@@ -93,18 +95,13 @@
       <file leaf-file-name="JobMaster.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="383" column="21" selection-start-line="383" selection-start-column="21" selection-end-line="383" selection-end-column="21" />
+            <state relative-caret-position="319">
+              <caret line="386" column="50" selection-start-line="386" selection-start-column="50" selection-end-line="386" selection-end-column="50" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
-                <element signature="e#665#1913#0" expanded="false" />
-                <element signature="e#894#1847#0" expanded="false" />
-                <element signature="e#2985#4217#0" expanded="false" />
-                <element signature="e#6993#9418#0" expanded="false" />
-                <element signature="e#11182#11357#0" expanded="false" />
-                <element signature="e#12793#13645#0" expanded="false" />
-                <element signature="e#13706#14549#0" expanded="false" />
-                <element signature="e#14593#14807#0" expanded="false" />
+                <element signature="e#665#2056#0" expanded="false" />
+                <element signature="e#894#1990#0" expanded="false" />
+                <element signature="e#7384#8022#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -160,8 +157,8 @@
         <option value="$PROJECT_DIR$/python/IScheduler.py" />
         <option value="$PROJECT_DIR$/python/WorkerRegistry.py" />
         <option value="$PROJECT_DIR$/python/WorkerAgent.py" />
-        <option value="$PROJECT_DIR$/python/JobMaster.py" />
         <option value="$PROJECT_DIR$/python/IAppManager.py" />
+        <option value="$PROJECT_DIR$/python/JobMaster.py" />
       </list>
     </option>
   </component>
@@ -315,9 +312,8 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/Application/UnitTest/App_Module.py</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/python/JobMaster.py</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/WorkerAgent.py</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/WorkerRegistry.py</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
           <option name="myUpdateName" value="Created" />
@@ -1014,7 +1010,14 @@
       <option name="project" value="LOCAL" />
       <updated>1511247888842</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="add app chain">
+      <created>1511343202103</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1511343202103</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -1030,15 +1033,15 @@
     <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14860515" sideWeight="0.50756305" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14860515" sideWeight="0.5095829" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2356257" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14860515" sideWeight="0.49243698" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14860515" sideWeight="0.49041712" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1437,32 +1440,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/WorkerRegistry.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="183" column="24" selection-start-line="183" selection-start-column="24" selection-end-line="183" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="631">
-          <caret line="273" column="0" selection-start-line="273" selection-start-column="0" selection-end-line="273" selection-end-column="0" />
-          <folding>
-            <element signature="e#14421#14862#0" expanded="false" />
-            <element signature="e#14966#15657#0" expanded="false" />
-            <element signature="e#15790#16434#0" expanded="false" />
-            <element signature="e#16573#16833#0" expanded="false" />
-            <element signature="e#24425#25860#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/python/IAppManager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="30" column="47" selection-start-line="30" selection-start-column="47" selection-end-line="30" selection-end-column="47" />
+        <state relative-caret-position="285">
+          <caret line="166" column="8" selection-start-line="166" selection-start-column="8" selection-end-line="166" selection-end-column="8" />
           <folding>
             <element signature="e#1165#1357#0" expanded="false" />
             <element signature="e#1403#1539#0" expanded="false" />
@@ -1479,20 +1460,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2240">
+          <caret line="379" column="36" selection-start-line="379" selection-start-column="24" selection-end-line="379" selection-end-column="36" />
+          <folding>
+            <element signature="e#13185#14271#0" expanded="false" />
+            <element signature="e#14421#14862#0" expanded="false" />
+            <element signature="e#14966#15657#0" expanded="false" />
+            <element signature="e#15790#16434#0" expanded="false" />
+            <element signature="e#16573#16833#0" expanded="false" />
+            <element signature="e#17616#17714#0" expanded="false" />
+            <element signature="e#17839#18146#0" expanded="false" />
+            <element signature="e#24425#25860#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/WorkerRegistry.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="268" column="8" selection-start-line="268" selection-start-column="8" selection-end-line="268" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="383" column="21" selection-start-line="383" selection-start-column="21" selection-end-line="383" selection-end-column="21" />
+        <state relative-caret-position="319">
+          <caret line="386" column="50" selection-start-line="386" selection-start-column="50" selection-end-line="386" selection-end-column="50" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
-            <element signature="e#665#1913#0" expanded="false" />
-            <element signature="e#894#1847#0" expanded="false" />
-            <element signature="e#2985#4217#0" expanded="false" />
-            <element signature="e#6993#9418#0" expanded="false" />
-            <element signature="e#11182#11357#0" expanded="false" />
-            <element signature="e#12793#13645#0" expanded="false" />
-            <element signature="e#13706#14549#0" expanded="false" />
-            <element signature="e#14593#14807#0" expanded="false" />
+            <element signature="e#665#2056#0" expanded="false" />
+            <element signature="e#894#1990#0" expanded="false" />
+            <element signature="e#7384#8022#0" expanded="false" />
           </folding>
         </state>
       </provider>
