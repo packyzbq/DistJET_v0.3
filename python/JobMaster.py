@@ -53,6 +53,9 @@ class WatchDogThread(BaseThread):
             if idleworker:
                 control_log.warning('Find Idle timeout worker %s'%idleworker)
                 # TODO: do something to reduce the resource
+            # print worker status
+            master_log.debug('[Master] Worker status = %s'%self.master.worker_registry.get_worker_status())
+
 
             if not lostworker and not idleworker:
                 control_log.debug('No lost worker and idle worker')
@@ -343,9 +346,6 @@ class JobMaster(IJobMaster):
                         self.handler_cond.release()
 
 
-                # print worker status
-                master_log.debug('[Master] Worker status = %s'%self.worker_registry.get_worker_status())
-
                 while not self.command_q.empty():
                     send_dict = self.command_q.get()
                     if len(send_dict) != 0:
@@ -387,13 +387,15 @@ class JobMaster(IJobMaster):
                     if self.appmgr.has_next_app():
                         self.load_app(napp=True)
                         init_comm = self.task_scheduler.setup_worker()
+                        worker_path = self.appmgr.current_app.specifiedWorker
                         send_dict = {'appid': self.task_scheduler.appid,
                                      'init': init_comm,
-                                     'flag':'NEWAPP'}
+                                     'flag':'NEWAPP',
+									 'wmp':worker_path}
                         for uuid in self.worker_registry.alive_workers:
                             send_dict['uuid'] = uuid
                             send_dict['wid'] = self.worker_registry.get_by_uuid(uuid).wid
-                            send_str = Pack.pack_obj(send_dict)
+                            send_str = Pack.pack_obj({MPI_Wrapper.Tags.MPI_REGISTY_ACK:send_dict})
                             send_final = Pack.pack2json({'uuid':uuid,'dict':send_str})
                             self.server.send_string(send_final,len(send_final),uuid,MPI_Wrapper.Tags.MPI_REGISTY_ACK)
 
