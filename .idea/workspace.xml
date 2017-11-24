@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/Application/ProdApp/ProdApp.py" line="107" mnemonic="9" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/IApplication/IApplication.py" afterPath="$PROJECT_DIR$/python/IApplication/IApplication.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/ProdApp/ProdApp.py" afterPath="$PROJECT_DIR$/Application/ProdApp/ProdApp.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/ProdApp/config.ini" afterPath="$PROJECT_DIR$/Application/ProdApp/config.ini" />
     </list>
     <ignored path="DistJET_v0.3.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -54,13 +58,21 @@
       <file leaf-file-name="ProdApp.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Application/ProdApp/ProdApp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1104">
-              <caret line="132" column="51" selection-start-line="132" selection-start-column="51" selection-end-line="132" selection-end-column="51" />
+            <state relative-caret-position="671">
+              <caret line="120" column="54" selection-start-line="120" selection-start-column="54" selection-end-line="120" selection-end-column="54" />
               <folding>
-                <element signature="e#1452#5611#0" expanded="false" />
-                <element signature="e#5678#7748#0" expanded="false" />
-                <element signature="e#7837#8508#0" expanded="false" />
+                <element signature="e#5689#7759#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="config.ini" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Application/ProdApp/config.ini">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="138">
+              <caret line="6" column="8" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -100,28 +112,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IAppManager.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/python/IAppManager.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="166" column="8" selection-start-line="166" selection-start-column="8" selection-end-line="166" selection-end-column="8" />
-              <folding>
-                <element signature="e#1165#1357#0" expanded="false" />
-                <element signature="e#1403#1539#0" expanded="false" />
-                <element signature="e#1589#1725#0" expanded="false" />
-                <element signature="e#1768#1794#0" expanded="false" />
-                <element signature="e#1835#1875#0" expanded="false" />
-                <element signature="e#1923#2057#0" expanded="false" />
-                <element signature="e#2180#2293#0" expanded="false" />
-                <element signature="e#2346#2522#0" expanded="false" />
-                <element signature="e#2573#2671#0" expanded="false" />
-                <element signature="e#3233#3890#1" expanded="false" />
-                <element signature="e#4272#4758#1" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="JobMaster.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -154,7 +144,7 @@
         <entry file="file://$PROJECT_DIR$/python/IApplication/IApplication.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="368">
-              <caret line="170" column="31" selection-start-line="170" selection-start-column="31" selection-end-line="170" selection-end-column="31" />
+              <caret line="171" column="0" selection-start-line="171" selection-start-column="0" selection-end-line="171" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -211,10 +201,8 @@
         <option value="$PROJECT_DIR$/Application/UnitTest/App_Module.py" />
         <option value="$PROJECT_DIR$/python/Process/Process.py" />
         <option value="$PROJECT_DIR$/Application/ProdApp/__init__.py" />
-        <option value="$PROJECT_DIR$/Application/ProdApp/config.ini" />
         <option value="$PROJECT_DIR$/Application/UnitTest/UnitTestApp.py" />
         <option value="$PROJECT_DIR$/Application/ProdApp/App_Module.py" />
-        <option value="$PROJECT_DIR$/Application/ProdApp/ProdApp.py" />
         <option value="$PROJECT_DIR$/python/Task.py" />
         <option value="$PROJECT_DIR$/python/IScheduler.py" />
         <option value="$PROJECT_DIR$/python/WorkerAgent.py" />
@@ -222,6 +210,8 @@
         <option value="$PROJECT_DIR$/python/WorkerRegistry.py" />
         <option value="$PROJECT_DIR$/python/JobMaster.py" />
         <option value="$PROJECT_DIR$/python/IApplication/IApplication.py" />
+        <option value="$PROJECT_DIR$/Application/ProdApp/config.ini" />
+        <option value="$PROJECT_DIR$/Application/ProdApp/ProdApp.py" />
       </list>
     </option>
   </component>
@@ -411,9 +401,7 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/JobMaster.py</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/WorkerAgent.py</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/WorkerRegistry.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/IApplication/IApplication.py</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
           <option name="myUpdateName" value="Created" />
@@ -1131,7 +1119,14 @@
       <option name="project" value="LOCAL" />
       <updated>1511428398179</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="add default merge method">
+      <created>1511489574357</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1511489574357</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -1204,7 +1199,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add proc debug log" />
     <MESSAGE value="change Process log output, fix inittask None bug" />
     <MESSAGE value="need add cleanup and check process" />
     <MESSAGE value="sync for debug" />
@@ -1229,7 +1223,8 @@
     <MESSAGE value="change assign logic" />
     <MESSAGE value="add app chain" />
     <MESSAGE value="test for app chain" />
-    <option name="LAST_COMMIT_MESSAGE" value="test for app chain" />
+    <MESSAGE value="add default merge method" />
+    <option name="LAST_COMMIT_MESSAGE" value="add default merge method" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1412,13 +1407,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Application/ProdApp/config.ini">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="9" column="12" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
         </state>
       </provider>
     </entry>
@@ -1605,19 +1593,25 @@
     <entry file="file://$PROJECT_DIR$/python/IApplication/IApplication.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="368">
-          <caret line="170" column="31" selection-start-line="170" selection-start-column="31" selection-end-line="170" selection-end-column="31" />
+          <caret line="171" column="0" selection-start-line="171" selection-start-column="0" selection-end-line="171" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Application/ProdApp/config.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="6" column="8" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Application/ProdApp/ProdApp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1104">
-          <caret line="132" column="51" selection-start-line="132" selection-start-column="51" selection-end-line="132" selection-end-column="51" />
+        <state relative-caret-position="671">
+          <caret line="120" column="54" selection-start-line="120" selection-start-column="54" selection-end-line="120" selection-end-column="54" />
           <folding>
-            <element signature="e#1452#5611#0" expanded="false" />
-            <element signature="e#5678#7748#0" expanded="false" />
-            <element signature="e#7837#8508#0" expanded="false" />
+            <element signature="e#5689#7759#0" expanded="false" />
           </folding>
         </state>
       </provider>

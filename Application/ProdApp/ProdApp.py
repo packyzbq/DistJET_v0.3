@@ -81,7 +81,7 @@ class ProdApp(JunoApp):
             workflow = self.cfg.get('workflow',sec=sample).strip().split(' ')
 
             seed_base = int(self.cfg.get('seed',sec=sample))
-            maxevt = self.cfg.get('evtmax',sec=sample)
+            maxevt = self.cfg.get('evtnum',sec=sample)
             assert seed_base is not None or maxevt is not None
             task_njob = int(maxevt)/int(self.njob)
             print "scripts = %s"%scripts
@@ -99,13 +99,13 @@ class ProdApp(JunoApp):
                 pre_task = None
                 for tag in tags:
                     while True:
-                        if seed_offset > int(maxevt)+task_njob:
+                        if seed_offset*task_njob > int(maxevt)+task_njob:
                             break
                         for wf in workflow:
-                            if seed_offset < maxevt:
+                            if seed_offset*task_njob <= maxevt:
                                 args = self._gen_args(sample,str(seed_base+seed_offset),str(task_njob),tag,wf,worksubdir)
-                            elif seed_offset < maxevt+task_njob:
-                                args = self._gen_args(sample,str(seed_base+seed_offset),str(maxevt+task_njob-seed_offset),tag,wf,worksubdir)
+                            elif seed_offset*task_njob < maxevt+task_njob:
+                                args = self._gen_args(sample,str(seed_base+seed_offset),str(maxevt%self.njob),tag,wf,worksubdir)
                             #self.log.info('bash %s %s'%(spt,args))
                             os.system('bash %s %s'%(chain_script[spt],args))
                             tmp_task = ChainTask()
@@ -119,7 +119,7 @@ class ProdApp(JunoApp):
                             pre_task = tmp_task
                             self.log.debug('[ProdApp] Creat task : %s'%tmp_task.toDict())
                             task_list.append(tmp_task)
-                        seed_offset += task_njob
+                        seed_offset += 1
                         pre_task = None
 
         os.chdir(self.res_dir)
