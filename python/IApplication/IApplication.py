@@ -164,7 +164,11 @@ class IApplication(object):
         :param tasklist:{tid:taskobj}
         :return:
         """
-        raise NotImplementedError
+        self.log.info('[%s] No specified merge method, use default'%self.name)
+        with open(self.res_dir+'/summary.log','w+') as resfile:
+            for tid, task in tasklist:
+                resfile.write("%s %s %s"%(tid,task.status, task.genCommand()))
+                resfile.flush()
 
     def setup(self):
         """
