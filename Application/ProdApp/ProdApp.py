@@ -86,7 +86,7 @@ class ProdApp(JunoApp):
             task_njob = int(maxevt)/int(self.njob)
             print "scripts = %s"%scripts
             for spt in scripts.keys():
-                seed_offset = 0
+                evt_count = 0
                 worksubdir = None
                 if 'uniform' in spt:
                     worksubdir = 'uniform'
@@ -99,17 +99,17 @@ class ProdApp(JunoApp):
                 pre_task = None
                 for tag in tags:
                     while True:
-                        if seed_offset*task_njob > int(maxevt)+task_njob:
+                        if evt_count >= int(maxevt)+task_njob:
                             break
                         for wf in workflow:
-                            if seed_offset*task_njob <= maxevt:
-                                args = self._gen_args(sample,str(seed_base+seed_offset),str(task_njob),tag,wf,worksubdir)
-                            elif seed_offset*task_njob < maxevt+task_njob:
-                                args = self._gen_args(sample,str(seed_base+seed_offset),str(maxevt%self.njob),tag,wf,worksubdir)
+                            if evt_count <= maxevt:
+                                args = self._gen_args(sample,str(seed_base),str(task_njob),tag,wf,worksubdir)
+                            elif evt_count < maxevt+task_njob:
+                                args = self._gen_args(sample,str(seed_base),str(maxevt-evt_count+task_njob),tag,wf,worksubdir)
                             #self.log.info('bash %s %s'%(spt,args))
                             os.system('bash %s %s'%(chain_script[spt],args))
                             tmp_task = ChainTask()
-                            tmp_task.boot.append("bash %s/run-%s-%s.sh"%(os.getcwd()+"/"+tag+'/'+wf,wf,seed_base+seed_offset))
+                            tmp_task.boot.append("bash %s/run-%s-%s.sh"%(os.getcwd()+"/"+tag+'/'+wf,wf,seed_base))
                             #tmp_task.boot = "bash %s/run-%s-%s.sh"%(os.getcwd()+"/"+tag+'/'+wf,wf,seed_base+seed_offset)
                             tmp_task.res_dir = task_resdir
                             if wf != 'detsim':
@@ -119,7 +119,7 @@ class ProdApp(JunoApp):
                             pre_task = tmp_task
                             self.log.debug('[ProdApp] Creat task : %s'%tmp_task.toDict())
                             task_list.append(tmp_task)
-                        seed_offset += 1
+                        seed_base += 1
                         pre_task = None
 
         os.chdir(self.res_dir)

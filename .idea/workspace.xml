@@ -7,7 +7,6 @@
     <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/ProdApp/ProdApp.py" afterPath="$PROJECT_DIR$/Application/ProdApp/ProdApp.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/ProdApp/config.ini" afterPath="$PROJECT_DIR$/Application/ProdApp/config.ini" />
     </list>
     <ignored path="DistJET_v0.3.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -58,10 +57,10 @@
       <file leaf-file-name="ProdApp.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Application/ProdApp/ProdApp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="671">
-              <caret line="120" column="54" selection-start-line="120" selection-start-column="54" selection-end-line="120" selection-end-column="54" />
+            <state relative-caret-position="703">
+              <caret line="121" column="33" selection-start-line="121" selection-start-column="33" selection-end-line="121" selection-end-column="33" />
               <folding>
-                <element signature="e#5689#7759#0" expanded="false" />
+                <element signature="e#5624#7694#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -1126,7 +1125,14 @@
       <option name="project" value="LOCAL" />
       <updated>1511489574357</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="fix ProdApp split()">
+      <created>1511512111975</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1511512111975</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -1199,7 +1205,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="change Process log output, fix inittask None bug" />
     <MESSAGE value="need add cleanup and check process" />
     <MESSAGE value="sync for debug" />
     <MESSAGE value="fix bug of finalize error and ignore fail task" />
@@ -1224,7 +1229,8 @@
     <MESSAGE value="add app chain" />
     <MESSAGE value="test for app chain" />
     <MESSAGE value="add default merge method" />
-    <option name="LAST_COMMIT_MESSAGE" value="add default merge method" />
+    <MESSAGE value="fix ProdApp split()" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix ProdApp split()" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1608,10 +1614,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Application/ProdApp/ProdApp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="671">
-          <caret line="120" column="54" selection-start-line="120" selection-start-column="54" selection-end-line="120" selection-end-column="54" />
+        <state relative-caret-position="703">
+          <caret line="121" column="33" selection-start-line="121" selection-start-column="33" selection-end-line="121" selection-end-column="33" />
           <folding>
-            <element signature="e#5689#7759#0" expanded="false" />
+            <element signature="e#5624#7694#0" expanded="false" />
           </folding>
         </state>
       </provider>
