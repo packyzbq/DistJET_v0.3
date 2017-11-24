@@ -57,10 +57,10 @@
       <file leaf-file-name="ProdApp.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Application/ProdApp/ProdApp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="703">
-              <caret line="121" column="33" selection-start-line="121" selection-start-column="33" selection-end-line="121" selection-end-column="33" />
+            <state relative-caret-position="617">
+              <caret line="110" column="50" selection-start-line="110" selection-start-column="50" selection-end-line="110" selection-end-column="50" />
               <folding>
-                <element signature="e#5624#7694#0" expanded="false" />
+                <element signature="e#5626#7696#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -789,13 +789,6 @@
       <option name="presentableId" value="Default" />
       <updated>1505126721810</updated>
     </task>
-    <task id="LOCAL-00001" summary="fix process">
-      <created>1506483261358</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1506483261358</updated>
-    </task>
     <task id="LOCAL-00002" summary="add worker Agent">
       <created>1507541130581</created>
       <option name="number" value="00002" />
@@ -1132,7 +1125,14 @@
       <option name="project" value="LOCAL" />
       <updated>1511512111975</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="test for Prod task generate">
+      <created>1511513758130</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1511513758131</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -1205,7 +1205,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="need add cleanup and check process" />
     <MESSAGE value="sync for debug" />
     <MESSAGE value="fix bug of finalize error and ignore fail task" />
     <MESSAGE value="fix process" />
@@ -1230,7 +1229,8 @@
     <MESSAGE value="test for app chain" />
     <MESSAGE value="add default merge method" />
     <MESSAGE value="fix ProdApp split()" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix ProdApp split()" />
+    <MESSAGE value="test for Prod task generate" />
+    <option name="LAST_COMMIT_MESSAGE" value="test for Prod task generate" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1614,10 +1614,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Application/ProdApp/ProdApp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="703">
-          <caret line="121" column="33" selection-start-line="121" selection-start-column="33" selection-end-line="121" selection-end-column="33" />
+        <state relative-caret-position="617">
+          <caret line="110" column="50" selection-start-line="110" selection-start-column="50" selection-end-line="110" selection-end-column="50" />
           <folding>
-            <element signature="e#5624#7694#0" expanded="false" />
+            <element signature="e#5626#7696#0" expanded="false" />
           </folding>
         </state>
       </provider>

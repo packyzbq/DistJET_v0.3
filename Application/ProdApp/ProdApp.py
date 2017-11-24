@@ -71,8 +71,8 @@ class ProdApp(JunoApp):
                     print 'rundir = %s'%rundir
                 topdir = rundir+'/'+sample
                 self.log.warning('WARN: Top dir is None, use default: %s'%(topdir))
-            if not os.path.exists(topdir):
-                os.mkdir(topdir)
+            #if not os.path.exists(topdir):
+            #    os.mkdir(topdir)
 
             sample_dir = self.res_dir+'/'+sample
             MakeandCD(sample_dir)
@@ -81,7 +81,7 @@ class ProdApp(JunoApp):
             workflow = self.cfg.get('workflow',sec=sample).strip().split(' ')
 
             seed_base = int(self.cfg.get('seed',sec=sample))
-            maxevt = self.cfg.get('evtnum',sec=sample)
+            maxevt = self.cfg.get('evtmax',sec=sample)
             assert seed_base is not None or maxevt is not None
             task_njob = int(maxevt)/int(self.njob)
             print "scripts = %s"%scripts
