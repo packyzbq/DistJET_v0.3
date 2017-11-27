@@ -203,8 +203,9 @@ class HandlerThread(BaseThread):
                                 #self.master.command_q.put({MPI_Wrapper.Tags.WORKER_HALT:'','uuid':current_uuid})
                                 self.master.acquire_newApp()
                             else:
-                                # no more app need to do, logout worker
-                                self.master.command_q.put({MPI_Wrapper.Tags.LOGOUT: '','uuid':current_uuid})
+                                # no more app need to do, logout all worker
+                                for uuid in self.master.worker_registry.alive_workers:
+                                    self.master.command_q.put({MPI_Wrapper.Tags.LOGOUT: '','uuid':uuid})
                     else:
                         master_log.error('worker %d finalize error, errmsg=%s' % (recv_dict['wid'], v['errmsg']))
                         if self.master.worker_registry.worker_refin(recv_dict['wid']):
