@@ -84,6 +84,7 @@ class ProdApp(JunoApp):
             maxevt = self.cfg.get('evtmax',sec=sample)
             assert seed_base is not None or maxevt is not None
             task_njob = int(maxevt)/int(self.njob)
+            rest_evt = int(maxevt)%task_njob
             print "scripts = %s"%scripts
             for spt in scripts.keys():
                 evt_count = 0
@@ -99,13 +100,14 @@ class ProdApp(JunoApp):
                 pre_task = None
                 for tag in tags:
                     while True:
-                        if evt_count >= int(maxevt)+task_njob:
+                        #if (rest_evt != 0 and evt_count >= int(maxevt)+task_njob) or (rest_evt == 0 and evt_count >= int(maxevt)):
+                        if evt_count >= int(maxevt):
                             break
                         for wf in workflow:
-                            if evt_count <= maxevt:
+                            if evt_count+task_njob < maxevt:
                                 args = self._gen_args(sample,str(seed_base),str(task_njob),tag,wf,worksubdir)
-                            elif evt_count < maxevt+task_njob:
-                                args = self._gen_args(sample,str(seed_base),str(maxevt-evt_count+task_njob),tag,wf,worksubdir)
+                            else:
+                                args = self._gen_args(sample,str(seed_base),str(rest_evt),tag,wf,worksubdir)
                             #self.log.info('bash %s %s'%(spt,args))
                             os.system('bash %s %s'%(chain_script[spt],args))
                             tmp_task = ChainTask()
@@ -120,6 +122,7 @@ class ProdApp(JunoApp):
                             self.log.debug('[ProdApp] Creat task : %s'%tmp_task.toDict())
                             task_list.append(tmp_task)
                         seed_base += 1
+                        evt_count+=task_njob
                         pre_task = None
 
         os.chdir(self.res_dir)
