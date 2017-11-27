@@ -195,13 +195,16 @@ class HandlerThread(BaseThread):
                     if v['recode'] == status.SUCCESS:
                         self.master.task_scheduler.worker_finalized(recv_dict['wid'])
                         master_log.debug('[Master] Have finalized worker %s' % recv_dict['wid'])
-                        # if more app need to be done, wait for old app finish and load new app
-                        if self.master.appmgr.has_next_app():
-                            #self.master.command_q.put({MPI_Wrapper.Tags.WORKER_HALT:'','uuid':current_uuid})
-                            self.master.acquire_newApp()
-                        else:
-                            # no more app need to do, logout worker
-                            self.master.command_q.put({MPI_Wrapper.Tags.LOGOUT: '','uuid':current_uuid})
+                        #check all worker finalized
+                        if self.master.worker_registry.checkFinalize():
+                            # after all alive worker finalized, load new app
+                            # if more app need to be done, wait for old app finish and load new app
+                            if self.master.appmgr.has_next_app():
+                                #self.master.command_q.put({MPI_Wrapper.Tags.WORKER_HALT:'','uuid':current_uuid})
+                                self.master.acquire_newApp()
+                            else:
+                                # no more app need to do, logout worker
+                                self.master.command_q.put({MPI_Wrapper.Tags.LOGOUT: '','uuid':current_uuid})
                     else:
                         master_log.error('worker %d finalize error, errmsg=%s' % (recv_dict['wid'], v['errmsg']))
                         if self.master.worker_registry.worker_refin(recv_dict['wid']):
