@@ -9,6 +9,7 @@ from Util import logger
 control_log = logger.getLogger('WatchDog_Log')
 handler_log = logger.getLogger('Handler')
 master_log = logger.getLogger('Master')
+health_log = logger.getLogger('Health')
 
 import IR_Buffer_Module as IM
 import IScheduler
@@ -125,9 +126,10 @@ class HandlerThread(BaseThread):
                             self.master.task_scheduler.task_failed(recv_dict['wid'], task)
                         else:
                             master_log.warning('[Master] Can not recognize the task status %s of Task' % task.status)
-                if recv_dict.has_key('Health'):
+                if recv_dict.has_key('health'):
                     # TODO add monitor
-                    pass
+                    # plan 1
+                    health_log.info('Worker %s : %s'%(recv_dict['wid'], recv_dict['health']))
                 if recv_dict.has_key('ctime'):
                     if (not recv_dict.has_key('flag')) or (recv_dict.has_key('flag') and recv_dict['flag'] != 'LP'):
                         self.master.worker_registry.setContacttime(recv_dict['uuid'], recv_dict['ctime'])
