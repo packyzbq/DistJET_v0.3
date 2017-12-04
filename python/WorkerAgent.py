@@ -476,7 +476,15 @@ class WorkerAgent:
         :return: dict
         """
         tmpdict = {}
-        tmpdict['CpuUsage'] = HD.getCpuUsage()
+        cpuid = None
+        if self.worker_list and self.worker_list[0].process:
+            pid = self.worker_list[0].process.pid
+            rc = subprocess.Popen(['ps -o pid,psr -p %s'%pid],stdout = subprocess.PIPE, stderr=subprocess.PIPE,shell=True)
+            out,err = rc.communicate()
+            out = out.strip().split('\n')
+            cpuid = out[-1].strip().split(' ')[-1]
+
+        tmpdict['CpuUsage'] = HD.getCpuUsage(cpuid=cpuid)
         tmpdict['MemoUsage'] = HD.getMemoUsage()
         script = self.cfg.getCFGattr("health_detect_scripts")
         if script and os.path.exists(self.cfg.getCFGattr('topDir') + '/' + script):
