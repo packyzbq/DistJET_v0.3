@@ -4,9 +4,8 @@
     <bookmark url="file://$PROJECT_DIR$/Application/ProdApp/ProdApp.py" line="110" mnemonic="9" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="add health record">
+    <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/WorkerAgent.py" afterPath="$PROJECT_DIR$/python/WorkerAgent.py" />
     </list>
     <ignored path="DistJET_v0.3.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -788,13 +787,6 @@
       <option name="presentableId" value="Default" />
       <updated>1505126721810</updated>
     </task>
-    <task id="LOCAL-00005" summary="finishi worker class and update Process">
-      <created>1507972080844</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1507972080844</updated>
-    </task>
     <task id="LOCAL-00006" summary="add worker agent test entry">
       <created>1508049783636</created>
       <option name="number" value="00006" />
@@ -1131,7 +1123,14 @@
       <option name="project" value="LOCAL" />
       <updated>1512356748975</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="add health record">
+      <created>1512370297714</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1512370297714</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1145,7 +1144,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.152897" sideWeight="0.5005637" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
