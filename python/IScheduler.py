@@ -262,13 +262,15 @@ class SimpleTaskScheduler(IScheduler):
         self.updateTask(task)
         if isinstance(task,Task.ChainTask):
             for child in task.get_child_list():
-                #child = self.task_list(child_id)
+                child = self.get_task(child.tid)
+                #child = self.task_list(child.tid)
                 child.remove_father(task)
-                scheduler_log.debug("[Scheduler] Task %s remove father %s , father list = %s"%(str(child.tid),str(task.tid),[str(t.tid) for t in child.get_father_list()]))
                 if child.father_len() == 0:
                     self.task_todo_queue.put(child.tid)
                     scheduler_log.debug('[Scheduler] ChainTask %s add to todo list'%(child.tid))
-                self.updateTask(child)
+                if self.updateTask(child):
+                    scheduler_log.debug('[Scheduler] Update task successfully')
+                scheduler_log.debug("[Scheduler] Task %s remove father %s , father list = %s"%(str(child.tid),str(task.tid),[str(t.tid) for t in child.get_father_list()]))
                 #scheduler_log.debug("[Scheduler] Task Compare: child:<%s>, task:<%s>"%(child.toDict(),self.get_task(child.tid).toDict()))
 
     def task_failed(self, wid, task):
