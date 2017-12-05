@@ -481,6 +481,7 @@ class WorkerAgent:
             pid = self.worker_list[0].process.pid
             rc = subprocess.Popen(['ps -o pid,psr -p %s'%pid],stdout = subprocess.PIPE, stderr=subprocess.PIPE,shell=True)
             out,err = rc.communicate()
+            #wlog.debug('[Agent] Worker Cpu Usage = %s'%out)
             out = out.strip().split('\n')
             cpuid = out[-1].strip().split(' ')[-1]
 
@@ -544,7 +545,7 @@ class Worker(BaseThread):
         else:
             #print "### if ignore fail: "+str(Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
             self.process = Process_withENV(init_task.boot,
-                                           Config.Config.getCFGattr('Rundir')+'/log/process_%d_%d.log'%(self.workeragent.wid,self.id),
+                                           Config.Config.getCFGattr('Rundir')+'/DistJET_log/process_%d_%d.log'%(self.workeragent.wid,self.id),
                                            task_callback=self.task_done,
                                            finalize_callback=self.finalize_done,
                                            ignoreFail=Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))

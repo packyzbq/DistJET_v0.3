@@ -10,7 +10,7 @@ def getLogger(name, level=None, applog=False):
         log_dir = Config.getCFGattr('Rundir')
         if not log_dir:
             log_dir = os.getcwd()
-        log_dir += '/Applog'
+        log_dir += '/DistJET_log/Applog'
     else:
         log_dir = Config.getCFGattr('Logdir')
     if not level:
@@ -18,7 +18,7 @@ def getLogger(name, level=None, applog=False):
         if not level:
             level = 'info'
     if not log_dir:
-        log_dir = os.getcwd() + '/log'
+        log_dir = os.getcwd() + '/DistJET_log'
     if not os.path.exists(log_dir):
         os.mkdir(log_dir)
 

@@ -124,6 +124,8 @@ class HandlerThread(BaseThread):
                         # continue
                 # Normal ping msg
                 if recv_dict.has_key('Task'):
+                    if recv_dict['Task']:
+                        master_log.debug('[Master] Receive finished task %s, status = %s'%([task.tid for task in recv_dict['Task']],[task.status for task in recv_dict['Task']]))
                     for task in recv_dict['Task']:
                         if task.status == TaskStatus.COMPLETED:
                             self.master.task_scheduler.task_completed(recv_dict['wid'], task)
