@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/DistJET_v0.3.iml" afterPath="$PROJECT_DIR$/.idea/DistJET_v0.3.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/IScheduler.py" afterPath="$PROJECT_DIR$/python/IScheduler.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/Task.py" afterPath="$PROJECT_DIR$/python/Task.py" />
     </list>
     <ignored path="DistJET_v0.3.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -461,13 +457,6 @@
       <option name="presentableId" value="Default" />
       <updated>1505126721810</updated>
     </task>
-    <task id="LOCAL-00008" summary="fix some bugs for WorkerAgent">
-      <created>1508057861609</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1508057861609</updated>
-    </task>
     <task id="LOCAL-00009" summary="fix agent finalize">
       <created>1508378188151</created>
       <option name="number" value="00009" />
@@ -804,7 +793,14 @@
       <option name="project" value="LOCAL" />
       <updated>1512441568253</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="change chainTask from obj to taskid">
+      <created>1512478139174</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1512478139190</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TodoView">
@@ -877,7 +873,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add worker finalize and stop" />
     <MESSAGE value="fix master cannot stop" />
     <MESSAGE value="quick fix for cannot pull back task" />
     <MESSAGE value="for sync&#10;" />
@@ -902,7 +897,8 @@
     <MESSAGE value="update new app judge" />
     <MESSAGE value="add health record" />
     <MESSAGE value="add recoder" />
-    <option name="LAST_COMMIT_MESSAGE" value="add recoder" />
+    <MESSAGE value="change chainTask from obj to taskid" />
+    <option name="LAST_COMMIT_MESSAGE" value="change chainTask from obj to taskid" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
