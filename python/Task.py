@@ -166,16 +166,22 @@ class ChainTask(Task):
     def __init__(self,tid=None):
         #Task.__init__(tid=tid)
         super(ChainTask,self).__init__(tid)
-        self._father = set()
-        self._child = set()
+        self._father = set()  # task id set
+        self._child = set()   # task id set
 
     def set_father(self,father):
+        if isinstance(father,Task):
+            father = father.tid
+        assert type(father) == types.IntType
         if father in self._father:
             return False
         self._father.add(father)
         return True
 
     def remove_father(self,father):
+        if isinstance(father,Task):
+            father = father.tid
+        assert type(father) == types.IntType
         if father not in self._father:
             return False
         self._father.remove(father)
@@ -188,12 +194,18 @@ class ChainTask(Task):
         return self._father
 
     def set_child(self, child):
+        if isinstance(child,Task):
+            child = child.tid
+        assert type(child) == types.IntType
         if child in self._child:
             return False
         self._child.add(child)
         return True
 
     def remove_child(self, child):
+        if isinstance(child,Task):
+            child = child.tid
+        assert type(child) == types.IntType
         if child not in self._child:
             return False
         self._child.remove(child)
