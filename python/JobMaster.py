@@ -26,6 +26,7 @@ from IAppManager import SimpleAppManager
 from Task import TaskStatus
 from python.Process.Process import status
 from python.Util.Config import Config, set_inipath
+from python.Util.Recoder import BaseElement,BaseRecoder
 
 
 
@@ -100,6 +101,8 @@ class HandlerThread(BaseThread):
                 recv_dict = Pack.unpack_obj(Pack.unpack_from_json(msg.sbuf[0:msg.size])['dict'])
                 current_uuid = self.uuid_queue.get()
 
+                recode_ele = BaseElement(recv_dict['wid'])
+
                 if recv_dict.has_key('flag'):
                     if recv_dict['flag'] == 'FP' and msg.tag == MPI_Wrapper.Tags.MPI_REGISTY:
                         # register worker
@@ -127,15 +130,22 @@ class HandlerThread(BaseThread):
                         else:
                             master_log.warning('[Master] Can not recognize the task status %s of Task' % task.status)
                 if recv_dict.has_key('health'):
-                    # TODO add monitor
                     # plan 1
-                    health_log.info('Worker %s : %s'%(recv_dict['wid'], recv_dict['health']))
+                    #health_log.info('Worker %s : %s'%(recv_dict['wid'], recv_dict['health']))
+                    # plan 2
+                    for item in recv_dict['health'].items():
+                        recode_ele.cpuid = item['CpuUsage'].keys()[0]
+                        recode_ele.cpurate = item['CpuUsage'].values()[0]
+                        recode_ele.mem = item['MemUsage']
                 if recv_dict.has_key('ctime'):
                     if (not recv_dict.has_key('flag')) or (recv_dict.has_key('flag') and recv_dict['flag'] != 'LP'):
                         self.master.worker_registry.setContacttime(recv_dict['uuid'], recv_dict['ctime'])
                 if recv_dict.has_key('wstatus'):
                     self.master.worker_registry.setStatus(recv_dict['wid'], recv_dict['wstatus'])
                     master_log.debug('[Master] Set worker %s status = %s' % (recv_dict['wid'], recv_dict['wstatus']))
+                if recv_dict.has_key('rTask'):
+                    recode_ele.running_task = recv_dict['rTask']
+
                 if recv_dict.has_key(MPI_Wrapper.Tags.APP_INI):
                     # result of slave setup
                     # wid:int, uuid:str, APP_INI:{recode:int, errmsg:str}
@@ -216,6 +226,9 @@ class HandlerThread(BaseThread):
                             # over the refinalize times, force to shutdown
                             self.master.task_scheduler.worker_finalized(recv_dict['wid'])
                             self.master.command_q.put({MPI_Wrapper.Tags.WORKER_STOP: '','uuid':current_uuid})
+
+                if recode_ele.check_integrity():
+                    self.master.recoder.set_message(recode_ele.wid,recode_ele)
         handler_log.info('Handler thread stop...')
 
 
@@ -267,6 +280,8 @@ class JobMaster(IJobMaster):
             # TODO add error handler
             exit()
 
+        self.recoder = BaseRecoder(self.cfg.getCFGattr('Rundir'))
+
         self.__newApp_flag = False
         self.__stop = False
 	
@@ -277,6 +292,9 @@ class JobMaster(IJobMaster):
         self.__newApp_flag = True
 
     def stop(self):
+        # Recoder finalize
+        self.recoder.finalize()
+        master_log.info('[Master] Recoder has finalized')
         # TaskScheduler is not a thread
         if self.control_thread and self.control_thread.isAlive():
             self.control_thread.stop()
