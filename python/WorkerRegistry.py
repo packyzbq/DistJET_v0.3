@@ -143,28 +143,25 @@ class WorkerRegistry:
             wRegistery_log.warning('attempt to remove not registered worker: wid=%d', wid)
             return False,None
         else:
-            if w_uuid in self.alive_workers:
-                # finalize worker
-                wRegistery_log.info('attempt to remove alive worker: wid=%d',wid)
-                return False,w_uuid
-            else:
-                wRegistery_log.info('worker removed: wid=%d',wid)
-                try:
-                    self.lock.acquire()
-                    del(self.__all_workers[wid])
-                    del(self.__all_workers_uuid[w_uuid])
-                except KeyError:
-                    wRegistery_log.warning('[WorkerRegistry]: can not find worker when remove worker=%d, uuid=%s', wid, w_uuid)
-                    return False, None
-                finally:
-                    self.lock.release()
-                return True ,None
+            wRegistery_log.info('worker removed: wid=%d',wid)
+            try:
+                self.lock.acquire()
+                del(self.__all_workers[wid])
+                del(self.__all_workers_uuid[w_uuid])
+                if w_uuid in self.alive_workers:
+                    self.alive_workers.remove(w_uuid)
+            except KeyError:
+                wRegistery_log.warning('[WorkerRegistry]: can not find worker when remove worker=%d, uuid=%s', wid, w_uuid)
+                return False, None
+            finally:
+                self.lock.release()
+            return True ,None
 
     def terminate_worker(self,wid):
         wentry = self.get_entry(wid)
         if wentry.w_uuid in self.alive_workers:
             if wentry.getStatus() == WorkerStatus.FINALIZED:
-                self.alive_workers.remove(wentry.w_uuid)
+                #self.alive_workers.remove(wentry.w_uuid)
                 return True
             else:
                 wRegistery_log.error('worker %d is not finalized, status=%s'%(wid,wentry.getStatus()))
@@ -225,6 +222,12 @@ class WorkerRegistry:
     def get_worker_list(self):
         return self.__all_workers.values()
 
+    def get_worker_status(self):
+        status = {}
+        for wid,entry in self.__all_workers.items():
+            status[wid] = entry.status
+        return status
+
     def get_capacity(self, wid):
         return self.__all_workers[wid].max_capacity
 
@@ -263,7 +266,7 @@ class WorkerRegistry:
     def checkFinalize(self,exp=[]):
         for uuid in self.alive_workers:
             entry = self.get_by_uuid(uuid)
-            if entry.status != WorkerStatus.FINALIZED:
+            if entry.status and entry.status != WorkerStatus.FINALIZED:
                 return False
         return True
 
@@ -277,15 +280,15 @@ class WorkerRegistry:
         if status == WorkerStatus.IDLE and wentry.status != status:
             wentry.idle_time = time.time()
         if wentry.alive:
-            wentry.alive_lock.acquire()
+            wentry.lock.acquire()
             wentry.status = status
-            wentry.alive_lock.release()
+            wentry.lock.release()
         else:
             wRegistery_log.warning('[Registry] Worker %s is not alive')
-            wentry.alive_lock.acquire()
+            wentry.lock.acquire()
             wentry.alive = True
             wentry.status = status
-            wentry.alive_lock.release()
+            wentry.lock.release()
             self.alive_workers.add(wentry.w_uuid)
 
 

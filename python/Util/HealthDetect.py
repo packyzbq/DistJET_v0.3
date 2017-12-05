@@ -14,7 +14,7 @@ def getCpuInfo():
     return info
 
 
-def getCpuUsage():
+def getCpuUsage(cpuid=None):
     """
     get cpu usage: 100*(total-idle)/total
     :return: {cpuk:usage}
@@ -32,6 +32,8 @@ def getCpuUsage():
             usage = 100-(idle*100/total)
         #usage = 100-(int(info2[k]['idle'])-int(info1[k]['idle'])*100)/(long(info2[k]['total'])-long(info1[k]['total']))
         tmpdict[k] = usage
+    if cpuid and tmpdict.has_key('cpu'+cpuid):
+        return {'cpu'+cpuid:tmpdict['cpu'+cpuid]}
     return tmpdict
 
 def getMemoUsage():

@@ -15,6 +15,10 @@ if len(sys.argv) < 3:
     print('@master need at least 2 parameter(given %d), args=%s, exit'%(len(sys.argv)-1, sys.argv))
     exit()
 
+#clean up last logfile
+#if os.path.exists('DistJET_log'):
+#    os.removedirs('DistJET_log')
+
 appfile = sys.argv[1]
 config_path = sys.argv[2]
 log_level = sys.argv[3]

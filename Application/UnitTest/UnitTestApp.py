@@ -26,9 +26,28 @@ class UnitTestApp(JunoApp):
         task2.data[0] = "Cf252"
         task2.res_dir = self.res_dir
         task_list.append(task2)
+        
+        task3 = ChainTask()
+        task3.boot = self.app_boot
+        task3.data[0] = "Cf252"
+        task3.res_dir = self.res_dir
+        task_list.append(task3)
+        
+        task4 = ChainTask()
+        task4.boot = self.app_boot
+        task4.data[0] = "Cf252"
+        task4.res_dir = self.res_dir
+        task_list.append(task4)
 
         task1.set_child(task2)
         task2.set_father(task1)
+        task2.set_child(task3)
+        task3.set_father(task2)
+        task3.set_child(task4)
+        task4.set_father(task3)
+        task4.set_father(task1)
+        task1.set_child(task4)
+
         '''
         self.data[0]=[]
         self.data[0].append('Tutorial')

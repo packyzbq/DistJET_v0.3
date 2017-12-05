@@ -88,6 +88,7 @@ class HeartbeatThread(BaseThread):
                     send_dict['Task'].append(task)
                 send_dict['uuid'] = self.worker_agent.uuid
                 send_dict['wid'] = self.worker_agent.wid
+                send_dict['wstatus'] = self.worker_agent.get_status()
                 send_dict['health'] = self.worker_agent.health_info()
                 send_dict['rTask'] = self.worker_agent.getRuntasklist()
                 send_dict['ctime'] = time.time()
@@ -243,6 +244,7 @@ class WorkerAgent:
                                 self.fin_flag = False
                                 self.app_fin_flag = False
                                 self.halt_flag = False
+                                self.task_acquire = False
                             else:
                                 wlog.debug('[WorkerAgent] Receive Registry_ACK msg = %s' % v)
                             worker_path = v['wmp']
@@ -354,10 +356,10 @@ class WorkerAgent:
 
                         elif int(k) == Tags.WORKER_HALT:
                             wlog.debug('[Agent] Receive WORKER_HALT command')
-                            self.haltflag=True
+                            self.halt_flag=True
                     continue
                 if self.initial_flag and len(self.worker_list) == 0 and not self.app_fin_flag:
-                    self.haltflag = False
+                    self.halt_flag = False
                     self.heartbeat.acquire_queue.put({Tags.APP_FIN: {'wid': self.wid, 'recode': status.SUCCESS, 'result': None}})
                     wlog.debug('[Agent] Send APP_FIN msg for logout/newApp')
                     self.app_fin_flag = True
@@ -474,7 +476,16 @@ class WorkerAgent:
         :return: dict
         """
         tmpdict = {}
-        tmpdict['CpuUsage'] = HD.getCpuUsage()
+        cpuid = None
+        if self.worker_list and self.worker_list[0].process:
+            pid = self.worker_list[0].process.pid
+            rc = subprocess.Popen(['ps -o pid,psr -p %s'%pid],stdout = subprocess.PIPE, stderr=subprocess.PIPE,shell=True)
+            out,err = rc.communicate()
+            #wlog.debug('[Agent] Worker Cpu Usage = %s'%out)
+            out = out.strip().split('\n')
+            cpuid = out[-1].strip().split(' ')[-1]
+
+        tmpdict['CpuUsage'] = HD.getCpuUsage(cpuid=cpuid)
         tmpdict['MemoUsage'] = HD.getMemoUsage()
         script = self.cfg.getCFGattr("health_detect_scripts")
         if script and os.path.exists(self.cfg.getCFGattr('topDir') + '/' + script):
@@ -491,7 +502,8 @@ class WorkerAgent:
     def set_status(self, wid, status):
         self.worker_status[wid] = status
 
-
+    def get_status(self):
+        return self.worker_status[0] if self.worker_status.has_key(0) else None
 
 
 
@@ -533,7 +545,7 @@ class Worker(BaseThread):
         else:
             #print "### if ignore fail: "+str(Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
             self.process = Process_withENV(init_task.boot,
-                                           Config.Config.getCFGattr('Rundir')+'/log/process_%d_%d.log'%(self.workeragent.wid,self.id),
+                                           Config.Config.getCFGattr('Rundir')+'/DistJET_log/process_%d_%d.log'%(self.workeragent.wid,self.id),
                                            task_callback=self.task_done,
                                            finalize_callback=self.finalize_done,
                                            ignoreFail=Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))

@@ -1,7 +1,7 @@
 import sys,os
 sys.path.append(os.environ['DistJETPATH'])
 from python.IApplication.JunoApp import JunoApp
-from python.Task import ChainTask
+from python.Task import ChainTask,Task
 import python.Util.Config as Config
 import subprocess
 
@@ -71,8 +71,8 @@ class ProdApp(JunoApp):
                     print 'rundir = %s'%rundir
                 topdir = rundir+'/'+sample
                 self.log.warning('WARN: Top dir is None, use default: %s'%(topdir))
-            if not os.path.exists(topdir):
-                os.mkdir(topdir)
+            #if not os.path.exists(topdir):
+            #    os.mkdir(topdir)
 
             sample_dir = self.res_dir+'/'+sample
             MakeandCD(sample_dir)
@@ -84,9 +84,10 @@ class ProdApp(JunoApp):
             maxevt = self.cfg.get('evtmax',sec=sample)
             assert seed_base is not None or maxevt is not None
             task_njob = int(maxevt)/int(self.njob)
+            rest_evt = int(maxevt)%task_njob
             print "scripts = %s"%scripts
             for spt in scripts.keys():
-                seed_offset = 0
+                evt_count = 0
                 worksubdir = None
                 if 'uniform' in spt:
                     worksubdir = 'uniform'
@@ -98,28 +99,38 @@ class ProdApp(JunoApp):
                 MakeandCD(sample_dir+'/'+worksubdir)
                 pre_task = None
                 for tag in tags:
+                    # Add detsim 0
+                    detsim0 = ChainTask()
+                    detsim0.boot.append("bash %s/run-%s-%s.sh" % (os.getcwd() + '/' + tag + '/detsim', 'detsim', '0'))
+                    detsim0.res_dir = task_resdir
+                    task_list.append(detsim0)
                     while True:
-                        if seed_offset > int(maxevt)+task_njob:
+                        #if (rest_evt != 0 and evt_count >= int(maxevt)+task_njob) or (rest_evt == 0 and evt_count >= int(maxevt)):
+                        if evt_count >= int(maxevt):
                             break
                         for wf in workflow:
-                            if seed_offset < maxevt:
-                                args = self._gen_args(sample,str(seed_base+seed_offset),str(task_njob),tag,wf,worksubdir)
-                            elif seed_offset < maxevt+task_njob:
-                                args = self._gen_args(sample,str(seed_base+seed_offset),str(maxevt+task_njob-seed_offset),tag,wf,worksubdir)
+                            if evt_count+task_njob < maxevt:
+                                args = self._gen_args(sample,str(seed_base),str(task_njob),tag,wf,worksubdir)
+                            else:
+                                args = self._gen_args(sample,str(seed_base),str(rest_evt),tag,wf,worksubdir)
                             #self.log.info('bash %s %s'%(spt,args))
                             os.system('bash %s %s'%(chain_script[spt],args))
                             tmp_task = ChainTask()
-                            tmp_task.boot.append("bash %s/run-%s-%s.sh"%(os.getcwd()+"/"+tag+'/'+wf,wf,seed_base+seed_offset))
+                            tmp_task.boot.append("bash %s/run-%s-%s.sh"%(os.getcwd()+"/"+tag+'/'+wf,wf,seed_base))
                             #tmp_task.boot = "bash %s/run-%s-%s.sh"%(os.getcwd()+"/"+tag+'/'+wf,wf,seed_base+seed_offset)
                             tmp_task.res_dir = task_resdir
                             if wf != 'detsim':
                                 tmp_task.set_father(pre_task)
+                            if wf == 'rec':
+                                detsim0.set_child(tmp_task)
+                                tmp_task.set_father(detsim0)
                             if pre_task:
                                 pre_task.set_child(tmp_task)
                             pre_task = tmp_task
                             self.log.debug('[ProdApp] Creat task : %s'%tmp_task.toDict())
                             task_list.append(tmp_task)
-                        seed_offset += task_njob
+                        seed_base += 1
+                        evt_count+=task_njob
                         pre_task = None
 
         os.chdir(self.res_dir)
@@ -178,13 +189,13 @@ class ProdApp(JunoApp):
         if driver_name:
             return self.driver.get(driver_name)
 
-    def _gen_args(self, sample, seed, evtnum, tags, workflow,worksubdir=None):
+    def _gen_args(self, sample, seed, evtnum, tags, workflow,worksubdir=None,njob=1):
         args = ''
         arg_neg_list = ['driver', 'scripts', 'workflow', 'evtmax', 'seed', 'tags']
         #args += ' --setup "$JUNOTOP/setup.sh"'
         args += ' --%s "%s"' %('seed',seed)
         args += ' --%s "%s"' % ('evtmax', evtnum)
-        args += ' --%s "%s"' % ('njobs', 1)
+        args += ' --%s "%s"' % ('njobs', njob)
         args += ' --%s "%s"' % ('tags',tags)
         for k, v in self.cfg.other_cfg[sample].items():
             if k not in arg_neg_list:
@@ -200,4 +211,6 @@ if __name__ == '__main__':
     app = ProdApp("/afs/ihep.ac.cn/users/z/zhaobq/workerSpace/DistJET_v0.3/Application/ProdApp/",'ProdApp')
     app.res_dir = "/afs/ihep.ac.cn/users/z/zhaobq/workerSpace/DistJET_v0.3/Application/ProdApp/test"
     tasklist = app.split()
-    print tasklist
+    print len(tasklist)
+    for task in tasklist:
+        print('%s - child: %s, father: %s\n'%(task.tid, [child.tid for child in task.get_child_list()],[father.tid for father in task.get_father_list()]))
