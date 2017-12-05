@@ -1,4 +1,4 @@
-import os,types,pickle
+import os,types,json
 
 class BaseElement(object):
     def __init__(self,wid):
@@ -13,22 +13,28 @@ class BaseElement(object):
             return True
         else:
             return False
+	
+    def toDict(self):
+        return self.__dict__
 
 class BaseRecoder(object):
     def __init__(self,basepath):
         self.basepath = basepath+'/tmp'
-        os.mkdir(self.basepath)
+        if not os.path.exists(self.basepath):
+            os.mkdir(self.basepath)
         self.recode_file = {} # worker_id: file
 
     def set_message(self,wid,message):
         if not self.recode_file.has_key(wid):
             self.recode_file[wid] = os.path.abspath(self.basepath)+'/'+str(wid)+'.tmp'
-        tmpfile = open(self.recode_file[wid])
+        tmpfile = open(self.recode_file[wid],'a')
         try:
             if type(message) == types.StringType:
                 tmpfile.write(message+'\n')
+            elif isinstance(message,BaseElement):
+                tmpfile.writelines(json.dumps(message.toDict())+'\n')
             else:
-                tmpfile.write(pickle.dumps(message)+' ')
+                tmpfile.write(json.dumps(message.__dict__)+'\n')
         finally:
             tmpfile.flush()
             tmpfile.close()

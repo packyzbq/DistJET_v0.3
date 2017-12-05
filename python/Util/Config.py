@@ -25,7 +25,7 @@ class Config(object):
         'topDir': os.environ['DistJETPATH'],
         'Rundir': None,
         'LogConsole': True,
-        'HeartBeatInterval': 0.5,
+        'HeartBeatInterval': 0.3,
         'Halt_Recv_Interval': 10
     }
 
