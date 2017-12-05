@@ -1,7 +1,7 @@
 import sys,os
 sys.path.append(os.environ['DistJETPATH'])
 from python.IApplication.JunoApp import JunoApp
-from python.Task import ChainTask
+from python.Task import ChainTask,Task
 import python.Util.Config as Config
 import subprocess
 
@@ -99,6 +99,11 @@ class ProdApp(JunoApp):
                 MakeandCD(sample_dir+'/'+worksubdir)
                 pre_task = None
                 for tag in tags:
+                    # Add detsim 0
+                    detsim0 = ChainTask()
+                    detsim0.boot.append("bash %s/run-%s-%s.sh" % (os.getcwd() + '/' + tag + '/detsim', 'detsim', '0'))
+                    detsim0.res_dir = task_resdir
+                    task_list.append(detsim0)
                     while True:
                         #if (rest_evt != 0 and evt_count >= int(maxevt)+task_njob) or (rest_evt == 0 and evt_count >= int(maxevt)):
                         if evt_count >= int(maxevt):
@@ -116,6 +121,9 @@ class ProdApp(JunoApp):
                             tmp_task.res_dir = task_resdir
                             if wf != 'detsim':
                                 tmp_task.set_father(pre_task)
+                            if wf == 'rec':
+                                detsim0.set_child(tmp_task)
+                                tmp_task.set_father(detsim0)
                             if pre_task:
                                 pre_task.set_child(tmp_task)
                             pre_task = tmp_task
@@ -181,13 +189,13 @@ class ProdApp(JunoApp):
         if driver_name:
             return self.driver.get(driver_name)
 
-    def _gen_args(self, sample, seed, evtnum, tags, workflow,worksubdir=None):
+    def _gen_args(self, sample, seed, evtnum, tags, workflow,worksubdir=None,njob=1):
         args = ''
         arg_neg_list = ['driver', 'scripts', 'workflow', 'evtmax', 'seed', 'tags']
         #args += ' --setup "$JUNOTOP/setup.sh"'
         args += ' --%s "%s"' %('seed',seed)
         args += ' --%s "%s"' % ('evtmax', evtnum)
-        args += ' --%s "%s"' % ('njobs', 1)
+        args += ' --%s "%s"' % ('njobs', njob)
         args += ' --%s "%s"' % ('tags',tags)
         for k, v in self.cfg.other_cfg[sample].items():
             if k not in arg_neg_list:

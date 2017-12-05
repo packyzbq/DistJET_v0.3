@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/Application/ProdApp/ProdApp.py" line="110" mnemonic="9" />
+    <bookmark url="file://$PROJECT_DIR$/Application/ProdApp/ProdApp.py" line="115" mnemonic="9" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/python/Util/Recoder.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/JobMaster.py" afterPath="$PROJECT_DIR$/python/JobMaster.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Application/ProdApp/ProdApp.py" afterPath="$PROJECT_DIR$/Application/ProdApp/ProdApp.py" />
     </list>
     <ignored path="DistJET_v0.3.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,8 +34,8 @@
       <file leaf-file-name="WorkerAgent.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
-              <caret line="92" column="32" selection-start-line="92" selection-start-column="27" selection-end-line="92" selection-end-column="32" />
+            <state relative-caret-position="354">
+              <caret line="46" column="43" selection-start-line="46" selection-start-column="43" selection-end-line="46" selection-end-column="43" />
               <folding>
                 <element signature="e#6096#7876#0" expanded="false" />
                 <element signature="e#14479#14920#0" expanded="false" />
@@ -66,8 +65,8 @@
       <file leaf-file-name="Recoder.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/Util/Recoder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="22" column="19" selection-start-line="22" selection-start-column="8" selection-end-line="22" selection-end-column="19" />
+            <state relative-caret-position="395">
+              <caret line="29" column="45" selection-start-line="29" selection-start-column="45" selection-end-line="29" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -83,43 +82,17 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="WorkerRegistry.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/python/WorkerRegistry.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1058">
-              <caret line="106" column="26" selection-start-line="106" selection-start-column="13" selection-end-line="106" selection-end-column="26" />
-              <folding>
-                <element signature="e#800#2395#0" expanded="false" />
-                <element signature="e#2705#2735#0" expanded="false" />
-                <element signature="e#2793#3767#0" expanded="false" />
-                <element signature="e#3811#4793#0" expanded="false" />
-                <element signature="e#4839#5313#0" expanded="false" />
-                <element signature="e#5352#5569#0" expanded="false" />
-                <element signature="e#5614#5668#0" expanded="false" />
-                <element signature="e#5707#5883#0" expanded="false" />
-                <element signature="e#5926#5965#0" expanded="false" />
-                <element signature="e#6005#6394#0" expanded="false" />
-                <element signature="e#6431#6486#0" expanded="false" />
-                <element signature="e#6520#6555#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JobMaster.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="JobMaster.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="354">
-              <caret line="296" column="46" selection-start-line="296" selection-start-column="46" selection-end-line="296" selection-end-column="46" />
+              <caret line="298" column="46" selection-start-line="298" selection-start-column="46" selection-end-line="298" selection-end-column="46" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
                 <element signature="e#761#2231#0" expanded="false" />
                 <element signature="e#2893#3020#0" expanded="false" />
-                <element signature="e#6383#7750#0" expanded="false" />
-                <element signature="e#7836#10261#0" expanded="false" />
-                <element signature="e#10348#12264#0" expanded="false" />
-                <element signature="e#16706#17704#0" expanded="false" />
-                <element signature="e#17777#19814#0" expanded="false" />
+                <element signature="e#16849#17847#0" expanded="false" />
+                <element signature="e#17920#19957#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -160,9 +133,21 @@
       <file leaf-file-name="Config.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/Util/Config.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="809">
+            <state relative-caret-position="1320">
               <caret line="74" column="8" selection-start-line="74" selection-start-column="8" selection-end-line="74" selection-end-column="8" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ProdApp.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Application/ProdApp/ProdApp.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="460">
+              <caret line="122" column="61" selection-start-line="122" selection-start-column="61" selection-end-line="122" selection-end-column="61" />
+              <folding>
+                <element signature="e#6262#8332#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -202,7 +187,6 @@
         <option value="$PROJECT_DIR$/Application/UnitTest/config.ini" />
         <option value="$PROJECT_DIR$/python/IApplication/JunoApp.py" />
         <option value="$PROJECT_DIR$/python/Process/Parser.py" />
-        <option value="$PROJECT_DIR$/python/Util/Config.py" />
         <option value="$PROJECT_DIR$/bin/worker.py" />
         <option value="$PROJECT_DIR$/Application/UnitTest/App_Module.py" />
         <option value="$PROJECT_DIR$/python/Process/Process.py" />
@@ -215,11 +199,12 @@
         <option value="$PROJECT_DIR$/python/WorkerRegistry.py" />
         <option value="$PROJECT_DIR$/python/IApplication/IApplication.py" />
         <option value="$PROJECT_DIR$/Application/ProdApp/config.ini" />
-        <option value="$PROJECT_DIR$/Application/ProdApp/ProdApp.py" />
         <option value="$PROJECT_DIR$/python/Util/HealthDetect.py" />
         <option value="$PROJECT_DIR$/python/WorkerAgent.py" />
-        <option value="$PROJECT_DIR$/python/Util/Recoder.py" />
         <option value="$PROJECT_DIR$/python/JobMaster.py" />
+        <option value="$PROJECT_DIR$/python/Util/Recoder.py" />
+        <option value="$PROJECT_DIR$/python/Util/Config.py" />
+        <option value="$PROJECT_DIR$/Application/ProdApp/ProdApp.py" />
       </list>
     </option>
   </component>
@@ -394,6 +379,121 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://D:/WorkSpace/DistJET_v0.3/python/Process/Parser.py" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
+  </component>
+  <component name="RestoreUpdateTree" date="Moments ago" ActionInfo="_Update">
+    <UpdatedFiles>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Updated from server" />
+        <option name="myStatusName" value="Changed on server" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="CHANGED_ON_SERVER" />
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Updated" />
+          <option name="myStatusName" value="Changed" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="UPDATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/Application/ProdApp/App_Module.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/Application/ProdApp/config.ini</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/config.ini</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/JobMaster.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/Util/Config.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/Util/Recoder.py</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Created" />
+          <option name="myStatusName" value="Created" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="CREATED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Deleted" />
+          <option name="myStatusName" value="Deleted" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="true" />
+          <option name="myId" value="REMOVED_FROM_REPOSITORY" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Restored" />
+          <option name="myStatusName" value="Will be restored" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="RESTORED" />
+        </FILE-GROUP>
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Modified" />
+        <option name="myStatusName" value="Modified" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MODIFIED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Skipped" />
+        <option name="myStatusName" value="Skipped" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SKIPPED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with conflicts" />
+        <option name="myStatusName" value="Will be merged with conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_CONFLICTS" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with tree conflicts" />
+        <option name="myStatusName" value="Merged with tree conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with property conflicts" />
+        <option name="myStatusName" value="Will be merged with property conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged" />
+        <option name="myStatusName" value="Will be merged" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Not in repository" />
+        <option name="myStatusName" value="Not in repository" />
+        <option name="mySupportsDeletion" value="true" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="UNKNOWN" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally added" />
+        <option name="myStatusName" value="Locally added" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_ADDED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally removed" />
+        <option name="myStatusName" value="Locally removed" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_REMOVED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Switched" />
+        <option name="myStatusName" value="Switched" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SWITCHED" />
+      </FILE-GROUP>
+    </UpdatedFiles>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -687,13 +787,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1505126721810</updated>
-    </task>
-    <task id="LOCAL-00007" summary="add HealtheDetect&#10;">
-      <created>1508050773474</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1508050773474</updated>
     </task>
     <task id="LOCAL-00008" summary="fix some bugs for WorkerAgent">
       <created>1508057861609</created>
@@ -1031,7 +1124,14 @@
       <option name="project" value="LOCAL" />
       <updated>1512370304479</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="add recoder">
+      <created>1512441568252</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1512441568253</updated>
+    </task>
+    <option name="localTasksCounter" value="57" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1104,7 +1204,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix process" />
     <MESSAGE value="add worker finalize and stop" />
     <MESSAGE value="fix master cannot stop" />
     <MESSAGE value="quick fix for cannot pull back task" />
@@ -1129,7 +1228,8 @@
     <MESSAGE value="test for Prod task generate" />
     <MESSAGE value="update new app judge" />
     <MESSAGE value="add health record" />
-    <option name="LAST_COMMIT_MESSAGE" value="add health record" />
+    <MESSAGE value="add recoder" />
+    <option name="LAST_COMMIT_MESSAGE" value="add recoder" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1355,16 +1455,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3864">
           <caret line="172" column="0" selection-start-line="172" selection-start-column="0" selection-end-line="172" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Application/ProdApp/ProdApp.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="82" column="60" selection-start-line="82" selection-start-column="60" selection-end-line="82" selection-end-column="60" />
-          <folding>
-            <element signature="e#5800#7870#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1457,18 +1548,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/Util/Config.py">
+    <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="809">
-          <caret line="74" column="8" selection-start-line="74" selection-start-column="8" selection-end-line="74" selection-end-column="8" />
+        <state relative-caret-position="354">
+          <caret line="298" column="46" selection-start-line="298" selection-start-column="46" selection-end-line="298" selection-end-column="46" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+            <element signature="e#761#2231#0" expanded="false" />
+            <element signature="e#2893#3020#0" expanded="false" />
+            <element signature="e#16849#17847#0" expanded="false" />
+            <element signature="e#17920#19957#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/Util/Recoder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="395">
+          <caret line="29" column="45" selection-start-line="29" selection-start-column="45" selection-end-line="29" selection-end-column="45" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="92" column="32" selection-start-line="92" selection-start-column="27" selection-end-line="92" selection-end-column="32" />
+        <state relative-caret-position="354">
+          <caret line="46" column="43" selection-start-line="46" selection-start-column="43" selection-end-line="46" selection-end-column="43" />
           <folding>
             <element signature="e#6096#7876#0" expanded="false" />
             <element signature="e#14479#14920#0" expanded="false" />
@@ -1484,27 +1589,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/Util/Recoder.py">
+    <entry file="file://$PROJECT_DIR$/python/Util/Config.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="22" column="19" selection-start-line="22" selection-start-column="8" selection-end-line="22" selection-end-column="19" />
+        <state relative-caret-position="1320">
+          <caret line="74" column="8" selection-start-line="74" selection-start-column="8" selection-end-line="74" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
+    <entry file="file://$PROJECT_DIR$/Application/ProdApp/ProdApp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="296" column="46" selection-start-line="296" selection-start-column="46" selection-end-line="296" selection-end-column="46" />
+        <state relative-caret-position="460">
+          <caret line="122" column="61" selection-start-line="122" selection-start-column="61" selection-end-line="122" selection-end-column="61" />
           <folding>
-            <element signature="e#0#12#0" expanded="true" />
-            <element signature="e#761#2231#0" expanded="false" />
-            <element signature="e#2893#3020#0" expanded="false" />
-            <element signature="e#6383#7750#0" expanded="false" />
-            <element signature="e#7836#10261#0" expanded="false" />
-            <element signature="e#10348#12264#0" expanded="false" />
-            <element signature="e#16706#17704#0" expanded="false" />
-            <element signature="e#17777#19814#0" expanded="false" />
+            <element signature="e#6262#8332#0" expanded="false" />
           </folding>
         </state>
       </provider>
