@@ -213,4 +213,4 @@ if __name__ == '__main__':
     tasklist = app.split()
     print len(tasklist)
     for task in tasklist:
-        print('%s - child: %s, father: %s\n'%(task.tid, [child.tid for child in task.get_child_list()],[father.tid for father in task.get_father_list()]))
+        print('%s - child: %s, father: %s\n'%(task.tid, [child for child in task.get_child_list()],[father for father in task.get_father_list()]))
