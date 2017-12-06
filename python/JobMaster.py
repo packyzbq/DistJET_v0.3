@@ -138,9 +138,11 @@ class HandlerThread(BaseThread):
                     #health_log.info('Worker %s : %s'%(recv_dict['wid'], recv_dict['health']))
                     # plan 2
                     tmpdict = recv_dict['health']
-                    recode_ele.cpuid = tmpdict['CpuUsage'].keys()[0]
-                    recode_ele.cpurate = tmpdict['CpuUsage'].values()[0]
+                    recode_ele.cpuid = tmpdict['CpuId'][0]
+                    if str(recode_ele.cpuid) != 'None':
+                        recode_ele.cpurate = tmpdict['CpuUsage']['cpu'+str(recode_ele.cpuid)]
                     recode_ele.mem = tmpdict['MemoUsage']['MemUsage']
+                    recode_ele.extra=[[tmpdict['CpuId']],tmpdict['CpuUsage']]
                 if recv_dict.has_key('ctime'):
                     if (not recv_dict.has_key('flag')) or (recv_dict.has_key('flag') and recv_dict['flag'] != 'LP'):
                         self.master.worker_registry.setContacttime(recv_dict['uuid'], recv_dict['ctime'])

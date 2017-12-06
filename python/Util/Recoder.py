@@ -7,6 +7,7 @@ class BaseElement(object):
         self.cpuid = None
         self.cpurate = None
         self.mem = None
+        self.extra=None
 
     def check_integrity(self):
         if self.cpurate and self.cpuid and self.mem:
