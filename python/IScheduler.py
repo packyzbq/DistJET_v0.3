@@ -224,7 +224,7 @@ class SimpleTaskScheduler(IScheduler):
                 task = self.get_task(tid)
                 if isinstance(task,Task.ChainTask) and task.father_len() != 0:
                     if pre_task and pre_task.tid == task.tid:
-                        scheduler_log.debug("There is only one task with father %s"%task.get_father_list())
+                        scheduler_log.warning("There is only one task with father %s"%task.get_father_list())
                         return task_list
                     else:
                         pre_task = task
@@ -244,7 +244,7 @@ class SimpleTaskScheduler(IScheduler):
             #    self.scheduled_task_list[wid].append(tid)
         print "task_list = %s"%task_list
         if task_list:
-            scheduler_log.debug('[Scheduler] Assign %s to worker %s' % (self.scheduled_task_list[wid][-room:], wid))
+            scheduler_log.info('[Scheduler] Assign %s to worker %s' % (self.scheduled_task_list[wid][-room:], wid))
         return task_list
 
 

@@ -57,7 +57,7 @@ class WatchDogThread(BaseThread):
                 control_log.warning('Find Idle timeout worker %s'%idleworker)
                 # TODO: do something to reduce the resource
             # print worker status
-            master_log.debug('[Master] Worker status = %s'%self.master.worker_registry.get_worker_status())
+            master_log.info('[Master] Worker status = %s'%self.master.worker_registry.get_worker_status())
 
 
             if not lostworker and not idleworker:
@@ -156,7 +156,7 @@ class HandlerThread(BaseThread):
                     # result of slave setup
                     # wid:int, uuid:str, APP_INI:{recode:int, errmsg:str}
                     v = recv_dict[MPI_Wrapper.Tags.APP_INI]
-                    master_log.debug('[Master] From worker %d receive a App_INI msg = %s' % (recv_dict['wid'], v))
+                    master_log.info('[Master] From worker %d receive a App_INI msg = %s' % (recv_dict['wid'], v))
                     if v['recode'] == status.SUCCESS:
                         master_log.info('worker %d initialize successfully' % recv_dict['wid'])
                     else:
@@ -187,7 +187,7 @@ class HandlerThread(BaseThread):
                             self.master.command_q.put({MPI_Wrapper.Tags.TASK_ADD: task_list, 'uuid': current_uuid})
 
                     else:
-                        master_log.debug('[Master] No more task to do')
+                        master_log.info('[Master] No more task to do')
                         # according to Policy ,check other worker status and idle worker
                         if Config.getPolicyattr('WORKER_SYNC_QUIT'):
                             if self.master.worker_registry.checkIdle(exp=[recv_dict['wid']]):  # exp=[recv_dict['wid']]
@@ -195,11 +195,11 @@ class HandlerThread(BaseThread):
                                     master_log.info('[Master] Have send all finalize msg, skip this')
                                 else:
                                     # finalize all worker
-                                    master_log.debug('[Master] All worker have done, finalize all worker')
+                                    master_log.info('[Master] All worker have done, finalize all worker')
                                     fin_task = self.master.task_scheduler.uninstall_worker()
                                     self.master.command_q.put({MPI_Wrapper.Tags.APP_FIN: fin_task, 'extra': [],'uuid':current_uuid})
                             else:
-                                master_log.debug('[Master] There are still running worker, halt')
+                                master_log.info('[Master] There are still running worker, halt')
                                 self.master.command_q.put({MPI_Wrapper.Tags.WORKER_HALT: '','uuid':current_uuid})
                         else:
                             master_log.info('[Master] Finalize worker %s' % recv_dict['wid'])
@@ -209,10 +209,10 @@ class HandlerThread(BaseThread):
 
                 if recv_dict.has_key(MPI_Wrapper.Tags.APP_FIN):
                     v = recv_dict[MPI_Wrapper.Tags.APP_FIN]
-                    master_log.debug('[Master] From worker %s receive a APP_FIN msg = %s' % (recv_dict['wid'], v))
+                    master_log.info('[Master] From worker %s receive a APP_FIN msg = %s' % (recv_dict['wid'], v))
                     if v['recode'] == status.SUCCESS:
                         self.master.task_scheduler.worker_finalized(recv_dict['wid'])
-                        master_log.debug('[Master] Have finalized worker %s' % recv_dict['wid'])
+                        master_log.info('[Master] Have finalized worker %s' % recv_dict['wid'])
                         #check all worker finalized
                         if self.master.worker_registry.checkFinalize():
                             # after all alive worker finalized, load new app
@@ -324,7 +324,7 @@ class JobMaster(IJobMaster):
         self.__stop = True
 
     def register_worker(self, w_uuid, capacity=1):
-        master_log.debug('[Master] register worker %s' % w_uuid)
+        master_log.info('[Master] register worker %s' % w_uuid)
         worker = self.worker_registry.add_worker(w_uuid, capacity)
         if not worker:
             master_log.warning('[Master] The uuid=%s of worker has already registered', w_uuid)
@@ -430,7 +430,7 @@ class JobMaster(IJobMaster):
                                 send_dict['wid'] = self.worker_registry.get_by_uuid(uuid).wid
                                 send_str = Pack.pack_obj({MPI_Wrapper.Tags.MPI_REGISTY_ACK:send_dict})
                                 send_final = Pack.pack2json({'uuid':uuid,'dict':send_str})
-                                master_log.debug('[Master] Send new App message') 
+                                master_log.info('[Master] Send new App message')
                                 self.server.send_string(send_final,len(send_final),uuid,MPI_Wrapper.Tags.MPI_REGISTY_ACK)
                             self.__newApp_flag = False
 

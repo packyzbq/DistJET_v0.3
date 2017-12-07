@@ -157,7 +157,7 @@ class WorkerAgent:
         self.uuid = str(uuid_mod.uuid4())
         if name is None:
             name = self.uuid
-        print "my name = %s"%self.uuid
+        #print "my name = %s"%self.uuid
         global wlog
         wlog = logger.getLogger('Worker_%s'%name)
         self.worker_class = None
@@ -209,9 +209,9 @@ class WorkerAgent:
 
     def run(self):
         try:
-            wlog.debug('[Agent] WorkerAgent run...')
+            wlog.info('[Agent] WorkerAgent run...')
             self.heartbeat.start()
-            wlog.debug('[WorkerAgent] HeartBeat thread start...')
+            wlog.info('[WorkerAgent] HeartBeat thread start...')
             while not self.__should_stop:
                 time.sleep(0.1) #TODO temporary config for loop interval
                 if not self.recv_buff.empty():
@@ -229,7 +229,7 @@ class WorkerAgent:
                         # registery info v={wid:val,init:[TaskObj], appid:v, wmp:worker_module_path}
                         if int(k) == Tags.MPI_REGISTY_ACK:
                             if v.has_key('flag') and v['flag'] == 'NEWAPP':
-                                wlog.debug('[WorkerAgent] Receive New App msg = %s' % v)
+                                wlog.info('[WorkerAgent] Receive New App msg = %s' % v)
                                 v['wid'] = self.wid
                                 self.appid = v['appid']
                                 self.task_queue.queue.clear()
@@ -246,7 +246,7 @@ class WorkerAgent:
                                 self.halt_flag = False
                                 self.task_acquire = False
                             else:
-                                wlog.debug('[WorkerAgent] Receive Registry_ACK msg = %s' % v)
+                                wlog.info('[WorkerAgent] Receive Registry_ACK msg = %s' % v)
                             worker_path = v['wmp']
                             if worker_path is not None and worker_path!='None':
                                 module_path = os.path.abspath(worker_path)
@@ -270,7 +270,7 @@ class WorkerAgent:
                                 self.appid = v['appid']
                                 self.tmpLock.acquire()
                                 self.iniExecutor = v['init'] # pack init command into one task obj
-                                wlog.debug('[Agent] init_task:%s, boot=%s'%(self.iniExecutor,self.iniExecutor.boot))
+                                wlog.info('[Agent] init_task:%s, boot=%s'%(self.iniExecutor,self.iniExecutor.boot))
                                 self.tmpLock.release()
 
                                 # notify worker initialize
@@ -280,7 +280,7 @@ class WorkerAgent:
                                     self.cond_list[i]=threading.Condition()
                                     self.worker_list[i]=Worker(i, self, self.cond_list[i], worker_class=self.worker_class)
                                     self.worker_status[i] = WorkerStatus.NEW
-                                    wlog.debug('[Agent] Worker %s start' % i)
+                                    wlog.info('[Agent] Worker %s start' % i)
                                     self.worker_list[i].start()
                                 self.list_lock.release()
 
@@ -295,7 +295,7 @@ class WorkerAgent:
                         elif int(k) == Tags.TASK_ADD:
                             tasklist = v
                             self.halt_flag = False
-                            wlog.debug('[WorkerAgent] Add new task : %s' % ([task.tid for task in tasklist]))
+                            wlog.info('[WorkerAgent] Add new task : %s' % ([task.tid for task in tasklist]))
                             for task in tasklist:
                                 self.task_queue.put(task)
                             count = len(tasklist)
@@ -313,7 +313,7 @@ class WorkerAgent:
                             self.task_acquire = False
                         # remove task, v={flag:F/V, list:[tid]}
                         elif int(k) == Tags.TASK_REMOVE:
-                            wlog.debug('[WorkerAgent] Receive TASK_REMOVE msg = %s' % v)
+                            wlog.info('[WorkerAgent] Receive TASK_REMOVE msg = %s' % v)
                             self.removed_tasks.extend(v['list'])
                             for worker in self.worker_list.values():
                                 if worker.running_task.tid in v['list']:
@@ -321,7 +321,7 @@ class WorkerAgent:
                                     ret = worker.term_task(tmptask.tid, v['flag'])
                         # master disconnect ack
                         elif int(k) == Tags.LOGOUT:
-                            wlog.debug('[WorkerAgent] Receive LOGOUT msg = %s' % v)
+                            wlog.info('[WorkerAgent] Receive LOGOUT msg = %s' % v)
                             self.list_lock.acquire()
                             for i in range(len(self.worker_list)):
                                 if self.worker_status[i] == WorkerStatus.FINALIZED:
@@ -335,7 +335,7 @@ class WorkerAgent:
                             break
                         # force worker to stop
                         elif int(k) == Tags.WORKER_STOP:
-                            wlog.debug('[Agent] Receive WORKER_STOP msg = %s' % v)
+                            wlog.info('[Agent] Receive WORKER_STOP msg = %s' % v)
                             self.list_lock.acquire()
                             for i in self.worker_status.keys():
                                 if self.worker_status[i] == WorkerStatus.RUNNING:
@@ -348,20 +348,20 @@ class WorkerAgent:
 
                         # app finalize v=None/[Taskobj]
                         elif int(k) == Tags.APP_FIN:
-                            wlog.debug('[WorkerAgent] Receive APP_FIN msg = %s' % v)
+                            wlog.info('[WorkerAgent] Receive APP_FIN msg = %s' % v)
                             self.tmpLock.acquire()
                             self.finExecutor = v
                             self.tmpLock.release()
                             self.app_fin_flag = True
 
                         elif int(k) == Tags.WORKER_HALT:
-                            wlog.debug('[Agent] Receive WORKER_HALT command')
+                            wlog.info('[Agent] Receive WORKER_HALT command')
                             self.halt_flag=True
                     continue
                 if self.initial_flag and len(self.worker_list) == 0 and not self.app_fin_flag:
                     self.halt_flag = False
                     self.heartbeat.acquire_queue.put({Tags.APP_FIN: {'wid': self.wid, 'recode': status.SUCCESS, 'result': None}})
-                    wlog.debug('[Agent] Send APP_FIN msg for logout/newApp')
+                    wlog.info('[Agent] Send APP_FIN msg for logout/newApp')
                     self.app_fin_flag = True
 
                 #ask for new task
@@ -442,7 +442,7 @@ class WorkerAgent:
             self.worker_status[wid] = WorkerStatus.INITIALIZED
             if not self.initial_flag:
                 self.initial_flag = True
-            wlog.debug('[Agent] Feed back app init result')
+            wlog.info('[Agent] Feed back app init result')
             self.heartbeat.acquire_queue.put({Tags.APP_INI: {'recode': retcode, 'errmsg': errmsg}})
 
     def finalize_done(self,wid,retcode, errmsg=None):
@@ -452,7 +452,7 @@ class WorkerAgent:
         else:
             self.worker_status[wid] = WorkerStatus.FINALIZED
             self.remove_worker(wid)
-            wlog.debug('[Agent] Worker %s finalized, remove from list'%wid)
+            wlog.info('[Agent] Worker %s finalized, remove from list'%wid)
         self.heartbeat.acquire_queue.put({Tags.APP_FIN: {'recode':retcode,'errmsg':errmsg}})
 
     def getRuntasklist(self):
@@ -554,11 +554,11 @@ class Worker(BaseThread):
                                            task_callback=self.task_done,
                                            finalize_callback=self.finalize_done,
                                            ignoreFail=Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
-            print '<worker has create process>'
+            #print '<worker has create process>'
             self.status = WorkerStatus.INITIALIZING
             self.workeragent.set_status(self.id,self.status)
             ret = self.process.initialize()
-            print '<worker process init ret=%d>'%ret
+            #print '<worker process init ret=%d>'%ret
             if ret == 0:
                 self.initialized = True
                 self.status = WorkerStatus.INITIALIZED
@@ -655,7 +655,7 @@ class Worker(BaseThread):
                         tmptime = 0
                         self.idle()
                     continue
-                print 'worker %d running task %d'%(self.id,task.tid)
+                #print 'worker %d running task %d'%(self.id,task.tid)
                 self.do_task(task)
                 # wait for process return result
                 self.cond.acquire()
@@ -676,7 +676,7 @@ class Worker(BaseThread):
             self.process.wait()
             wlog.info("[Worker_%d] Stop..."%self.id)
             self.stop()
-        wlog.debug('[Worker_%d] Exit run method'%self.id)
+        wlog.info('[Worker_%d] Exit run method'%self.id)
 
 
 
