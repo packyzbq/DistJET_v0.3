@@ -178,7 +178,12 @@ class WorkerRegistry:
             return None
 
     def get_by_uuid(self, w_uuid):
-        return self.get_entry(self.__all_workers_uuid[w_uuid])
+        e=None
+        if self.__all_workers_uuid.has_key(w_uuid):
+            e = self.get_entry(self.__all_workers_uuid[w_uuid])
+        return e
+
+
 
     def task_done(self,wid):
         """
@@ -201,7 +206,7 @@ class WorkerRegistry:
         for uuid in self.alive_workers:
             entry = self.get_by_uuid(uuid)
             # the smaller wid has the high priority
-            if(entry.capacity() > 0):
+            if entry and (entry.capacity() > 0):
                 avalible_list.append(entry)
         return avalible_list
 
@@ -255,6 +260,9 @@ class WorkerRegistry:
         flag = True
         for uuid in self.alive_workers:
             wentry = self.get_by_uuid(uuid)
+            if not wentry:
+                wRegistery_log.warning('[Registry] worker %s is not exists, skip'%uuid)
+                continue
             if str(wentry.wid) in exp or int(wentry.wid) in exp:
                 continue
             elif wentry.status in [WorkerStatus.RUNNING, WorkerStatus.INITIALIZED]:
@@ -266,7 +274,7 @@ class WorkerRegistry:
     def checkFinalize(self,exp=[]):
         for uuid in self.alive_workers:
             entry = self.get_by_uuid(uuid)
-            if entry.status and entry.status != WorkerStatus.FINALIZED:
+            if entry and entry.status and entry.status != WorkerStatus.FINALIZED:
                 return False
         return True
 
