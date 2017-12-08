@@ -3,7 +3,7 @@ assert os.environ['DistJETPATH']
 assert os.environ['JUNOTOP']
 
 sys.path.append(os.environ['DistJETPATH'])
-#argv[1]=capacity, argv[2]=conf_file
+#argv[1]=capacity, argv[2]=conf_file, argv[3]=log_level
 if len(sys.argv) <= 2:
     print('@worker, need at least 2 parameter(given %d), exit'%(len(sys.argv)-1))
     exit()
@@ -13,6 +13,12 @@ if 'Boost' not in os.environ['PATH']:
     exit()
 else:
     print('SETUP: find Boost')
+
+import python.Util.logger as logger
+if len(sys.argv) == 4 and sys.argv[3] in ['info','debug']:
+    logger.setlevel(sys.argv[3])
+else:
+    logger.setlevel('info')
 
 import python.Util.Config as CONF
 CONF.Config.setCfg('Rundir',os.getcwd())

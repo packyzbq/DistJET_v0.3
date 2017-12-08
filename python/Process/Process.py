@@ -6,6 +6,7 @@ sys.path.append(os.environ['DistJETPATH'])
 import threading
 import select
 import subprocess
+import psutil
 import Queue
 import traceback
 from Parser import Parser
@@ -71,7 +72,7 @@ class Process_withENV(threading.Thread):
 
         self.stdout = subprocess.PIPE
         self.stdin = subprocess.PIPE
-        self.process = subprocess.Popen(['bash'], stdin=self.stdin, stdout=self.stdout, stderr=subprocess.STDOUT,preexec_fn=os.setsid)
+        self.process = psutil.Popen(['bash'], stdin=self.stdin, stdout=self.stdout, stderr=subprocess.STDOUT,preexec_fn=os.setsid)
         self.pid = self.process.pid
 
         #self.logFile.write('@Process: create process for tasks, pid= %d\n' %self.pid)\
@@ -353,7 +354,7 @@ class Process_withENV(threading.Thread):
         self._burnProcess()
 
     def _clean_process(self):
-        rc = subprocess.Popen(['ps -ef|grep %s | grep -v grep| awk \'{if($3==1 && $8!="hydra_nameserver") print $2}\'|xargs kill'%getpass.getuser()],shell=True)
+        rc = psutil.Popen(['ps -ef|grep %s | grep -v grep| awk \'{if($3==1 && $8!="hydra_nameserver") print $2}\'|xargs kill'%getpass.getuser()],shell=True)
         rc.wait()
         self.log.write('\n [Proc]Clean up process...\n')
 
@@ -374,7 +375,7 @@ class Process_withENV(threading.Thread):
         self.log.flush()
 
     def _restart(self):
-        proc = subprocess.Popen(['bash'], shell=self.shell, stdin=self.stdin, stdout=self.stdout, stderr=subprocess.STDOUT,preexec_fn=os.setsid)
+        proc = psutil.Popen(['bash'], shell=self.shell, stdin=self.stdin, stdout=self.stdout, stderr=subprocess.STDOUT,preexec_fn=os.setsid)
         self.pid = proc.pid
         #self.logFile.write('[Proc] Restart a new process,pid=%d'%self.pid)
         #self.logFile.flush()

@@ -133,16 +133,15 @@ class HandlerThread(BaseThread):
                             self.master.task_scheduler.task_failed(recv_dict['wid'], task)
                         else:
                             master_log.warning('[Master] Can not recognize the task status %s of Task' % task.status)
-                if recv_dict.has_key('health') and recode_ele:
+                if recv_dict.has_key('health') and recv_dict['health'] and recode_ele:
                     # plan 1
                     #health_log.info('Worker %s : %s'%(recv_dict['wid'], recv_dict['health']))
                     # plan 2
                     tmpdict = recv_dict['health']
-                    recode_ele.cpuid = tmpdict['CpuId'][0]
-                    if str(recode_ele.cpuid) != 'None':
-                        recode_ele.cpurate = tmpdict['CpuUsage']['cpu'+str(recode_ele.cpuid)]
+                    recode_ele.cpuid = tmpdict['CpuId']
+                    recode_ele.cpurate = tmpdict['CpuUsage']
                     recode_ele.mem = tmpdict['MemoUsage']['MemUsage']
-                    recode_ele.extra=[[tmpdict['CpuId']],tmpdict['CpuUsage']]
+                    recode_ele.extra=tmpdict['extra']
                 if recv_dict.has_key('ctime'):
                     if (not recv_dict.has_key('flag')) or (recv_dict.has_key('flag') and recv_dict['flag'] != 'LP'):
                         self.master.worker_registry.setContacttime(recv_dict['uuid'], recv_dict['ctime'])

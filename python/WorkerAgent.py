@@ -5,6 +5,7 @@ import threading
 import time
 import traceback
 import types
+import psutil
 
 import IR_Buffer_Module as IM
 
@@ -475,7 +476,10 @@ class WorkerAgent:
         Plug in self-costume bash scripts to add more information
         :return: dict
         """
+
         tmpdict = {}
+        #------change to psutil--------
+        '''
         cpuid1 = None
         cpuid2 = None
         if self.worker_list and self.worker_list[0].process:
@@ -488,10 +492,27 @@ class WorkerAgent:
             out = out.strip().split('\n')
             cpuid1 = out[-1].strip().split(' ')[-1]
             cpuid2 = out[-2].strip().split(' ')[-1]
-
-        tmpdict['CpuUsage'] = HD.getCpuUsage()
-        tmpdict['MemoUsage'] = HD.getMemoUsage()
-        tmpdict['CpuId'] = [cpuid1,cpuid2]
+        '''
+		#------change to psutil------
+        if not self.worker_list.has_key(0):
+            return tmpdict
+        proc = self.worker_list[0].process
+        if not proc:
+            return tmpdict
+        proc = proc.process
+        if not proc:
+            return tmpdict
+        child = proc.children(recursive=True)
+        if not child:
+            return tmpdict
+        try:
+            child = child[-1]
+            tmpdict['CpuUsage'] = child.cpu_percent(interval=0.05)
+            tmpdict['MemoUsage'] = HD.getMemoUsage()
+            tmpdict['CpuId'] = child.cpu_num()
+            tmpdict['extra'] = child.name()+' '+child.exe()
+        except psutil.Error:
+            return {}
         script = self.cfg.getCFGattr("health_detect_scripts")
         if script and os.path.exists(self.cfg.getCFGattr('topDir') + '/' + script):
             script = self.cfg.getCFGattr('topDir') + '/' + script
