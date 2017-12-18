@@ -258,25 +258,33 @@ class WorkerRegistry:
         if exp:
             wRegistery_log.debug('[Registry] check idle exclude worker %s, type of exp = %s'%(exp,type(exp[0])))
         flag = True
-        for uuid in self.alive_workers:
-            wentry = self.get_by_uuid(uuid)
-            if not wentry:
-                wRegistery_log.warning('[Registry] worker %s is not exists, skip'%uuid)
-                continue
-            if str(wentry.wid) in exp or int(wentry.wid) in exp:
-                continue
-            elif wentry.status in [WorkerStatus.RUNNING, WorkerStatus.INITIALIZED]:
-                wRegistery_log.info('[Registry] worker %s is in status=%s, cannot finalize'%(wentry.wid, wentry.status))
-                flag = False
-                return flag
-        return flag
+        self.lock.acquire()
+        try:
+            for uuid in self.alive_workers:
+                wentry = self.get_by_uuid(uuid)
+                if not wentry:
+                    wRegistery_log.warning('[Registry] worker %s is not exists, skip'%uuid)
+                    continue
+                if str(wentry.wid) in exp or int(wentry.wid) in exp:
+                    continue
+                elif wentry.status in [WorkerStatus.RUNNING, WorkerStatus.INITIALIZED]:
+                    wRegistery_log.info('[Registry] worker %s is in status=%s, cannot finalize'%(wentry.wid, wentry.status))
+                    flag = False
+                    return flag
+            return flag
+        finally:
+            self.lock.release()
 
     def checkFinalize(self,exp=[]):
-        for uuid in self.alive_workers:
-            entry = self.get_by_uuid(uuid)
-            if entry and entry.status and entry.status != WorkerStatus.FINALIZED:
-                return False
-        return True
+        self.lock.acquire()
+        try:
+            for uuid in self.alive_workers:
+                entry = self.get_by_uuid(uuid)
+                if entry and entry.status and entry.status != WorkerStatus.FINALIZED:
+                    return False
+            return True
+        finally:
+            self.lock.release()
 
     def setContacttime(self, uuid, time):
         wid = self.__all_workers_uuid[uuid]

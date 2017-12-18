@@ -510,7 +510,7 @@ class WorkerAgent:
             tmpdict['CpuUsage'] = child.cpu_percent(interval=0.05)
             tmpdict['MemoUsage'] = HD.getMemoUsage()
             tmpdict['CpuId'] = child.cpu_num()
-            tmpdict['extra'] = child.name()+' '+child.exe()
+            tmpdict['extra'] = child.cmdline()
         except psutil.Error:
             return {}
         script = self.cfg.getCFGattr("health_detect_scripts")
