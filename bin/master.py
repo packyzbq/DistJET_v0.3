@@ -23,6 +23,10 @@ appfile = sys.argv[1]
 config_path = sys.argv[2]
 log_level = sys.argv[3]
 app_config_path = sys.argv[4]
+if len(sys.argv) > 5:
+    log_screen = sys.argv[5]
+else:
+    log_screen = False
 
 if os.path.exists(appfile):
     module_path = os.path.dirname(appfile)
@@ -47,6 +51,7 @@ except ImportError:
 
 import python.Util.logger as logger
 logger.setlevel(log_level)
+logger.setConsole(log_screen)
 
 from python.JobMaster import JobMaster
 applications=[]

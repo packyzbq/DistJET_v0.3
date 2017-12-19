@@ -34,6 +34,7 @@ def getLogger(name, level=None, applog=False):
     logger.setLevel(loglevel[level])
     logger.addHandler(handler)
     if console:
+        print "add console handler"
         logger.addHandler(console)
     return logger
 
@@ -41,3 +42,6 @@ def setlevel(level, logger=None):
     if logger:
         logger.setLevel(loglevel[level])
     Config.setCfg('Log_Level',level)
+
+def setConsole(flag=False):
+	Config.setCfg('LogConsole',flag)

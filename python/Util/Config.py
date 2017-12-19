@@ -24,7 +24,7 @@ class Config(object):
         'health_detect_scripts': None,
         'topDir': os.environ['DistJETPATH'],
         'Rundir': None,
-        'LogConsole': True,
+        'LogConsole': False,
         'HeartBeatInterval': 0.5,
         'Halt_Recv_Interval': 10
     }
