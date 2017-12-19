@@ -625,19 +625,23 @@ class Worker(BaseThread):
         self.cond.wait()
         self.cond.release()
 
-    def task_done(self, stu, retcode, start_time, end_time):
+    def task_done(self, stu, retcode, start_time, end_time, logfile_path):
         self.log.info('[Worker_%d] Task %s finish, status=%s'%(self.id, str(self.running_task.tid),status.describe(stu)))
         if stu == status.SUCCESS:
             self.running_task.complete(start_time,end_time)
+            if logfile_path and logfile_path.endswith('.tmp'):
+                os.rename(logfile_path,logfile_path[:-4])
         else:
             self.running_task.fail(start_time,end_time,status.describe(stu))
+            if logfile_path and logfile_path.endswith('.tmp'):
+                os.rename(logfile_path,logfile_path[:-3]+'err')
         self.finish_task = self.running_task
         #if self.status == WorkerStatus.IDLE:
         self.cond.acquire()
         self.cond.notify()
         self.cond.release()
 
-    def finalize_done(self,stu, retcode, start_time,end_time):
+    def finalize_done(self,stu, retcode, start_time,end_time,**kwd):
         self.log.info('[Worker_%d] Process finalize, status=%s'%(self.id,status.describe(stu)))
         if stu == status.SUCCESS:
             self.finialized = True

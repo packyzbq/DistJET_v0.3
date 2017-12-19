@@ -66,9 +66,9 @@ class Config(object):
                 finally:
                     GlobalLock.release()
         if cls.__global_config['Rundir'] is None:
-            if not os.path.exists('Rundir'):
-                os.mkdir('Rundir')
             cls.__global_config['Rundir'] = os.getcwd()+'/Rundir'
+        if not os.path.exists(cls.__global_config['Rundir']):
+            os.mkdir(cls.__global_config['Rundir'])
         return object.__new__(cls)
 
     @classmethod

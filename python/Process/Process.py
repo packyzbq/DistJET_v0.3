@@ -11,7 +11,7 @@ import Queue
 import traceback
 from Parser import Parser
 from python.Task import Task
-import python.Util.logger as logger
+import python.Util.Config as Config
 
 
 class status:
@@ -91,6 +91,11 @@ class Process_withENV(threading.Thread):
 
         self.stop_flag = False
 
+        self.TaskLogDir = Config.Config.getCFGattr('Rundir')+'/task_log'
+        if not os.path.exists(self.TaskLogDir):
+            os.mkdir(self.TaskLogDir)
+
+
     def set_task(self,task, genLog=True):
         command_list=[]
         if genLog:
@@ -105,9 +110,11 @@ class Process_withENV(threading.Thread):
         else:
             command_list.extend(task.boot)
 
+        task_log=self.TaskLogDir+'task_'+str(task.tid)+'.tmp'
+
         if genLog:
             print "res_dir=%s, tid=%s"%(task.res_dir,str(task.tid))
-            commpack = CommandPack(task.tid,command_list,task_log=task.res_dir+'/task_'+str(task.tid)+'_log.log')
+            commpack = CommandPack(task.tid,command_list,task_log=task_log)
         else:
             commpack = CommandPack(task.tid,command_list,proc_log=self.log, finalize_flag=True)
         self.executable.put(commpack)
@@ -217,7 +224,7 @@ class Process_withENV(threading.Thread):
                         if '#exit#' in script:
                             print "<process> exiting..."
                             if self.hook and callable(self.hook):
-                                self.hook(status.SUCCESS,0,self.start,self.end)
+                                self.hook(status.SUCCESS,0,self.start,self.end, os.path.abspath(logfile.name))
                             logfile.write("[Proc] Ready to exit\n")
                             logfile.flush()
                             self.stop_flag=True
@@ -239,7 +246,7 @@ class Process_withENV(threading.Thread):
                                 logfile.flush()
                                 self.end = time.time()
                                 if self.hook and callable(self.hook):
-                                    self.hook(self.status,self.recode, self.start_time, self.end)
+                                    self.hook(self.status,self.recode, self.start_time, self.end, os.path.abspath(logfile.name))
                                 self._kill_task()
                                 #tmp_list=[]
                                 #while not self.executable.empty():
@@ -287,7 +294,7 @@ class Process_withENV(threading.Thread):
                                     time.asctime(time.localtime(self.start_time)), time.asctime(time.localtime(self.end))))
                                     logfile.flush()
                                     if self.hook and callable(self.hook):
-                                        self.hook(self.status, self.recode, self.start_time, self.end)
+                                        self.hook(self.status, self.recode, self.start_time, self.end, os.path.abspath(logfile.name))
                                 self._clean_process()
                                 break
                             elif not self.ignoreFail and (self.logParser and (not self._parseLog(data))):
@@ -295,7 +302,7 @@ class Process_withENV(threading.Thread):
                                 self.recode = -1
                                 self.end = time.time()
                                 if self.hook and callable(self.hook):
-                                    self.hook(self.status, self.recode, self.start_time, self.end)
+                                    self.hook(self.status, self.recode, self.start_time, self.end, os.path.abspath(logfile.name))
                                 #logfile.write(line)
                                 logfile.write("\n\n\n @execute error, stop running")
                                 logfile.flush()
