@@ -145,6 +145,8 @@ class HandlerThread(BaseThread):
                 if recv_dict.has_key('ctime'):
                     if (not recv_dict.has_key('flag')) or (recv_dict.has_key('flag') and recv_dict['flag'] != 'LP'):
                         self.master.worker_registry.setContacttime(recv_dict['uuid'], recv_dict['ctime'])
+                    if recode_ele:
+                        recode_ele.delay=time.time()-float(recv_dict['ctime'])
                 if recv_dict.has_key('wstatus'):
                     self.master.worker_registry.setStatus(recv_dict['wid'], recv_dict['wstatus'])
                     master_log.debug('[Master] Set worker %s status = %s' % (recv_dict['wid'], recv_dict['wstatus']))
