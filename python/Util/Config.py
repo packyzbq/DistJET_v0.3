@@ -45,30 +45,37 @@ class Config(object):
     def __new__(cls, *args, **kwargs):
         global _inipath
         if not cls.__loaded:
-            if _inipath:
-                if os.path.exists(_inipath):
-                    pass
-                elif os.path.exists(os.environ['DistJETPATH'] + '/' + _inipath):
+            if not _inipath:
+                set_inipath(os.environ['DistJETPATH']+'/config/config.ini')
+            elif _inipath and not os.path.exists(_inipath):
+                if os.path.exists(os.environ['DistJETPATH'] + '/' + _inipath):
                     set_inipath(os.environ['DistJETPATH'] + '/' + _inipath)
                 else:
-                    return object.__new__(cls)
-                try:
-                    GlobalLock.acquire()
-                    cf = ConfigParser.ConfigParser()
-                    cf.read(_inipath)
-                    if cf.has_section('GlobalCfg'):
-                        for key in cf.options('GlobalCfg'):
-                            cls.__global_config[key] = cf.get('GlobalCfg', key)
-                    if cf.has_section('Policy'):
-                        for key in cf.options('Policy'):
-                            cls.__policy[key] = cf.getint('Policy', key)
-                    cls.__loaded = True
-                finally:
+                    set_inipath(os.environ['DistJETPATH']+'/config/config.ini')
+            try:
+                GlobalLock.acquire()
+                cf = ConfigParser.ConfigParser()
+                cf.read(_inipath)
+                if cf.has_section('GlobalCfg'):
+                    for key in cf.options('GlobalCfg'):
+                        cls.__global_config[key] = cf.get('GlobalCfg', key)
+                if cf.has_section('Policy'):
+                    for key in cf.options('Policy'):
+                        cls.__policy[key] = cf.getint('Policy', key)
+                cls.__loaded = True
+            finally:
                     GlobalLock.release()
         if cls.__global_config['Rundir'] is None:
             cls.__global_config['Rundir'] = os.getcwd()+'/Rundir'
         if not os.path.exists(cls.__global_config['Rundir']):
             os.mkdir(cls.__global_config['Rundir'])
+        if not os.path.exists(os.environ['DistJETPATH']+'/config.ini'):        
+            tmpconfig=open(os.environ['DistJETPATH']+'/config.ini','w+')
+            tmpconfig.write('[GlobalCfg]\n')
+            for k,v in cls.__global_config.items():
+                tmpconfig.write("%s=%s\n"%(k,v))
+            tmpconfig.flush()
+            tmpconfig.close()
         return object.__new__(cls)
 
     @classmethod
@@ -223,7 +230,7 @@ class AppConf:
 
 
 if __name__ == '__main__':
-    set_inipath('/afs/ihep.ac.cn/users/z/zhaobq/workerSpace/DistJET_v2/config/default.cfg')
+    set_inipath(os.environ['DistJETPATH']+'/config/config.ini')
     config = Config()
     if config.__class__.isload():
         print 'config file loaded'

@@ -641,7 +641,7 @@ class Worker(BaseThread):
         self.cond.notify()
         self.cond.release()
 
-    def finalize_done(self,stu, retcode, start_time,end_time,**kwd):
+    def finalize_done(self,stu, retcode, start_time,end_time,*kwd):
         self.log.info('[Worker_%d] Process finalize, status=%s'%(self.id,status.describe(stu)))
         if stu == status.SUCCESS:
             self.finialized = True

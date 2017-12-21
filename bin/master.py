@@ -10,7 +10,7 @@ if 'Boost' not in os.environ['PATH']:
 else:
     print("SETUP: Find Boost")
 
-# argv[1] = appfile, argv[2] = config, argv[3]=log_level, argv[4] = app_config_file
+# argv[1] = appfile, argv[2] = config, argv[3]=log_level, argv[4] = app_config_file, argv[5] = log_screen
 if len(sys.argv) < 3:
     print('@master need at least 2 parameter(given %d), args=%s, exit'%(len(sys.argv)-1, sys.argv))
     exit()
@@ -38,9 +38,9 @@ if os.path.exists(appfile):
 else:
     print('@master: cannot find app module %s, exit'%sys.argv[1])
 
-rundir = os.getcwd()
+#rundir = os.getcwd()
 import python.Util.Config as Conf
-Conf.Config.setCfg('Rundir',rundir)
+#Conf.Config.setCfg('Rundir',rundir)
 
 module=None
 try:
@@ -77,6 +77,5 @@ if master.getRunFlag():
     #    rf.flush()
     print('@master: start running')
     master.startProcessing()
-	
-    #if 'running.log' in os.listdir('.'):
-    #    os.remove('./running.log')
+if os.path.exists(os.environ['DistJETPATH']+'/config.ini'):
+    os.remove(os.environ['DistJETPATH']+'/config.ini')

@@ -1,7 +1,23 @@
 import os,sys
-import python.Util.Config as Config
+import ConfigParser
+if not os.environ.has_key('DistJETPATH'):
+    print "There is no environment path"
+    exit()
 sys.path.append(os.environ['DistJETPATH'])
-task_path = Config.Config.getCFGattr('Rundir')+'/task_log'
+import python.Util.Config as Config
+config_path = os.environ['DistJETPATH']+'/config.ini'
+if not os.path.exists(config_path):
+    print "Can not find running job, exit"
+    exit()
+
+cf = ConfigParser.ConfigParser()
+cf.read(config_path)
+run_path = cf.get('GlobalCfg','Rundir')
+task_path = cf.get('GlobalCfg','Rundir')+'/task_log'
+print task_path
+if not os.path.exists(task_path):
+    print "Wrong task directory, exit"
+    exit()
 succ = 0
 running = 0
 err = 0
@@ -17,11 +33,15 @@ if succ==0 and running==0 and err==0:
     exit()
 #parse AppMgr.log
 total = 0
-if os.path.exists(Config.Config.getCFGattr('Rundir')+'/DistJET_log/DistJET.AppMgr.log'):
-    appmgr_log = open(Config.Config.getCFGattr('Rundir')+'/DistJET_log/DistJET.AppMgr.log','a')
+if os.path.exists(run_path+'/DistJET_log/DistJET.AppMgr.log'):
+    appmgr_log = open(run_path+'/DistJET_log/DistJET.AppMgr.log')
     for line in appmgr_log.readlines():
         if '[AppMgr]: Create' in line:
-            total = int(line[-6])
+            line = line.split()
+            for s in line:
+                if s.isdigit():
+                    total = int(s)
+                    break
             break
     appmgr_log.close()
 

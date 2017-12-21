@@ -21,7 +21,7 @@ else:
     logger.setlevel('info')
 
 import python.Util.Config as CONF
-CONF.Config.setCfg('Rundir',os.getcwd())
+#CONF.Config.setCfg('Rundir',os.getcwd())
 cfg_path = sys.argv[2]
 if sys.argv[2] != 'null' and not os.path.exists(sys.argv[2]):
     CONF.set_inipath(os.path.abspath(sys.argv[2]))
