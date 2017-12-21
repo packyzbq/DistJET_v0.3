@@ -139,14 +139,19 @@ class Task(object):
         return self.data
 
     def genCommand(self):
+        #TODO change gen task command method
         comm_list=[]
         errmsg=None
         comm=None
         if not self.data:
-            comm = self.boot[0]
-            if self.args.has_key(0):
-                comm += self.args[0]
-            comm_list.append(comm)
+            #FIXME: quick fix, can't generate command list
+            if not self.args:
+                comm_list.append(self.boot)
+            else:
+                comm = self.boot[0]
+                if self.args.has_key(0):
+                    comm += self.args[0]
+                comm_list.append(comm)
         elif type(self.data) == types.DictType:
             for k, data in self.data.items():
                 if self.boot[k]:
