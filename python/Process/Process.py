@@ -92,6 +92,7 @@ class Process_withENV(threading.Thread):
         self.stop_flag = False
 
         self.TaskLogDir = Config.Config.getCFGattr('Rundir')+'/task_log'
+        print 'task dir= %s'%self.TaskLogDir
         if not os.path.exists(self.TaskLogDir):
             os.mkdir(self.TaskLogDir)
 
@@ -110,7 +111,7 @@ class Process_withENV(threading.Thread):
         else:
             command_list.extend(task.boot)
 
-        task_log=self.TaskLogDir+'task_'+str(task.tid)+'.tmp'
+        task_log=self.TaskLogDir+'/task_'+str(task.tid)+'.tmp'
 
         if genLog:
             print "res_dir=%s, tid=%s"%(task.res_dir,str(task.tid))

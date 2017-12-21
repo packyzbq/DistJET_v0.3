@@ -1,24 +1,27 @@
 import logging
 import os
 from Config import Config
+cfg = Config()
 
 loglevel={'info':logging.INFO, 'debug':logging.DEBUG}
 
 
 def getLogger(name, level=None, applog=False):
+    log_dir = cfg.getCFGattr('Rundir')+'/DistJET_log'
+    print 'log_dir=%s'%log_dir
     if applog:
-        log_dir = Config.getCFGattr('Rundir')
-        if not log_dir:
-            log_dir = os.getcwd()
-        log_dir += '/DistJET_log/Applog'
-    else:
-        log_dir = Config.getCFGattr('Logdir')
+        #log_dir = Config.getCFGattr('Rundir')
+        #if not log_dir:
+        #    log_dir = os.getcwd()
+        log_dir += '/Applog'
+    #else:
+    #    log_dir = cfg.getCFGattr('Logdir')
     if not level:
-        level = Config.getCFGattr('Log_Level')
+        level = cfg.getCFGattr('Log_Level')
         if not level:
             level = 'info'
-    if not log_dir:
-        log_dir = os.getcwd() + '/DistJET_log'
+    #if not log_dir:
+    #    log_dir = os.getcwd() + '/DistJET_log'
     if not os.path.exists(log_dir):
         os.mkdir(log_dir)
 
