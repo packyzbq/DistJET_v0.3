@@ -146,7 +146,7 @@ class Task(object):
         if not self.data:
             #FIXME: quick fix, can't generate command list
             if not self.args:
-                comm_list.append(self.boot)
+                comm_list.extend(self.boot)
             else:
                 comm = self.boot[0]
                 if self.args.has_key(0):

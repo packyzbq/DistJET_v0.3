@@ -312,45 +312,10 @@ class Process_withENV(threading.Thread):
                                 script_list = []
                                 self._clean_process()
                                 break
-                            '''
-                            for line in st:
-                                if "@recode" in st:
-                                    fin_flag = True
-                                    self.end = time.time()
-                                    self.recode = line[line.find("@recode=")+8:]
-                                    logfile.write("\n\n\nreturn code = %s"%self.recode)
-                                    logfile.write("\nstart time = %s \nend time = %s\n\n"%(time.asctime(time.localtime(self.start_time)), time.asctime(time.localtime(self.end))))
-                                    logfile.flush()
-                                    if int(self.recode) == 0:
-                                        self.status = status.SUCCESS
-                                    if self.hook and callable(self.hook):
-                                        self.hook(self.status, self.recode, self.start_time, self.end)
-                                    break
-
-                                elif not self.ignoreFail and (self.logParser and (not self._parseLog(line))):
-                                    fin_flag = True
-                                    self.status = status.FAIL
-                                    self.recode = -1
-                                    self.end = time.time()
-                                    if self.hook and callable(self.hook):
-                                        self.hook(self.status, self.recode, self.start_time, self.end)
-                                    logfile.write(line)
-                                    logfile.write("\n\n\n @execute error, stop running")
-                                    logfile.flush()
-                                    #self._kill_task()
-                                    #self.process = self._restart()
-                                    script_list = []
-                                    break
-                                #else:
-                                #    logfile.write(line)
-                                #    logfile.flush()
-                            if fin_flag:
-                                break
-                            '''
-
-                        if commpack.task_log:
-                            logfile.flush()
-                            logfile.close()
+                            
+                    if commpack.task_log:
+                        logfile.flush()
+                        logfile.close()
 
                 else:
                     self.exec_queue_lock.release()

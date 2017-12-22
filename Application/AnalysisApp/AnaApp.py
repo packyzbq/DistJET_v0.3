@@ -80,10 +80,12 @@ class AnaApp(JunoApp):
             if step in os.listdir(energy_path):
                 with open(energy_path+'/'+'lists_%s.txt'%step,'w+') as list_file:
                     for data_list in os.listdir(energy_path+'/'+step):
-                        if data_list.startswith('user') and data_list.endswith('.root'):
-                            list_file.write(os.path.abspath(data_list)+'\n')
+                        if (data_list.startswith('user') and data_list.endswith('.root')) or (step=='rec' and data_list.endswith('.root')):
+                            list_file.write(energy_path+'/'+step+'/'+data_list+'\n')
             if not os.path.exists(energy_path+'/'+step+'_ana'):
                 os.mkdir(energy_path+'/'+step+'_ana')
+        #set calib output
+        #os.environ['JUNOTEST_CALIB_ANA_OUTPUT']=energy_path+'/calib_ana'
 
     def split(self):
         if not self.__load:
@@ -95,6 +97,9 @@ class AnaApp(JunoApp):
                 if step in os.listdir(energy):
                     task = Task()
                     task.boot.append("cd %s"%energy)
+                    if step == 'calib':
+                        task.boot.append('export JUNOTEST_CALIB_ANA_OUTPUT=%s'%energy+'/calib_ana')
+                    task.boot.append('pwd')
                     if self.step_script[step].endswith('.sh'):
                         task.boot.append("bash %s"%self.step_script[step])
                     else:
