@@ -77,7 +77,7 @@ class ProdApp(JunoApp):
             sample_dir = self.res_dir+'/'+sample
             MakeandCD(sample_dir)
 
-            tags = self.cfg.get('tags',sec=sample).strip().split(' ')
+            tags = self.cfg.get('tags',sec=sample).strip().split()
             workflow = self.cfg.get('workflow',sec=sample).strip().split(' ')
 
             seed_base = int(self.cfg.get('seed',sec=sample))
@@ -98,7 +98,8 @@ class ProdApp(JunoApp):
                     os.mkdir(task_resdir)
                 MakeandCD(sample_dir+'/'+worksubdir)
                 pre_task = None
-                for tag in tags:
+                for tag in tags: 
+                    evt_count = 0
                     # Add detsim 0
                     detsim0 = ChainTask()
                     detsim0.boot.append("bash %s/run-%s-%s.sh" % (os.getcwd() + '/' + tag + '/detsim', 'detsim', '0'))
