@@ -1,3 +1,4 @@
+#!/afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre2/ExternalLibs/Python/2.7.6/bin/python
 import os,sys
 import ConfigParser
 if not os.environ.has_key('DistJETPATH'):

@@ -1,6 +1,7 @@
 import sys,os
 sys.path.append(os.environ['DistJETPATH'])
 from python.IApplication.JunoApp import JunoApp
+from python.IApplication.IApplication import IApplication
 from python.Task import ChainTask,Task
 import python.Util.Config as Config
 import subprocess
@@ -21,6 +22,8 @@ class ProdApp(JunoApp):
         self.driver_dir = []
         self.driver={} # driver_name: scripts_list
         self.sample_list=[]
+     
+        #self.JUNOTOP=os.environ['JUNOTOP']
 
         self.setStatus('boot')
         self.setStatus('data')
