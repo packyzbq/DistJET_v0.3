@@ -192,6 +192,7 @@ class HandlerThread(BaseThread):
                             tid_list = [task.tid for task in task_list]
                             master_log.info(
                                 '[Master] Assign task %s to worker %d' % (tid_list, recv_dict['wid']))
+                            self.master.worker_registry.setStatus(recv_dict['wid'], WorkerStatus.SCHEDULED)
                             self.master.command_q.put({MPI_Wrapper.Tags.TASK_ADD: task_list, 'uuid': current_uuid})
 
                     else:

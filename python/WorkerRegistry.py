@@ -11,17 +11,19 @@ class WorkerStatus:
     INITIALIZED,
     INITIALIZING,
     INITIALIZE_FAIL,
+    SCHEDULED,
     RUNNING,
     ERROR,
     LOST,
     FINALIZED,
     FINALIZING,
     FINALIZE_FAIL,
-    IDLE) = range(0,11)
+    IDLE) = range(0,12)
     des = {
         NEW: "NEW",
         INITIALIZING: "INITIALIZING",
         INITIALIZE_FAIL:"INITIALIZE_FAIL",
+        SCHEDULED: "SCHEDULED",
         RUNNING:"RUNNING",
         ERROR:"ERROR",
         LOST:"LOST",
@@ -267,8 +269,8 @@ class WorkerRegistry:
                     continue
                 if str(wentry.wid) in exp or int(wentry.wid) in exp:
                     continue
-                elif wentry.status in [WorkerStatus.RUNNING, WorkerStatus.INITIALIZED]:
-                    wRegistery_log.info('[Registry] worker %s is in status=%s, cannot finalize'%(wentry.wid, wentry.status))
+                elif wentry.status in [WorkerStatus.RUNNING, WorkerStatus.INITIALIZED, WorkerStatus.SCHEDULED]:
+                    wRegistery_log.info('[Registry] worker %s is in status=%s, cannot finalize'%(wentry.wid, WorkerStatus.desc(wentry.status)))
                     flag = False
                     return flag
             return flag
