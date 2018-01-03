@@ -5,7 +5,8 @@ junodir = '/afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6'
 class JunoApp(IApplication):
     def __init__(self,rootdir, name, config_path=None):
         super(JunoApp,self).__init__(rootdir,name,config_path)
-        self.JUNOTOP=None
+        self.JUNOTOP=os.environ['JUNOTOP']
+        '''
         if self.app_config is not None:
             self.JUNOTOP = self.app_config.get('JunoTop')
         if self.app_config and self.JUNOTOP is None:
@@ -18,10 +19,11 @@ class JunoApp(IApplication):
         if not self.JUNOTOP or( self.JUNOTOP and not os.path.exists(self.JUNOTOP)):
             self.log.warning('[JUNOAPP] Cannot find JUNOTOP dir %s, using latest version.'%self.JUNOTOP)
             self.JUNOTOP = self._findJunoTop()
+        '''
         self.log.info('[JunoAPP] Set JunoTop = %s'%self.JUNOTOP)
 
     def setup(self):
-        if not self.JUNOTOP or os.path.exists(self.JUNOTOP):
+        if not self.JUNOTOP or not os.path.exists(self.JUNOTOP):
             self.log.info('[JunoAPP] Cannot find JUNOTOP:%s ,use default'%self.JUNOTOP)
             self.JUNOTOP = self._findJunoTop()
         return ['. %s/setup.sh'%self.JUNOTOP]

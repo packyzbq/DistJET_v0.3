@@ -66,7 +66,7 @@ else:
 
 if config_path == 'null' or not os.path.exists(os.path.abspath(config_path)):
     print('@master: Cannot find configuration file [%s]'%os.path.abspath(config_path))
-    config_path = os.getenv('DistJETPATH')+'/config/default.cfg'
+    config_path = os.getenv('DistJETPATH')+'/config/config.ini'
 Conf.set_inipath(config_path)
 cfg = Conf.Config()
 
@@ -77,5 +77,7 @@ if master.getRunFlag():
     #    rf.flush()
     print('@master: start running')
     master.startProcessing()
+else:
+    print('@master: Load Application error, exit')
 if os.path.exists(os.environ['DistJETPATH']+'/config.ini'):
     os.remove(os.environ['DistJETPATH']+'/config.ini')

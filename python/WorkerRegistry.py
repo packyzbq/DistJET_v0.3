@@ -114,7 +114,7 @@ class WorkerRegistry:
         try:
             if self.__all_workers_uuid.has_key(w_uuid):
                 wid = self.__all_workers_uuid[w_uuid]
-                wRegistery_log.warning('worker already registered: wid=%d, worker_uuid=%s',wid,w_uuid)
+                wRegistery_log.warning('[WorkerRegistry]worker already registered: wid=%d, worker_uuid=%s',wid,w_uuid)
                 return None
             else:
                 self.last_wid+=1
@@ -123,7 +123,7 @@ class WorkerRegistry:
                 self.__all_workers[self.last_wid] = w
                 self.__all_workers_uuid[w_uuid] = self.last_wid
                 self.alive_workers.add(w_uuid)
-                wRegistery_log.info('new worker registered: wid=%d, worker_uuid=%s',self.last_wid, w_uuid)
+                wRegistery_log.info('[WorkerRegistry]new worker registered: wid=%d, worker_uuid=%s',self.last_wid, w_uuid)
                 return w
         except:
             wRegistery_log.error('[WorkerRegistry]: Error occurs when adding worker, msg=%s', traceback.format_exc())
@@ -140,10 +140,10 @@ class WorkerRegistry:
         try:
             w_uuid = self.__all_workers[wid].w_uuid
         except KeyError:
-            wRegistery_log.warning('attempt to remove not registered worker: wid=%d', wid)
+            wRegistery_log.warning('[WorkerRegistry]attempt to remove not registered worker: wid=%d', wid)
             return False,None
         else:
-            wRegistery_log.info('worker removed: wid=%d',wid)
+            wRegistery_log.info('[WorkerRegistry]worker removed: wid=%d',wid)
             try:
                 self.lock.acquire()
                 del(self.__all_workers[wid])
@@ -164,10 +164,10 @@ class WorkerRegistry:
                 #self.alive_workers.remove(wentry.w_uuid)
                 return True
             else:
-                wRegistery_log.error('worker %d is not finalized, status=%s'%(wid,wentry.getStatus()))
+                wRegistery_log.error('[WorkerRegistry]worker %d is not finalized, status=%s'%(wid,wentry.getStatus()))
                 return False
         else:
-            wRegistery_log.error('Cannot find worker %d'%wid)
+            wRegistery_log.error('[WorkerRegistry]Cannot find worker %d'%wid)
             return False
 
     def get_entry(self,wid):
@@ -281,6 +281,7 @@ class WorkerRegistry:
             for uuid in self.alive_workers:
                 entry = self.get_by_uuid(uuid)
                 if entry and entry.status and entry.status != WorkerStatus.FINALIZED:
+                    wRegistery_log.warning('[Registry] @checkFinalize: worker %s status = %s'%(entry.wid,entry.status))
                     return False
             return True
         finally:
