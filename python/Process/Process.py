@@ -94,7 +94,10 @@ class Process_withENV(threading.Thread):
         self.TaskLogDir = Config.Config.getCFGattr('Rundir')+'/task_log'
         print 'task dir= %s'%self.TaskLogDir
         if not os.path.exists(self.TaskLogDir):
-            os.mkdir(self.TaskLogDir)
+            try:
+                os.mkdir(self.TaskLogDir)
+            except:
+                pass
 
 
     def set_task(self,task, genLog=True):

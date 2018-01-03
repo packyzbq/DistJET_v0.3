@@ -359,12 +359,13 @@ class WorkerAgent:
                             wlog.info('[Agent] Receive WORKER_HALT command')
                             self.halt_flag=True
                     continue
-                if self.initial_flag and len(self.worker_list) == 0 and not self.app_fin_flag:
-                    self.halt_flag = False
-                    self.heartbeat.acquire_queue.put({Tags.APP_FIN: {'wid': self.wid, 'recode': status.SUCCESS, 'result': None}})
-                    wlog.info('[Agent] Send APP_FIN msg for logout/newApp')
-                    self.app_fin_flag = True
-
+			    
+                #if self.initial_flag and len(self.worker_list) == 0 and not self.app_fin_flag:
+                #    self.halt_flag = False
+                #    self.heartbeat.acquire_queue.put({Tags.APP_FIN: {'wid': self.wid, 'recode': status.SUCCESS, 'result': None}})
+                #    wlog.info('[Agent] Send APP_FIN msg for logout/newApp')
+                #    self.app_fin_flag = True
+                
                 #ask for new task
                 # ask for one task
                 ask_flag = False
