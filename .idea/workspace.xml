@@ -4,11 +4,8 @@
     <bookmark url="file://$PROJECT_DIR$/Application/ProdApp/ProdApp.py" line="119" mnemonic="9" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="add dist_ls command and half of AnalysisApp">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/DistJET_v0.3.iml" afterPath="$PROJECT_DIR$/.idea/DistJET_v0.3.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+    <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/IScheduler.py" afterPath="$PROJECT_DIR$/python/IScheduler.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/JobMaster.py" afterPath="$PROJECT_DIR$/python/JobMaster.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/WorkerRegistry.py" afterPath="$PROJECT_DIR$/python/WorkerRegistry.py" />
     </list>
@@ -23,7 +20,8 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/DistJET_v0.3$Process.coverage" NAME="Process Coverage Results" MODIFIED="1510905789671" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/python/Process" />
+    <SUITE FILE_PATH="coverage/DistJET_v0.3$Process.coverage" NAME="Process Coverage Results" MODIFIED="1514949727445" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/python/Process" />
+    <SUITE FILE_PATH="coverage/DistJET_v0.3$data.coverage" NAME="data Coverage Results" MODIFIED="1514949769113" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="D:/IHEPBox_Sync/Documents/论文-测试结果/Rundir-10njob-1000/tmp" />
     <SUITE FILE_PATH="coverage/DistJET_v0.3$test.coverage" NAME="test Coverage Results" MODIFIED="1505651131177" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/python/Process" />
   </component>
   <component name="CreatePatchCommitExecutor">
@@ -35,20 +33,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="Task.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/python/Task.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3496">
-              <caret line="153" column="16" selection-start-line="153" selection-start-column="16" selection-end-line="153" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="WorkerAgent.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6739">
+            <state relative-caret-position="23">
               <caret line="408" column="8" selection-start-line="408" selection-start-column="8" selection-end-line="408" selection-end-column="8" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
@@ -65,11 +53,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IScheduler.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="IScheduler.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/python/IScheduler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="301" column="8" selection-start-line="301" selection-start-column="8" selection-end-line="301" selection-end-column="8" />
+            <state relative-caret-position="340">
+              <caret line="324" column="54" selection-start-line="324" selection-start-column="48" selection-end-line="324" selection-end-column="54" />
               <folding>
                 <element signature="e#6256#7187#0" expanded="false" />
                 <element signature="e#6536#7187#1" expanded="false" />
@@ -81,38 +69,9 @@
       <file leaf-file-name="WorkerRegistry.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/WorkerRegistry.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="133" column="8" selection-start-line="133" selection-start-column="8" selection-end-line="133" selection-end-column="8" />
+            <state relative-caret-position="354">
+              <caret line="232" column="57" selection-start-line="232" selection-start-column="57" selection-end-line="232" selection-end-column="57" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JobMaster.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="356">
-              <caret line="59" column="38" selection-start-line="59" selection-start-column="38" selection-end-line="59" selection-end-column="38" />
-              <folding>
-                <element signature="e#2498#2702#0" expanded="false" />
-                <element signature="e#2751#2816#0" expanded="false" />
-                <element signature="e#2849#2871#0" expanded="false" />
-                <element signature="e#3079#3206#0" expanded="false" />
-                <element signature="e#4981#5691#0" expanded="false" />
-                <element signature="e#5799#6222#0" expanded="false" />
-                <element signature="e#6290#6606#0" expanded="false" />
-                <element signature="e#6676#6871#0" expanded="false" />
-                <element signature="e#7084#8450#0" expanded="false" />
-                <element signature="e#8536#10958#0" expanded="false" />
-                <element signature="e#13180#13355#0" expanded="false" />
-                <element signature="e#13438#14695#0" expanded="false" />
-                <element signature="e#14735#14763#0" expanded="false" />
-                <element signature="e#14803#14828#0" expanded="false" />
-                <element signature="e#14858#15827#0" expanded="false" />
-                <element signature="e#15888#16730#0" expanded="false" />
-                <element signature="e#17035#17095#0" expanded="false" />
-                <element signature="e#18486#20523#0" expanded="false" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -123,6 +82,33 @@
             <state relative-caret-position="3772">
               <caret line="166" column="8" selection-start-line="166" selection-start-column="8" selection-end-line="166" selection-end-column="8" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JobMaster.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="156" column="45" selection-start-line="156" selection-start-column="39" selection-end-line="156" selection-end-column="45" />
+              <folding>
+                <element signature="e#2545#2749#0" expanded="false" />
+                <element signature="e#2798#2863#0" expanded="false" />
+                <element signature="e#2896#2918#0" expanded="false" />
+                <element signature="e#3126#3253#0" expanded="false" />
+                <element signature="e#5028#5738#0" expanded="false" />
+                <element signature="e#5846#6269#0" expanded="false" />
+                <element signature="e#6337#6653#0" expanded="false" />
+                <element signature="e#7150#8516#0" expanded="false" />
+                <element signature="e#8602#11024#0" expanded="false" />
+                <element signature="e#13246#13421#0" expanded="false" />
+                <element signature="e#13504#14761#0" expanded="false" />
+                <element signature="e#14801#14829#0" expanded="false" />
+                <element signature="e#14869#14894#0" expanded="false" />
+                <element signature="e#14924#15893#0" expanded="false" />
+                <element signature="e#15954#16796#0" expanded="false" />
+                <element signature="e#17101#17161#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -146,6 +132,7 @@
               <caret line="3" column="9" selection-start-line="3" selection-start-column="9" selection-end-line="3" selection-end-column="9" />
               <folding>
                 <element signature="e#224#1092#0" expanded="false" />
+                <marker date="1514945786247" expanded="true" signature="159:2031" ph="..." />
               </folding>
             </state>
           </provider>
@@ -154,21 +141,9 @@
       <file leaf-file-name="IApplication.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/IApplication/IApplication.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3427">
+            <state relative-caret-position="517">
               <caret line="153" column="8" selection-start-line="153" selection-start-column="8" selection-end-line="153" selection-end-column="8" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Process.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3910">
-              <caret line="209" column="25" selection-start-line="209" selection-start-column="25" selection-end-line="209" selection-end-column="25" />
-              <folding>
-                <element signature="e#4820#6233#0" expanded="false" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -230,6 +205,7 @@
         <option value="$PROJECT_DIR$/config/config.ini" />
         <option value="$PROJECT_DIR$/python/Task.py" />
         <option value="$PROJECT_DIR$/python/IScheduler.py" />
+        <option value="D:/IHEPBox_Sync/Documents/论文-测试结果/Rundir-10njob-1000/tmp/data.py" />
         <option value="$PROJECT_DIR$/python/WorkerRegistry.py" />
         <option value="$PROJECT_DIR$/python/JobMaster.py" />
       </list>
@@ -509,7 +485,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Process">
+  <component name="RunManager" selected="Python.data">
     <configuration default="false" name="test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -542,6 +518,24 @@
       <module name="DistJET_v0.3" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/python/Process/Process.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="data" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="D:/IHEPBox_Sync/Documents/论文-测试结果/Rundir-10njob-1000/tmp" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="DistJET_v0.3" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="D:/IHEPBox_Sync/Documents/论文-测试结果/Rundir-10njob-1000/tmp/data.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -765,14 +759,16 @@
       <option name="USE_KEYWORD" value="false" />
       <method />
     </configuration>
-    <list size="2">
+    <list size="3">
       <item index="0" class="java.lang.String" itemvalue="Python.test" />
       <item index="1" class="java.lang.String" itemvalue="Python.Process" />
+      <item index="2" class="java.lang.String" itemvalue="Python.data" />
     </list>
     <recent_temporary>
-      <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="Python.Process" />
-        <item index="1" class="java.lang.String" itemvalue="Python.test" />
+      <list size="3">
+        <item index="0" class="java.lang.String" itemvalue="Python.data" />
+        <item index="1" class="java.lang.String" itemvalue="Python.Process" />
+        <item index="2" class="java.lang.String" itemvalue="Python.test" />
       </list>
     </recent_temporary>
   </component>
@@ -789,13 +785,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1505126721810</updated>
-    </task>
-    <task id="LOCAL-00012" summary="add master worker start bin">
-      <created>1508483221013</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1508483221013</updated>
     </task>
     <task id="LOCAL-00013" summary="add master_start bin">
       <created>1508743368734</created>
@@ -1133,7 +1122,14 @@
       <option name="project" value="LOCAL" />
       <updated>1513688036129</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="change master stop condition">
+      <created>1514948145871</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1514948145872</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1155,20 +1151,20 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2356257" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38675496" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1110515" sideWeight="0.53100336" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3990981" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Concurrent Activities Diagram" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3990981" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1206,7 +1202,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add UnitTest uninstall and fix worker has one log bug" />
     <MESSAGE value="try to fix finalize bug" />
     <MESSAGE value="add worker status desc" />
     <MESSAGE value="sync for test" />
@@ -1231,7 +1226,8 @@
     <MESSAGE value="update log debug info" />
     <MESSAGE value="fix get alive worker bug" />
     <MESSAGE value="add dist_ls command and half of AnalysisApp" />
-    <option name="LAST_COMMIT_MESSAGE" value="add dist_ls command and half of AnalysisApp" />
+    <MESSAGE value="change master stop condition" />
+    <option name="LAST_COMMIT_MESSAGE" value="change master stop condition" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1251,8 +1247,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../DistJET_v2/python/MPI_Wrapper.py" />
-    <entry file="file://$PROJECT_DIR$/../DistJET_v2/python/WorkerAgent.py" />
     <entry file="file://$PROJECT_DIR$/../DistJET_v2/python/BaseThread.py" />
     <entry file="uml://Python/#D:/WorkSpace/DistJET_v0.3/python/BaseThread.py">
       <provider selected="true" editor-type-id="UmlEditorProvider">
@@ -1540,14 +1534,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/IApplication/IApplication.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3427">
-          <caret line="153" column="8" selection-start-line="153" selection-start-column="8" selection-end-line="153" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Application/ProdApp/ProdApp.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="437">
@@ -1564,6 +1550,7 @@
           <caret line="3" column="9" selection-start-line="3" selection-start-column="9" selection-end-line="3" selection-end-column="9" />
           <folding>
             <element signature="e#224#1092#0" expanded="false" />
+            <marker date="1514945786247" expanded="true" signature="159:2031" ph="..." />
           </folding>
         </state>
       </provider>
@@ -1576,9 +1563,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../DataProcess/dataprocess.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-253">
+          <caret line="13" column="14" selection-start-line="13" selection-start-column="14" selection-end-line="13" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6739">
+        <state relative-caret-position="23">
           <caret line="408" column="8" selection-start-line="408" selection-start-column="8" selection-end-line="408" selection-end-column="8" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
@@ -1594,48 +1591,64 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/WorkerRegistry.py">
+    <entry file="file://D:/IHEPBox_Sync/Documents/论文-测试结果/Rundir-10njob-1000/tmp/data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="133" column="8" selection-start-line="133" selection-start-column="8" selection-end-line="133" selection-end-column="8" />
+        <state relative-caret-position="299">
+          <caret line="19" column="46" selection-start-line="19" selection-start-column="46" selection-end-line="19" selection-end-column="46" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/IApplication/IApplication.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="517">
+          <caret line="153" column="8" selection-start-line="153" selection-start-column="8" selection-end-line="153" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/IScheduler.py">
+    <entry file="file://$PROJECT_DIR$/python/WorkerRegistry.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="301" column="8" selection-start-line="301" selection-start-column="8" selection-end-line="301" selection-end-column="8" />
-          <folding>
-            <element signature="e#6256#7187#0" expanded="false" />
-            <element signature="e#6536#7187#1" expanded="false" />
-          </folding>
+        <state relative-caret-position="354">
+          <caret line="232" column="57" selection-start-line="232" selection-start-column="57" selection-end-line="232" selection-end-column="57" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="59" column="38" selection-start-line="59" selection-start-column="38" selection-end-line="59" selection-end-column="38" />
+        <state relative-caret-position="272">
+          <caret line="156" column="45" selection-start-line="156" selection-start-column="39" selection-end-line="156" selection-end-column="45" />
           <folding>
-            <element signature="e#2498#2702#0" expanded="false" />
-            <element signature="e#2751#2816#0" expanded="false" />
-            <element signature="e#2849#2871#0" expanded="false" />
-            <element signature="e#3079#3206#0" expanded="false" />
-            <element signature="e#4981#5691#0" expanded="false" />
-            <element signature="e#5799#6222#0" expanded="false" />
-            <element signature="e#6290#6606#0" expanded="false" />
-            <element signature="e#6676#6871#0" expanded="false" />
-            <element signature="e#7084#8450#0" expanded="false" />
-            <element signature="e#8536#10958#0" expanded="false" />
-            <element signature="e#13180#13355#0" expanded="false" />
-            <element signature="e#13438#14695#0" expanded="false" />
-            <element signature="e#14735#14763#0" expanded="false" />
-            <element signature="e#14803#14828#0" expanded="false" />
-            <element signature="e#14858#15827#0" expanded="false" />
-            <element signature="e#15888#16730#0" expanded="false" />
-            <element signature="e#17035#17095#0" expanded="false" />
-            <element signature="e#18486#20523#0" expanded="false" />
+            <element signature="e#2545#2749#0" expanded="false" />
+            <element signature="e#2798#2863#0" expanded="false" />
+            <element signature="e#2896#2918#0" expanded="false" />
+            <element signature="e#3126#3253#0" expanded="false" />
+            <element signature="e#5028#5738#0" expanded="false" />
+            <element signature="e#5846#6269#0" expanded="false" />
+            <element signature="e#6337#6653#0" expanded="false" />
+            <element signature="e#7150#8516#0" expanded="false" />
+            <element signature="e#8602#11024#0" expanded="false" />
+            <element signature="e#13246#13421#0" expanded="false" />
+            <element signature="e#13504#14761#0" expanded="false" />
+            <element signature="e#14801#14829#0" expanded="false" />
+            <element signature="e#14869#14894#0" expanded="false" />
+            <element signature="e#14924#15893#0" expanded="false" />
+            <element signature="e#15954#16796#0" expanded="false" />
+            <element signature="e#17101#17161#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/IScheduler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="324" column="54" selection-start-line="324" selection-start-column="48" selection-end-line="324" selection-end-column="54" />
+          <folding>
+            <element signature="e#6256#7187#0" expanded="false" />
+            <element signature="e#6536#7187#1" expanded="false" />
           </folding>
         </state>
       </provider>

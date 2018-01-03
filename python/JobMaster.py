@@ -27,6 +27,7 @@ from Task import TaskStatus
 from python.Process.Process import status
 from python.Util.Config import Config, set_inipath
 from python.Util.Recoder import BaseElement,BaseRecoder
+from python.WorkerRegistry import WorkerStatus
 
 
 
@@ -155,7 +156,7 @@ class HandlerThread(BaseThread):
                         recode_ele.delay=time.time()-float(recv_dict['ctime'])
                 if recv_dict.has_key('wstatus'):
                     self.master.worker_registry.setStatus(recv_dict['wid'], recv_dict['wstatus'])
-                    master_log.debug('[Master] Set worker %s status = %s' % (recv_dict['wid'], recv_dict['wstatus']))
+                    master_log.debug('[Master] Set worker %s status = %s' % (recv_dict['wid'], WorkerStatus.desc(recv_dict['wstatus'])))
                 if recv_dict.has_key('rTask') and recode_ele:
                     recode_ele.running_task = recv_dict['rTask']
 

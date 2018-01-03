@@ -230,7 +230,7 @@ class WorkerRegistry:
     def get_worker_status(self):
         status = {}
         for wid,entry in self.__all_workers.items():
-            status[wid] = entry.status
+            status[wid] = WorkerStatus.desc(entry.status)
         return status
 
     def get_capacity(self, wid):
