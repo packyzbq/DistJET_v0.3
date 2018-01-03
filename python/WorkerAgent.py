@@ -49,6 +49,7 @@ class HeartbeatThread(BaseThread):
         self.cond = cond
         global wlog
     def run(self):
+        task_acquire=0 # timer for acquire tasks from master when is halted
         #add first time to ping master, register to master
         send_dict = {}
         send_dict['flag'] = 'FP'
@@ -90,6 +91,12 @@ class HeartbeatThread(BaseThread):
                 send_dict['uuid'] = self.worker_agent.uuid
                 send_dict['wid'] = self.worker_agent.wid
                 send_dict['wstatus'] = self.worker_agent.get_status()
+                if send_dict['wstatus'] == WorkerStatus.IDLE and self.worker_agent.halt_flag:
+                    if task_acquire == 100:
+                        send_dict[Tags.TASK_ADD] = 1
+                        task_acquire=0
+                    else:
+                        task_acquire+=1
                 send_dict['health'] = self.worker_agent.health_info()
                 send_dict['rTask'] = self.worker_agent.getRuntasklist()
                 send_dict['ctime'] = time.time()
