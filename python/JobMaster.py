@@ -389,7 +389,12 @@ class JobMaster(IJobMaster):
                 while not self.command_q.empty():
                     send_dict = self.command_q.get()
                     if len(send_dict) != 0:
-                        tag = send_dict.keys()[0]
+                        tag = None
+                        for k in send_dict.keys():
+                            if k not in ['uuid','extra']:
+                                tag = k
+                        #tag = send_dict.keys()[0]
+                        #print("%s, tag=%s"%(send_dict.keys(),tag))
                         if not send_dict.has_key('uuid'):
                             master_log.error('Send message error, uuid not found')
                             continue
@@ -414,9 +419,9 @@ class JobMaster(IJobMaster):
                                 self.server.send_string(send_final, len(send_final), uuid, tag)
                         else:
                             send_str = Pack.pack_obj(send_dict)
-                            master_log.debug('[Master] Send to worker %s msg = %s' % (current_uuid, send_dict))
+                            master_log.debug('[Master] Send to worker %s msg = %s, tag=%s' % (current_uuid, send_dict,tag))
                             send_final = Pack.pack2json({'uuid':current_uuid,'dict':send_str})
-                            self.server.send_string(send_final, len(send_final), current_uuid, tag)
+                            self.server.send_string(send_final, len(send_final), current_uuid, int(tag))
                 # master stop condition
 
                 # time.sleep(1)
