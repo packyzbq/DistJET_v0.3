@@ -275,6 +275,21 @@ class WorkerRegistry:
         finally:
             self.lock.release()
 
+    def checkRunning(self):
+        """
+        Return if any worker is running
+        :return:
+        """
+        self.lock.acquire()
+        try:
+            for uuid in self.alive_workers:
+                entry = self.get_by_uuid(uuid)
+                if entry and entry.status and entry.status == WorkerStatus.RUNNING:
+                    return True
+            return False
+        finally:
+            self.lock.release()
+
     def checkFinalize(self,exp=[]):
         self.lock.acquire()
         try:

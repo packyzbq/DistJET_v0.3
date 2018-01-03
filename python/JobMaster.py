@@ -421,36 +421,39 @@ class JobMaster(IJobMaster):
                 # time.sleep(1)
                 if not self.task_scheduler.has_more_work() and not self.task_scheduler.has_scheduled_work():
                     #TODO: app finalize/merge need to be a single module
-                    self.appmgr.finalize_app()
-                    #check all worker finalized
-                    if self.worker_registry.checkFinalize() and self.__newApp_flag:
-                        # has more app need to be done
-                        if self.appmgr.has_next_app():
-                            self.load_app(napp=True)
-                            init_comm = self.task_scheduler.setup_worker()
-                            worker_path = self.appmgr.current_app.specifiedWorker
-                            send_dict = {'appid': self.task_scheduler.appid,
-                                         'init': init_comm,
-                                         'flag':'NEWAPP',
-                                         'wmp':worker_path}
-                            for uuid in self.worker_registry.alive_workers:
-                                send_dict['uuid'] = uuid
-                                send_dict['wid'] = self.worker_registry.get_by_uuid(uuid).wid
-                                send_str = Pack.pack_obj({MPI_Wrapper.Tags.MPI_REGISTY_ACK:send_dict})
-                                send_final = Pack.pack2json({'uuid':uuid,'dict':send_str})
-                                master_log.info('[Master] Send new App message')
-                                self.server.send_string(send_final,len(send_final),uuid,MPI_Wrapper.Tags.MPI_REGISTY_ACK)
-                            self.__newApp_flag = False
+                    #check all worker stop working
+                    if not self.worker_registry.checkRunning():
+                        master_log.info('[Scheduler] Complete tasks number: %s; All task number: %s' % (self.task_scheduler.completed_queue.qsize(), len(self.task_scheduler.task_list)))
+                        self.appmgr.finalize_app()
+                        #check all worker finalized
+                        if self.worker_registry.checkFinalize() and self.__newApp_flag:
+                            # has more app need to be done
+                            if self.appmgr.has_next_app():
+                                self.load_app(napp=True)
+                                init_comm = self.task_scheduler.setup_worker()
+                                worker_path = self.appmgr.current_app.specifiedWorker
+                                send_dict = {'appid': self.task_scheduler.appid,
+                                             'init': init_comm,
+                                             'flag':'NEWAPP',
+                                             'wmp':worker_path}
+                                for uuid in self.worker_registry.alive_workers:
+                                    send_dict['uuid'] = uuid
+                                    send_dict['wid'] = self.worker_registry.get_by_uuid(uuid).wid
+                                    send_str = Pack.pack_obj({MPI_Wrapper.Tags.MPI_REGISTY_ACK:send_dict})
+                                    send_final = Pack.pack2json({'uuid':uuid,'dict':send_str})
+                                    master_log.info('[Master] Send new App message')
+                                    self.server.send_string(send_final,len(send_final),uuid,MPI_Wrapper.Tags.MPI_REGISTY_ACK)
+                                self.__newApp_flag = False
 
-                    elif not self.appmgr.has_next_app() and self.worker_registry.size() == 0:
-                        master_log.info("[Master] Application done, logout workers")
-                        if self.worker_registry.hasAlive():
-                            #TODO logout/disconnect worker -- force stop?
-                            stop_line = Pack.pack_obj({MPI_Wrapper.Tags.WORKER_STOP:''})
-                            for uuid in self.worker_registry.alive_workers:
-                                self.server.send_string(stop_line,len(stop_line),uuid,MPI_Wrapper.Tags.WORKER_STOP)
-                            continue
-                        self.stop()
+                        elif not self.appmgr.has_next_app() and self.worker_registry.size() == 0:
+                            master_log.info("[Master] Application done, logout workers")
+                            if self.worker_registry.hasAlive():
+                                #TODO logout/disconnect worker -- force stop?
+                                stop_line = Pack.pack_obj({MPI_Wrapper.Tags.WORKER_STOP:''})
+                                for uuid in self.worker_registry.alive_workers:
+                                    self.server.send_string(stop_line,len(stop_line),uuid,MPI_Wrapper.Tags.WORKER_STOP)
+                                continue
+                            self.stop()
 
 
         except KeyboardInterrupt, Exception:

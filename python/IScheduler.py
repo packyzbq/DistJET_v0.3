@@ -71,15 +71,16 @@ class IScheduler:
         Return ture if current app has more work( when the number of works of app is larger than sum of workers' capacities)
         :return: bool
         """
+        return not self.task_todo_queue.empty()
         #if not self.task_todo_queue.empty():
             #scheduler_log.debug('task_todo_quue has task num = %d'%self.task_todo_queue.qsize())
-        if self.task_todo_queue.empty():
-            scheduler_log.info('[Scheduler] Complete tasks number: %s; All task number: %s'%(self.completed_queue.qsize(),len(self.task_list)))
-            return False
+        #if self.task_todo_queue.empty():
+            #scheduler_log.info('[Scheduler] Complete tasks number: %s; All task number: %s'%(self.completed_queue.qsize(),len(self.task_list)))
+            #return False
         #if self.task_todo_queue.empty():
             #return not self.completed_queue.qsize() == len(self.task_list)
-        else:
-            return True
+        #else:
+            #return True
 
     def has_scheduled_work(self,wid=None):
         if wid:
