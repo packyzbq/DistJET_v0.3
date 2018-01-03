@@ -56,6 +56,12 @@ class WatchDogThread(BaseThread):
             if idleworker:
                 control_log.warning('Find Idle timeout worker %s'%idleworker)
                 # TODO: do something to reduce the resource
+
+            #check error status worker
+            errworker = self.master.worker_registry.checkError()
+            for wid in errworker:
+                self.master.remove_worker(wid)
+
             # print worker status
             master_log.info('[Master] Worker status = %s'%self.master.worker_registry.get_worker_status())
 

@@ -74,7 +74,10 @@ class IScheduler:
         #if not self.task_todo_queue.empty():
             #scheduler_log.debug('task_todo_quue has task num = %d'%self.task_todo_queue.qsize())
         if self.task_todo_queue.empty():
-            return not self.completed_queue.qsize() == len(self.task_list)
+            scheduler_log.info('[Scheduler] Complete tasks number: %s; All task number: %s'%(self.completed_queue.qsize(),len(self.task_list)))
+            return False
+        #if self.task_todo_queue.empty():
+            #return not self.completed_queue.qsize() == len(self.task_list)
         else:
             return True
 

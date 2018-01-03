@@ -281,9 +281,22 @@ class WorkerRegistry:
             for uuid in self.alive_workers:
                 entry = self.get_by_uuid(uuid)
                 if entry and entry.status and entry.status != WorkerStatus.FINALIZED:
-                    wRegistery_log.warning('[Registry] @checkFinalize: worker %s status = %s'%(entry.wid,entry.status))
+                    wRegistery_log.warning('[Registry] @checkFinalize: worker %s status = %s'%(entry.wid,WorkerStatus.desc(entry.status)))
                     return False
             return True
+        finally:
+            self.lock.release()
+
+    def checkError(self):
+        err_list = []
+        self.lock.acquire()
+        try:
+            for uuid in self.alive_workers:
+                entry=self.get_by_uuid(uuid)
+                if entry and entry.status and entry.status in [WorkerStatus.FINALIZE_FAIL, WorkerStatus.INITIALIZE_FAIL]:
+                    wRegistery_log.warning('[Registry] @checkError: worker %s status error, status = %s'%(entry.wid,WorkerStatus.desc(entry.status)))
+                    err_list.append(entry.wid)
+            return err_list
         finally:
             self.lock.release()
 
