@@ -8,7 +8,6 @@ import types
 import psutil
 
 import IR_Buffer_Module as IM
-
 from Util import HealthDetect as HD
 from BaseThread import BaseThread
 from MPI_Wrapper import Tags ,Client, MSG
@@ -55,6 +54,7 @@ class HeartbeatThread(BaseThread):
         send_dict['flag'] = 'FP'
         send_dict[Tags.MPI_REGISTY] = {'capacity':self.worker_agent.capacity}
         send_dict['ctime'] = time.time()
+        wlog.debug('[HeartBeat] time stamp = %f'%send_dict['ctime'])
         send_dict['uuid'] = self.worker_agent.uuid
         send_str = Package.pack_obj(send_dict)
         send_str = Package.pack2json({'uuid':self.worker_agent.uuid,'dict':send_str})
@@ -176,6 +176,8 @@ class WorkerAgent:
         self.cfg = Config.Config
         if self.cfg.isload():
             wlog.debug('[Agent] Loaded config file')
+        import socket
+        wlog.info('[Agent] Running on host: %s'%socket.gethostname())
         wlog.debug('[Agent] Start to connect to service <%s>' % self.cfg.getCFGattr('svc_name'))
 
         self.client = Client(self.recv_buff, self.cfg.getCFGattr('svc_name'), self.uuid)
