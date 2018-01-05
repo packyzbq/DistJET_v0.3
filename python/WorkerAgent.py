@@ -18,6 +18,8 @@ from Util import Package
 from Task import Task
 from Process.Process import Process_withENV,status
 
+import python.Util.Recoder as Recoder
+
 wlog = None
 
 # class status:
@@ -190,6 +192,8 @@ class WorkerAgent:
             #TODO client initial error, add handler
             wlog.error('[Agent] Client initialize error, errcode = %d'%ret)
             exit()
+
+        self.recoder = Recoder.BaseRecoder(Config.Config.getCFGattr('Rundir')+'/Agent')
 
         self.wid = None
         self.appid = None
@@ -367,6 +371,19 @@ class WorkerAgent:
                         elif int(k) == Tags.WORKER_HALT:
                             wlog.info('[Agent] Receive WORKER_HALT command')
                             self.halt_flag=True
+
+                        # for test v={ctime, response}
+                        elif int(k) == Tags.EXTRA:
+                            wlog.debug('[Agent] Receive time exam msg')
+                            ele = Recoder.BaseElement(self.wid)
+                            ele.cpurate=0
+                            ele.cpuid = 0
+                            ele.mem = 0
+                            ele.delay = time.time()-v['ctime']
+                            ele.extra = v['response']
+                            self.recoder.set_message(ele)
+
+
                     continue
 			    
                 #if self.initial_flag and len(self.worker_list) == 0 and not self.app_fin_flag:

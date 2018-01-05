@@ -31,6 +31,8 @@ class Tags:
 
     NEW_APP         = 140   # master tell worker has a new app, and restart
 
+    EXTRA           = 150
+
 
 class Server:
     """
