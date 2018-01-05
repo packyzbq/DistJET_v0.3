@@ -150,6 +150,7 @@ class HandlerThread(BaseThread):
                     recode_ele.mem = tmpdict['MemoUsage']['MemUsage']
                     recode_ele.extra=tmpdict['extra']
                 if recv_dict.has_key('ctime'):
+                    replay = 0
                     if (not recv_dict.has_key('flag')) or (recv_dict.has_key('flag') and recv_dict['flag'] != 'LP'):
                         self.master.worker_registry.setContacttime(recv_dict['uuid'], recv_dict['ctime'])
                     if recode_ele:
@@ -159,7 +160,7 @@ class HandlerThread(BaseThread):
                             master_log.error('[Master] error response time, wid=%d ,start=%f, response=%f'%(recv_dict['wid'],float(recv_dict['ctime']),replay))
                     #for testing, reply a ack msg
                     send_dict = {'ctime':recv_dict['ctime'],'response':replay}
-                    send_str = Pack.pack2json(Pack.pack_obj({MPI_Wrapper.Tags.EXTRA:send_dict}))
+                    send_str = Pack.pack2json({'uuid':current_uuid,'dict':Pack.pack_obj({MPI_Wrapper.Tags.EXTRA:send_dict})})
                     self.master.server.send_string(send_str, len(send_str), current_uuid, int(MPI_Wrapper.Tags.EXTRA))
                 if recv_dict.has_key('wstatus'):
                     self.master.worker_registry.setStatus(recv_dict['wid'], recv_dict['wstatus'])

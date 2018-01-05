@@ -193,7 +193,7 @@ class WorkerAgent:
             wlog.error('[Agent] Client initialize error, errcode = %d'%ret)
             exit()
 
-        self.recoder = Recoder.BaseRecoder(Config.Config.getCFGattr('Rundir')+'/Agent')
+        self.recoder = Recoder.BaseRecoder(Config.Config.getCFGattr('Rundir')+'/Agent-'+self.uuid)
 
         self.wid = None
         self.appid = None
@@ -381,7 +381,7 @@ class WorkerAgent:
                             ele.mem = 0
                             ele.delay = time.time()-v['ctime']
                             ele.extra = v['response']
-                            self.recoder.set_message(ele)
+                            self.recoder.set_message(self.wid,ele)
 
 
                     continue

@@ -21,6 +21,8 @@ class BaseElement(object):
 
 class BaseRecoder(object):
     def __init__(self,basepath):
+        if basepath and not os.path.exists(basepath):
+            os.mkdir(basepath)
         self.basepath = basepath+'/tmp'
         if not os.path.exists(self.basepath):
             os.mkdir(self.basepath)
