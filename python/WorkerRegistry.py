@@ -318,8 +318,15 @@ class WorkerRegistry:
             self.lock.release()
 
     def setContacttime(self, uuid, time):
-        wid = self.__all_workers_uuid[uuid]
-        self.__all_workers[wid].last_contact_time = time
+        try:
+        	wid = self.__all_workers_uuid[uuid]
+        	self.__all_workers[wid].last_contact_time = time
+        except:
+            print "Can not find worker :%s, all worker is below:\n"%uuid
+            for uuid in self.__all_workers_uuid.keys():
+                print uuid+'\n'
+
+
 
     def setStatus(self,wid,status):
         wid = int(wid)

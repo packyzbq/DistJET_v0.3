@@ -167,7 +167,7 @@ class Process_withENV(threading.Thread):
             self.process.stdin.write(comm)
         self.process.stdin.write('echo "recode=$?"\n')
         while True:
-            fs = select.select([self.process.stdout],[],[],10)
+            fs = select.select([self.process.stdout],[],[],60)
             if not fs[0]:
                 #self.logFile.write('@Process initial timeout')
                 #self.logFile.flush()
