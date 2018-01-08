@@ -438,7 +438,7 @@ class WorkerAgent:
         if self.heartbeat:
             self.heartbeat.stop()
             self.heartbeat.join()
-        ret = self.client.stop()
+        ret = self.client.stop(False)
         wlog.info('[WorkerAgent] Agent stop..., exit code = %d'%ret)
         if ret != 0:
             wlog.error('[WorkerAgent] Client stop error, errcode = %d'%ret)

@@ -161,7 +161,9 @@ class HandlerThread(BaseThread):
                     #for testing, reply a ack msg
                     send_dict = {'ctime':recv_dict['ctime'],'response':replay}
                     send_str = Pack.pack2json({'uuid':current_uuid,'dict':Pack.pack_obj({MPI_Wrapper.Tags.EXTRA:send_dict})})
-                    self.master.server.send_string(send_str, len(send_str), current_uuid, int(MPI_Wrapper.Tags.EXTRA))
+                    #if self.master.worker_registry.isAlive(recv_dict['wid']):
+                    if not recv_dict.has_key('flag'):
+                    	self.master.server.send_string(send_str, len(send_str), current_uuid, int(MPI_Wrapper.Tags.EXTRA))
                 if recv_dict.has_key('wstatus'):
                     self.master.worker_registry.setStatus(recv_dict['wid'], recv_dict['wstatus'])
                     master_log.debug('[Master] Set worker %s status = %s' % (recv_dict['wid'], WorkerStatus.desc(recv_dict['wstatus'])))
@@ -437,7 +439,7 @@ class JobMaster(IJobMaster):
                     #TODO: app finalize/merge need to be a single module
                     #check all worker stop working
                     if not self.worker_registry.checkRunning():
-                        master_log.info('[Scheduler] Complete tasks number: %s; All task number: %s' % (self.task_scheduler.completed_queue.qsize(), len(self.task_scheduler.task_list)))
+                        #master_log.info('[Scheduler] Complete tasks number: %s; All task number: %s' % (self.task_scheduler.completed_queue.qsize(), len(self.task_scheduler.task_list)))
                         self.appmgr.finalize_app()
                         #check all worker finalized
                         if self.worker_registry.checkFinalize() and self.__newApp_flag:

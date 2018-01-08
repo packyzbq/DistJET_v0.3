@@ -298,7 +298,7 @@ class WorkerRegistry:
             for uuid in self.alive_workers:
                 entry = self.get_by_uuid(uuid)
                 if entry and entry.status and entry.status != WorkerStatus.FINALIZED:
-                    wRegistery_log.warning('[Registry] @checkFinalize: worker %s status = %s'%(entry.wid,WorkerStatus.desc(entry.status)))
+                    #wRegistery_log.warning('[Registry] @checkFinalize: worker %s status = %s'%(entry.wid,WorkerStatus.desc(entry.status)))
                     return False
             return True
         finally:

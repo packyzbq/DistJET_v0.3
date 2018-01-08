@@ -92,8 +92,8 @@ class Client:
     def send_string(self, strs ,msgsize, dest, tags):
         return self.client.send_string(strs, msgsize, dest, tags)
 
-    def stop(self):
-        return self.client.stop()
+    def stop(self,flag):
+        return self.client.stop(flag)
 
 class MSG:
     def __init__(self, tag, pack):
