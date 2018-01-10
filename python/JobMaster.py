@@ -299,6 +299,7 @@ class JobMaster(IJobMaster):
         #master_log.debug('[Master] Appmgr has instanced')
 
         self.server = MPI_Wrapper.Server(self.recv_buffer, self.svc_name)
+        self.server.set_portfile(self.cfg.getCFGattr('Rundir')+"/port.txt")
         ret = self.server.initialize()
         if ret != 0:
             master_log.error('[Master] Server initialize error, stop. errcode = %d' % ret)

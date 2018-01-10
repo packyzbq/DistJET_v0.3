@@ -183,6 +183,7 @@ class WorkerAgent:
         wlog.debug('[Agent] Start to connect to service <%s>' % self.cfg.getCFGattr('svc_name'))
 
         self.client = Client(self.recv_buff, self.cfg.getCFGattr('svc_name'), self.uuid)
+        self.client.set_portfile(Config.Config.getCFGattr('Rundir')+'/port.txt')
         ret = self.client.initial()
         #----test----
         #self.client=None

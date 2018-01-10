@@ -50,6 +50,9 @@ class Server:
         else:
             MPI_log.info('[MPI server]: start server with service_name=%s', self.svcname)
             return ret
+    
+    def set_portfile(self, path):
+        self.server.set_portfile(path)
 
     def send_int(self, int_data, msgsize, dest, tags):
         self.server.send_int(int_data, msgsize, dest, tags)
@@ -81,6 +84,9 @@ class Client:
 
     def initial(self):
         return self.client.initialize()
+    
+    def set_portfile(self, path):
+        self.client.set_portfile(path)
 
     def run(self):
         self.client.run()
