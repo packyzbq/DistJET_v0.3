@@ -335,8 +335,8 @@ class WorkerRegistry:
         	self.__all_workers[wid].last_contact_time = time
         except:
             print "Can not find worker :%s, all worker is below:\n"%uuid
-            for uuid in self.__all_workers_uuid.keys():
-                print uuid+'\n'
+            #for uuid in self.__all_workers_uuid.keys():
+            #    print uuid+'\n'
 
 
 

@@ -220,7 +220,7 @@ class SimpleTaskScheduler(IScheduler):
 
         else:
             # assign 1 task once
-            print "assign 1 task, todo_queue_size = %d"%self.task_todo_queue.qsize()
+            print "assign 1 task to worker %d, todo_queue_size = %d"%(wid,self.task_todo_queue.qsize())
             task = None
             pre_task = None
             while not self.task_todo_queue.empty():
@@ -246,7 +246,7 @@ class SimpleTaskScheduler(IScheduler):
             #    task_list.append(tid)
             #    room-=1
             #    self.scheduled_task_list[wid].append(tid)
-        print "task_list = %s"%task_list
+        #print "task_list = %s"%task_list
         if task_list:
             scheduler_log.info('[Scheduler] Assign %s to worker %s' % (self.scheduled_task_list[wid][-room:], wid))
         return task_list
