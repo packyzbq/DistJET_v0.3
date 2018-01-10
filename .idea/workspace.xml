@@ -6,9 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/Process/Process.py" afterPath="$PROJECT_DIR$/python/Process/Process.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/WorkerAgent.py" afterPath="$PROJECT_DIR$/python/WorkerAgent.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/WorkerRegistry.py" afterPath="$PROJECT_DIR$/python/WorkerRegistry.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/config.ini" afterPath="$PROJECT_DIR$/config/config.ini" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/JobMaster.py" afterPath="$PROJECT_DIR$/python/JobMaster.py" />
     </list>
     <ignored path="DistJET_v0.3.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -22,11 +21,34 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/DistJET_v0.3$Process.coverage" NAME="Process Coverage Results" MODIFIED="1514949727445" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/python/Process" />
-    <SUITE FILE_PATH="coverage/DistJET_v0.3$data.coverage" NAME="data Coverage Results" MODIFIED="1514949769113" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="D:/IHEPBox_Sync/Documents/论文-测试结果/Rundir-10njob-1000/tmp" />
+    <SUITE FILE_PATH="coverage/DistJET_v0.3$data__1_.coverage" NAME="data (1) Coverage Results" MODIFIED="1515571770723" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="D:/IHEPBox_Sync/Documents/论文-测试结果/newTest" />
+    <SUITE FILE_PATH="coverage/DistJET_v0.3$data.coverage" NAME="data Coverage Results" MODIFIED="1515570371122" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="D:/IHEPBox_Sync/Documents/论文-测试结果/Rundir-10njob-1000/tmp" />
     <SUITE FILE_PATH="coverage/DistJET_v0.3$test.coverage" NAME="test Coverage Results" MODIFIED="1505651131177" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/python/Process" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="D:\WorkSpace\DistJET_v0.3" />
+  </component>
+  <component name="DockManager">
+    <window id="2">
+      <content type="file-editors">
+        <state>
+          <leaf>
+            <file leaf-file-name="data.py" pinned="false" current-in-tab="true">
+              <entry file="file://D:/IHEPBox_Sync/Documents/论文-测试结果/newTest/data.py">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="513">
+                    <caret line="38" column="64" selection-start-line="38" selection-start-column="64" selection-end-line="38" selection-end-column="64" />
+                    <folding>
+                      <element signature="e#0#11#0" expanded="true" />
+                    </folding>
+                  </state>
+                </provider>
+              </entry>
+            </file>
+          </leaf>
+        </state>
+      </content>
+    </window>
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
@@ -37,18 +59,18 @@
       <file leaf-file-name="WorkerAgent.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="627" column="35" selection-start-line="627" selection-start-column="35" selection-end-line="627" selection-end-column="35" />
+            <state relative-caret-position="435">
+              <caret line="378" column="50" selection-start-line="378" selection-start-column="50" selection-end-line="378" selection-end-column="50" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
                 <element signature="e#500#515#0" expanded="false" />
                 <element signature="e#925#6513#0" expanded="false" />
                 <element signature="e#1487#6434#0" expanded="false" />
+                <element signature="e#9788#13926#0" expanded="false" />
                 <element signature="e#27138#28583#0" expanded="false" />
                 <element signature="e#29454#29565#0" expanded="false" />
                 <element signature="e#29849#30569#0" expanded="false" />
                 <element signature="e#30647#30996#0" expanded="false" />
-                <element signature="e#33219#34230#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -67,11 +89,21 @@
       <file leaf-file-name="JobMaster.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-529">
-              <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+            <state relative-caret-position="2668">
+              <caret line="166" column="28" selection-start-line="166" selection-start-column="28" selection-end-line="166" selection-end-column="28" />
               <folding>
                 <element signature="e#808#2464#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="config.ini" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config/config.ini">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="138">
+              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="9" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -162,18 +194,19 @@
         <option value="$PROJECT_DIR$/Application/AnalysisApp/config.ini" />
         <option value="$PROJECT_DIR$/python/Util/Config.py" />
         <option value="$PROJECT_DIR$/Application/AnalysisApp/AnaApp.py" />
-        <option value="$PROJECT_DIR$/config/config.ini" />
         <option value="$PROJECT_DIR$/python/Task.py" />
         <option value="D:/IHEPBox_Sync/Documents/论文-测试结果/Rundir-10njob-1000/tmp/data.py" />
         <option value="D:/IHEPBox_Sync/Documents/论文-测试结果/Rundir-25njob-20/tmp/data.py" />
         <option value="$PROJECT_DIR$/python/IScheduler.py" />
-        <option value="$PROJECT_DIR$/python/JobMaster.py" />
         <option value="$PROJECT_DIR$/python/Util/Recoder.py" />
         <option value="D:/IHEPBox_Sync/Documents/论文-测试结果/newTest/Rundir-10/data.py" />
         <option value="$PROJECT_DIR$/python/MPI_Wrapper.py" />
         <option value="$PROJECT_DIR$/python/WorkerRegistry.py" />
         <option value="$PROJECT_DIR$/python/Process/Process.py" />
         <option value="$PROJECT_DIR$/python/WorkerAgent.py" />
+        <option value="$PROJECT_DIR$/config/config.ini" />
+        <option value="D:/IHEPBox_Sync/Documents/论文-测试结果/newTest/data.py" />
+        <option value="$PROJECT_DIR$/python/JobMaster.py" />
       </list>
     </option>
   </component>
@@ -262,6 +295,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Util" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DistJET_v0.3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DistJET_v0.3" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -403,7 +450,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.data">
+  <component name="RunManager" selected="Python.data (1)">
     <configuration default="false" name="test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -458,6 +505,86 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
+    <configuration default="false" name="data (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="D:/IHEPBox_Sync/Documents/论文-测试结果/newTest" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="DistJET_v0.3" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="D:/IHEPBox_Sync/Documents/论文-测试结果/newTest/data.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="BashConfigurationType" factoryName="Bash">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="INTERPRETER_PATH" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="DistJET_v0.3" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="TARGET" value="" />
+      <option name="SETTINGS_FILE" value="" />
+      <option name="CUSTOM_SETTINGS" value="false" />
+      <option name="USE_OPTIONS" value="false" />
+      <option name="OPTIONS" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="PyBehaveRunConfigurationType" factoryName="Behave">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="DistJET_v0.3" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="ADDITIONAL_ARGS" value="" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PyLettuceRunConfigurationType" factoryName="Lettuce">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="DistJET_v0.3" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="ADDITIONAL_ARGS" value="" />
+      <method />
+    </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -487,6 +614,16 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <module name="DistJET_v0.3" />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
+      <command value="run-script" />
+      <scripts />
+      <node-interpreter value="project" />
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="tests" factoryName="Attests">
@@ -599,16 +736,18 @@
       <option name="USE_KEYWORD" value="false" />
       <method />
     </configuration>
-    <list size="3">
+    <list size="4">
       <item index="0" class="java.lang.String" itemvalue="Python.test" />
       <item index="1" class="java.lang.String" itemvalue="Python.Process" />
       <item index="2" class="java.lang.String" itemvalue="Python.data" />
+      <item index="3" class="java.lang.String" itemvalue="Python.data (1)" />
     </list>
     <recent_temporary>
-      <list size="3">
-        <item index="0" class="java.lang.String" itemvalue="Python.data" />
-        <item index="1" class="java.lang.String" itemvalue="Python.Process" />
-        <item index="2" class="java.lang.String" itemvalue="Python.test" />
+      <list size="4">
+        <item index="0" class="java.lang.String" itemvalue="Python.data (1)" />
+        <item index="1" class="java.lang.String" itemvalue="Python.data" />
+        <item index="2" class="java.lang.String" itemvalue="Python.Process" />
+        <item index="3" class="java.lang.String" itemvalue="Python.test" />
       </list>
     </recent_temporary>
   </component>
@@ -625,13 +764,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1505126721810</updated>
-    </task>
-    <task id="LOCAL-00016" summary="change communication format">
-      <created>1508921057805</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1508921057805</updated>
     </task>
     <task id="LOCAL-00017" summary="fix task add bug">
       <created>1509095233210</created>
@@ -969,7 +1101,14 @@
       <option name="project" value="LOCAL" />
       <updated>1515118143783</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="delete some output and fix error&#10;&#10;">
+      <created>1515570022097</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1515570022098</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TodoView">
@@ -982,7 +1121,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
+    <frame x="-9" y="-9" width="1938" height="1050" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.119098715" sideWeight="0.4464487" order="0" side_tool="false" content_ui="combo" />
@@ -991,20 +1130,20 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23337092" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38669673" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.119098715" sideWeight="0.5535513" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3990981" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38675496" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Concurrent Activities Diagram" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3990981" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1042,7 +1181,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="test finalize" />
     <MESSAGE value="add watch dog thread" />
     <MESSAGE value="test for ProdApp" />
     <MESSAGE value="change gen_boot  and test" />
@@ -1067,7 +1205,8 @@
     <MESSAGE value="change log status recode&#10;" />
     <MESSAGE value="fix master stop condition bug&#10;" />
     <MESSAGE value="add worker recorde time delay&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="add worker recorde time delay&#10;" />
+    <MESSAGE value="delete some output and fix error&#10;&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="delete some output and fix error&#10;&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1081,29 +1220,27 @@
           <url>file://$PROJECT_DIR$/python/BaseThread.py</url>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://D:/IHEPBox_Sync/Documents/论文-测试结果/newTest/data.py</url>
+          <line>40</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://D:/IHEPBox_Sync/Documents/论文-测试结果/newTest/data.py</url>
+          <line>42</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://D:/IHEPBox_Sync/Documents/论文-测试结果/newTest/data.py</url>
+          <line>44</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="15" />
+      <option name="time" value="20" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../DistJET_v2/bin/start-master.py" />
-    <entry file="file://$PROJECT_DIR$/../DistJET_v2/bin/start-worker.py" />
-    <entry file="file://$PROJECT_DIR$/bin/start_worker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../DistJET_v2/config/default.cfg" />
-    <entry file="file://$PROJECT_DIR$/bin/start_master.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-842">
-          <caret line="5" column="28" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bin/master.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="230">
@@ -1257,13 +1394,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/config.ini">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="uml://Python/python.WorkerAgent.WorkerAgent" />
     <entry file="uml://Python/#D:/WorkSpace/DistJET_v0.3/python/JobMaster.py" />
     <entry file="file://$PROJECT_DIR$/Application/ProdApp/ProdApp.py">
@@ -1353,24 +1483,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="627" column="35" selection-start-line="627" selection-start-column="35" selection-end-line="627" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-            <element signature="e#500#515#0" expanded="false" />
-            <element signature="e#925#6513#0" expanded="false" />
-            <element signature="e#1487#6434#0" expanded="false" />
-            <element signature="e#27138#28583#0" expanded="false" />
-            <element signature="e#29454#29565#0" expanded="false" />
-            <element signature="e#29849#30569#0" expanded="false" />
-            <element signature="e#30647#30996#0" expanded="false" />
-            <element signature="e#33219#34230#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/python/WorkerRegistry.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
@@ -1379,10 +1491,80 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/xlwt-1.3.0-py2.7.egg/xlwt/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="8" column="27" selection-start-line="8" selection-start-column="27" selection-end-line="8" selection-end-column="27" />
+          <folding>
+            <element signature="e#23#53#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/xlwt-1.3.0-py2.7.egg/xlwt/Workbook.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="376">
+          <caret line="702" column="63" selection-start-line="702" selection-start-column="58" selection-end-line="702" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/xlwt-1.3.0-py2.7.egg/xlwt/Row.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="153" column="0" selection-start-line="153" selection-start-column="0" selection-end-line="153" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/xlwt-1.3.0-py2.7.egg/xlwt/Worksheet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="1087" column="0" selection-start-line="1087" selection-start-column="0" selection-end-line="1087" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/config.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="378" column="50" selection-start-line="378" selection-start-column="50" selection-end-line="378" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+            <element signature="e#500#515#0" expanded="false" />
+            <element signature="e#925#6513#0" expanded="false" />
+            <element signature="e#1487#6434#0" expanded="false" />
+            <element signature="e#9788#13926#0" expanded="false" />
+            <element signature="e#27138#28583#0" expanded="false" />
+            <element signature="e#29454#29565#0" expanded="false" />
+            <element signature="e#29849#30569#0" expanded="false" />
+            <element signature="e#30647#30996#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/IHEPBox_Sync/Documents/论文-测试结果/newTest/data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="38" column="64" selection-start-line="38" selection-start-column="64" selection-end-line="38" selection-end-column="64" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-529">
-          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+        <state relative-caret-position="2668">
+          <caret line="166" column="28" selection-start-line="166" selection-start-column="28" selection-end-line="166" selection-end-column="28" />
           <folding>
             <element signature="e#808#2464#0" expanded="false" />
           </folding>
