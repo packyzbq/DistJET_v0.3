@@ -176,13 +176,15 @@ class WorkerRegistry:
         if self.__all_workers.has_key(wid):
             return self.__all_workers[wid]
         else:
-            #print 'Can not find worker %s, this is all workers %s'%(wid, self.__all_workers.keys())
+            wRegistery_log.error('[Registry] Cannot find worker %s, skip'%(wid))
             return None
 
     def get_by_uuid(self, w_uuid):
         e=None
         if self.__all_workers_uuid.has_key(w_uuid):
             e = self.get_entry(self.__all_workers_uuid[w_uuid])
+        else:
+            wRegistery_log.error('[Registry] Cannot find worker uuid = %s, skip'%(w_uuid))
         return e
 
 
@@ -213,7 +215,11 @@ class WorkerRegistry:
         return avalible_list
 
     def isAlive(self,wid):
-        return self.get_entry(wid).w_uuid in self.alive_workers
+        e = self.get_entry(wid)
+        if e:
+            return e in self.alive_workers
+        else:
+            return False
 
     def hasAlive(self):
         return len(self.alive_workers) != 0
@@ -239,15 +245,21 @@ class WorkerRegistry:
         return self.__all_workers[wid].max_capacity
 
     def worker_reinit(self, wid):
-        return self.get_entry(wid).reinit()
+        e = self.get_entry(wid)
+        if e:
+            return e.reinit()
+        return
 
     def worker_refin(self, wid):
-        return self.get_entry(wid).refin()
+        e = self.get_entry(wid)
+        if e:
+            return e.refin()
+        return
 
     def sync_capacity(self, wid, capacity):
         # TODO the num of assigned task is incompatable with worker
         wentry = self.get_entry(wid)
-        if capacity != wentry.max_capacity - wentry.assigned:
+        if wentry is not None and capacity != wentry.max_capacity - wentry.assigned:
             wentry.alive_lock.acquire()
             wentry.assigned = wentry.max_capacity - capacity
             wentry.alive_lock.release()
@@ -331,6 +343,8 @@ class WorkerRegistry:
     def setStatus(self,wid,status):
         wid = int(wid)
         wentry = self.get_entry(wid)
+        if wentry is None:
+            return
         if status == WorkerStatus.IDLE and wentry.status != status:
             wentry.idle_time = time.time()
         if wentry.alive:

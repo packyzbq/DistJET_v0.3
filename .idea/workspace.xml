@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="92e70014-404e-40f1-999a-ab50b566c719" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/DistJET_v0.3.iml" afterPath="$PROJECT_DIR$/.idea/DistJET_v0.3.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/JobMaster.py" afterPath="$PROJECT_DIR$/python/JobMaster.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/MPI_Wrapper.py" afterPath="$PROJECT_DIR$/python/MPI_Wrapper.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/Process/Process.py" afterPath="$PROJECT_DIR$/python/Process/Process.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/WorkerAgent.py" afterPath="$PROJECT_DIR$/python/WorkerAgent.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/python/WorkerRegistry.py" afterPath="$PROJECT_DIR$/python/WorkerRegistry.py" />
     </list>
     <ignored path="DistJET_v0.3.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,36 +34,43 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="WorkerAgent.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="WorkerAgent.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="736">
-              <caret line="383" column="56" selection-start-line="383" selection-start-column="56" selection-end-line="383" selection-end-column="56" />
+            <state relative-caret-position="336">
+              <caret line="627" column="35" selection-start-line="627" selection-start-column="35" selection-end-line="627" selection-end-column="35" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
                 <element signature="e#500#515#0" expanded="false" />
                 <element signature="e#925#6513#0" expanded="false" />
-                <element signature="e#9666#13804#0" expanded="false" />
-                <element signature="e#13912#14997#0" expanded="false" />
-                <element signature="e#15147#15587#0" expanded="false" />
-                <element signature="e#15691#16381#0" expanded="false" />
-                <element signature="e#16514#17157#0" expanded="false" />
-                <element signature="e#17296#17555#0" expanded="false" />
-                <element signature="e#19561#20857#0" expanded="false" />
-                <element signature="e#21166#21517#0" expanded="false" />
+                <element signature="e#1487#6434#0" expanded="false" />
+                <element signature="e#27138#28583#0" expanded="false" />
+                <element signature="e#29454#29565#0" expanded="false" />
+                <element signature="e#29849#30569#0" expanded="false" />
+                <element signature="e#30647#30996#0" expanded="false" />
+                <element signature="e#33219#34230#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JobMaster.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Process.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="8993">
+              <caret line="394" column="8" selection-start-line="394" selection-start-column="8" selection-end-line="394" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JobMaster.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5405">
-              <caret line="304" column="30" selection-start-line="304" selection-start-column="30" selection-end-line="304" selection-end-column="30" />
+            <state relative-caret-position="-529">
+              <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
               <folding>
                 <element signature="e#808#2464#0" expanded="false" />
-                <element signature="e#7742#9108#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -74,8 +79,18 @@
       <file leaf-file-name="Recoder.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/Util/Recoder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="299">
-              <caret line="13" column="48" selection-start-line="13" selection-start-column="48" selection-end-line="13" selection-end-column="48" />
+            <state relative-caret-position="690">
+              <caret line="30" column="38" selection-start-line="30" selection-start-column="38" selection-end-line="30" selection-end-column="38" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WorkerRegistry.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/python/WorkerRegistry.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="450">
+              <caret line="379" column="23" selection-start-line="379" selection-start-column="23" selection-end-line="379" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -84,8 +99,8 @@
       <file leaf-file-name="MPI_Wrapper.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/python/MPI_Wrapper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="736">
-              <caret line="33" column="22" selection-start-line="33" selection-start-column="22" selection-end-line="33" selection-end-column="22" />
+            <state relative-caret-position="810">
+              <caret line="100" column="8" selection-start-line="100" selection-start-column="8" selection-end-line="100" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -143,7 +158,6 @@
         <option value="$PROJECT_DIR$/python/Util/HealthDetect.py" />
         <option value="$PROJECT_DIR$/Application/AnalysisApp/__init__.py" />
         <option value="$PROJECT_DIR$/Application/__init__.py" />
-        <option value="$PROJECT_DIR$/python/Util/Recoder.py" />
         <option value="$PROJECT_DIR$/bin/dist_ls.py" />
         <option value="$PROJECT_DIR$/Application/AnalysisApp/config.ini" />
         <option value="$PROJECT_DIR$/python/Util/Config.py" />
@@ -153,10 +167,12 @@
         <option value="D:/IHEPBox_Sync/Documents/论文-测试结果/Rundir-10njob-1000/tmp/data.py" />
         <option value="D:/IHEPBox_Sync/Documents/论文-测试结果/Rundir-25njob-20/tmp/data.py" />
         <option value="$PROJECT_DIR$/python/IScheduler.py" />
-        <option value="$PROJECT_DIR$/python/Process/Process.py" />
-        <option value="$PROJECT_DIR$/python/WorkerRegistry.py" />
-        <option value="$PROJECT_DIR$/python/MPI_Wrapper.py" />
         <option value="$PROJECT_DIR$/python/JobMaster.py" />
+        <option value="$PROJECT_DIR$/python/Util/Recoder.py" />
+        <option value="D:/IHEPBox_Sync/Documents/论文-测试结果/newTest/Rundir-10/data.py" />
+        <option value="$PROJECT_DIR$/python/MPI_Wrapper.py" />
+        <option value="$PROJECT_DIR$/python/WorkerRegistry.py" />
+        <option value="$PROJECT_DIR$/python/Process/Process.py" />
         <option value="$PROJECT_DIR$/python/WorkerAgent.py" />
       </list>
     </option>
@@ -198,7 +214,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -252,6 +267,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -276,7 +292,10 @@
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
           <PATH vcs="Git" revision="">$PROJECT_DIR$/python/JobMaster.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/MPI_Wrapper.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/Process/Process.py</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/python/WorkerAgent.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/python/WorkerRegistry.py</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
           <option name="myUpdateName" value="Created" />
@@ -606,13 +625,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1505126721810</updated>
-    </task>
-    <task id="LOCAL-00015" summary="add keyInterrupt stop and default config.ini">
-      <created>1508914911733</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1508914911733</updated>
     </task>
     <task id="LOCAL-00016" summary="change communication format">
       <created>1508921057805</created>
@@ -950,7 +962,14 @@
       <option name="project" value="LOCAL" />
       <updated>1514964726234</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="add worker recorde time delay&#10;">
+      <created>1515118143783</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1515118143783</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="TodoView">
@@ -966,13 +985,13 @@
     <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1137339" sideWeight="0.45997745" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.119098715" sideWeight="0.4464487" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2356257" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23337092" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1137339" sideWeight="0.54002255" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.119098715" sideWeight="0.5535513" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919955" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1023,7 +1042,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="sync for test" />
     <MESSAGE value="test finalize" />
     <MESSAGE value="add watch dog thread" />
     <MESSAGE value="test for ProdApp" />
@@ -1048,7 +1066,8 @@
     <MESSAGE value="change master stop condition" />
     <MESSAGE value="change log status recode&#10;" />
     <MESSAGE value="fix master stop condition bug&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix master stop condition bug&#10;" />
+    <MESSAGE value="add worker recorde time delay&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="add worker recorde time delay&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1068,14 +1087,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="uml://Python/#D:/WorkSpace/DistJET_v0.3/python/BaseThread.py" />
-    <entry file="file://$PROJECT_DIR$/Application/UnitTest/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../DistJET_v2/bin/start-master.py" />
     <entry file="file://$PROJECT_DIR$/../DistJET_v2/bin/start-worker.py" />
     <entry file="file://$PROJECT_DIR$/bin/start_worker.py">
@@ -1300,22 +1311,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="333" column="24" selection-start-line="333" selection-start-column="24" selection-end-line="333" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/python/WorkerRegistry.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="279" column="8" selection-start-line="279" selection-start-column="8" selection-end-line="279" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="294" column="76" selection-start-line="294" selection-start-column="76" selection-end-line="294" selection-end-column="76" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1326,49 +1321,70 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/MPI_Wrapper.py">
+    <entry file="file://$PROJECT_DIR$/python/Util/Recoder.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="736">
-          <caret line="33" column="22" selection-start-line="33" selection-start-column="22" selection-end-line="33" selection-end-column="22" />
+        <state relative-caret-position="690">
+          <caret line="30" column="38" selection-start-line="30" selection-start-column="38" selection-end-line="30" selection-end-column="38" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
+    <entry file="file://D:/IHEPBox_Sync/Documents/论文-测试结果/Rundir-20njob-20/tmp/data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5405">
-          <caret line="304" column="30" selection-start-line="304" selection-start-column="30" selection-end-line="304" selection-end-column="30" />
-          <folding>
-            <element signature="e#808#2464#0" expanded="false" />
-            <element signature="e#7742#9108#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="46">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="20" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/python/Util/Recoder.py">
+    <entry file="file://D:/IHEPBox_Sync/Documents/论文-测试结果/newTest/Rundir-10/data.py" />
+    <entry file="file://$PROJECT_DIR$/python/MPI_Wrapper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="13" column="48" selection-start-line="13" selection-start-column="48" selection-end-line="13" selection-end-column="48" />
+        <state relative-caret-position="810">
+          <caret line="100" column="8" selection-start-line="100" selection-start-column="8" selection-end-line="100" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/Process/Process.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8993">
+          <caret line="394" column="8" selection-start-line="394" selection-start-column="8" selection-end-line="394" selection-end-column="8" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/python/WorkerAgent.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="736">
-          <caret line="383" column="56" selection-start-line="383" selection-start-column="56" selection-end-line="383" selection-end-column="56" />
+        <state relative-caret-position="336">
+          <caret line="627" column="35" selection-start-line="627" selection-start-column="35" selection-end-line="627" selection-end-column="35" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
             <element signature="e#500#515#0" expanded="false" />
             <element signature="e#925#6513#0" expanded="false" />
-            <element signature="e#9666#13804#0" expanded="false" />
-            <element signature="e#13912#14997#0" expanded="false" />
-            <element signature="e#15147#15587#0" expanded="false" />
-            <element signature="e#15691#16381#0" expanded="false" />
-            <element signature="e#16514#17157#0" expanded="false" />
-            <element signature="e#17296#17555#0" expanded="false" />
-            <element signature="e#19561#20857#0" expanded="false" />
-            <element signature="e#21166#21517#0" expanded="false" />
+            <element signature="e#1487#6434#0" expanded="false" />
+            <element signature="e#27138#28583#0" expanded="false" />
+            <element signature="e#29454#29565#0" expanded="false" />
+            <element signature="e#29849#30569#0" expanded="false" />
+            <element signature="e#30647#30996#0" expanded="false" />
+            <element signature="e#33219#34230#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/WorkerRegistry.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="379" column="23" selection-start-line="379" selection-start-column="23" selection-end-line="379" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/python/JobMaster.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-529">
+          <caret line="22" column="0" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+          <folding>
+            <element signature="e#808#2464#0" expanded="false" />
           </folding>
         </state>
       </provider>

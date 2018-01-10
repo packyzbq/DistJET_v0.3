@@ -352,6 +352,7 @@ class WorkerAgent:
                         # force worker to stop
                         elif int(k) == Tags.WORKER_STOP:
                             wlog.info('[Agent] Receive WORKER_STOP msg = %s' % v)
+                            self.fin_flag = True
                             self.list_lock.acquire()
                             for i in self.worker_status.keys():
                                 if self.worker_status[i] == WorkerStatus.RUNNING:

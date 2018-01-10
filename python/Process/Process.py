@@ -57,7 +57,7 @@ class Process_withENV(threading.Thread):
 
         self.shell = shell
         self.ignoreFail = ignoreFail
-        print "@Process: ignoreFail = %s"%str(self.ignoreFail)
+        #print "@Process: ignoreFail = %s"%str(self.ignoreFail)
         self.exec_queue_lock = threading.RLock()
         self.executable = Queue.Queue()
 
@@ -92,7 +92,7 @@ class Process_withENV(threading.Thread):
         self.stop_flag = False
 
         self.TaskLogDir = Config.Config.getCFGattr('Rundir')+'/task_log'
-        print 'task dir= %s'%self.TaskLogDir
+        #print 'task dir= %s'%self.TaskLogDir
         if not os.path.exists(self.TaskLogDir):
             try:
                 os.mkdir(self.TaskLogDir)
@@ -117,7 +117,7 @@ class Process_withENV(threading.Thread):
         task_log=self.TaskLogDir+'/task_'+str(task.tid)+'.tmp'
 
         if genLog:
-            print "res_dir=%s, tid=%s"%(task.res_dir,str(task.tid))
+            #print "res_dir=%s, tid=%s"%(task.res_dir,str(task.tid))
             commpack = CommandPack(task.tid,command_list,task_log=task_log)
         else:
             commpack = CommandPack(task.tid,command_list,proc_log=self.log, finalize_flag=True)
@@ -140,7 +140,7 @@ class Process_withENV(threading.Thread):
         '''
 
     def stop(self,force=False):
-        print "someone call stop\n"
+        #print "someone call stop\n"
         self.stop_flag = True
         if force:
             self._kill_task()
@@ -194,7 +194,7 @@ class Process_withENV(threading.Thread):
         else:
             task = Task(-1)
             task.boot.append('#exit#')
-        print "finalize task boot = %s"%task.boot
+        #print "finalize task boot = %s"%task.boot
         self.set_task(task,genLog=False)
 
     def run(self):
@@ -215,8 +215,7 @@ class Process_withENV(threading.Thread):
                         logfile = commpack.proc_log
                     if commpack.finalize_flag:
                         self.hook = self.finalize_callback
-                    #fin_flag = commpack.finzlize_flag
-                    print "script_list = %s"%script_list
+                    #print "script_list = %s"%script_list
                     sc_len = len(script_list)
                     index = 0
                     while len(script_list) != 0 and len(script_list) > index:
@@ -224,7 +223,7 @@ class Process_withENV(threading.Thread):
                         index+=1
                         if '#exit#' not in script and not script.endswith('\n'):
                             script+='\n'
-                        print "<process> get script=%s"%script
+                        #print "<process> get script=%s"%script
                         if '#exit#' in script:
                             print "<process> exiting..."
                             if self.hook and callable(self.hook):
