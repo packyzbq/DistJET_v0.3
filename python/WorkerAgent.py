@@ -16,7 +16,8 @@ from WorkerRegistry import WorkerStatus
 from Util import Config
 from Util import Package
 from Task import Task
-from Process.Process import Process_withENV,status
+from Process.Process import Process_withENV
+from Process.Process import status as ProcessStatus
 
 import python.Util.Recoder as Recoder
 
@@ -468,13 +469,12 @@ class WorkerAgent:
         if retcode!=0:
             self.worker_status[wid] = WorkerStatus.INITIALIZE_FAIL
             wlog.error('[Error] Worker %s initialization error, error msg = %s' % (wid, errmsg))
-            #TODO reinit worker
         else:
             self.worker_status[wid] = WorkerStatus.INITIALIZED
             if not self.initial_flag:
                 self.initial_flag = True
             wlog.info('[Agent] Feed back app init result')
-            self.heartbeat.acquire_queue.put({Tags.APP_INI: {'recode': retcode, 'errmsg': errmsg}})
+        self.heartbeat.acquire_queue.put({Tags.APP_INI: {'recode': retcode, 'errmsg': errmsg}})
 
     def finalize_done(self,wid,retcode, errmsg=None):
         if retcode != 0:
@@ -618,7 +618,7 @@ class Worker(BaseThread):
             else:
                 self.status = WorkerStatus.INITIALIZE_FAIL
                 self.workeragent.set_status(self.id,self.status)
-                self.log.error("[Worker_%d] Worker setup error"%self.id)
+                self.log.error("[Worker_%d] Worker setup error, errorcode = %d"%(self.id,ret))
             return ret
 
     def do_task(self,task):
@@ -656,13 +656,13 @@ class Worker(BaseThread):
         self.cond.release()
 
     def task_done(self, stu, retcode, start_time, end_time, logfile_path):
-        self.log.info('[Worker_%d] Task %s finish, status=%s'%(self.id, str(self.running_task.tid),status.describe(stu)))
-        if stu == status.SUCCESS:
+        self.log.info('[Worker_%d] Task %s finish, status=%s'%(self.id, str(self.running_task.tid),ProcessStatus.describe(stu)))
+        if stu == ProcessStatus.SUCCESS:
             self.running_task.complete(start_time,end_time)
             if logfile_path and logfile_path.endswith('.tmp'):
                 os.rename(logfile_path,logfile_path[:-4])
         else:
-            self.running_task.fail(start_time,end_time,status.describe(stu))
+            self.running_task.fail(start_time,end_time,ProcessStatus.describe(stu))
             if logfile_path and logfile_path.endswith('.tmp'):
                 os.rename(logfile_path,logfile_path[:-3]+'err')
         self.finish_task = self.running_task
@@ -672,17 +672,18 @@ class Worker(BaseThread):
         self.cond.release()
 
     def finalize_done(self,stu, retcode, start_time,end_time,*kwd):
-        self.log.info('[Worker_%d] Process finalize, status=%s'%(self.id,status.describe(stu)))
-        if stu == status.SUCCESS:
+        self.log.info('[Worker_%d] Process finalize, status=%s'%(self.id,ProcessStatus.describe(stu)))
+        if stu == ProcessStatus.SUCCESS:
             self.finialized = True
             self.status = WorkerStatus.FINALIZED
         else:
             self.status = WorkerStatus.FINALIZE_FAIL
-        self.workeragent.finalize_done(self.id,retcode,status.describe(stu))
+        self.workeragent.finalize_done(self.id,retcode,ProcessStatus.describe(stu))
 
 
     def run(self):
         init_try = 0
+        ret = 0
         while not self.get_stop_flag():
             while not self.initialized and not self.setup_flag:
                 self.cond.acquire()
@@ -694,32 +695,32 @@ class Worker(BaseThread):
                     #print "<worker_%d> setup process"%self.id
                     ret = self.setup(self.workeragent.iniExecutor)
                     #print "<worker_%d> self.process =%s"%(self.id,self.process is None)
-                    self.workeragent.setup_done(self.id,ret)
                     if ret != 0:
                         continue
-                else:
-                    break
-            self.process.start()
-            # ask for tasks
-            tmptime=0 # times of ask tasks
-            while not self.fin_flag:
-                task = self.workeragent.getTask()
-                if task is None:
-                    tmptime+=1
-                    if tmptime == 5:
-                        tmptime = 0
-                        self.idle()
-                    continue
-                #print 'worker %d running task %d'%(self.id,task.tid)
-                self.do_task(task)
-                # wait for process return result
-                self.cond.acquire()
-                self.cond.wait()
-                self.cond.release()
+                self.workeragent.setup_done(self.id, ret, ProcessStatus.describe(ret))
 
-                self.running_task = None
-                self.workeragent.task_done(self.finish_task)
-                self.finish_task = None
+            if ret == ProcessStatus.SUCCESS:
+                self.process.start()
+                # ask for tasks
+                tmptime=0 # times of ask tasks
+                while not self.fin_flag:
+                    task = self.workeragent.getTask()
+                    if task is None:
+                        tmptime+=1
+                        if tmptime == 5:
+                            tmptime = 0
+                            self.idle()
+                        continue
+                    #print 'worker %d running task %d'%(self.id,task.tid)
+                    self.do_task(task)
+                    # wait for process return result
+                    self.cond.acquire()
+                    self.cond.wait()
+                    self.cond.release()
+
+                    self.running_task = None
+                    self.workeragent.task_done(self.finish_task)
+                    self.finish_task = None
             wlog.debug('[Worker_%d] Finalize task = %s'%(self.id,self.workeragent.finExecutor))
             self.finalize(self.workeragent.finExecutor)
             self.status = WorkerStatus.FINALIZING

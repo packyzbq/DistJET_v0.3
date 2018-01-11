@@ -183,17 +183,19 @@ class HandlerThread(BaseThread):
                     else:
                         # initial worker failed
                         master_log.error('worker %d initialize error, errmsg=%s' % (recv_dict['wid'], v['errmsg']))
-                        if self.master.worker_registry.worker_refin(recv_dict['wid']):
+                        '''
+                        if self.master.worker_registry.worker_reinit(recv_dict['wid']):
                             init_comm = self.master.task_scheduler.setup_worker()
                             send_dict = {'wid': recv_dict['wid'],
                                          'appid': self.master.task_scheduler.appid,
                                          'init': init_comm,
                                          'uuid': recv_dict['uuid']}
                             self.master.command_q.put({MPI_Wrapper.Tags.MPI_REGISTY_ACK: send_dict,'uuid':current_uuid})
-                        else:
-                            # terminate worker
-                            master_log.info('[Master] Send Worker stop to worker %d'%recv_dict['wid'])
-                            self.master.command_q.put({MPI_Wrapper.Tags.WORKER_STOP: '','uuid':current_uuid})
+                        '''
+                        #else:
+                        # terminate worker
+                        master_log.info('[Master] Send Worker stop to worker %d'%recv_dict['wid'])
+                        self.master.command_q.put({MPI_Wrapper.Tags.WORKER_STOP: '','uuid':current_uuid})
                 if recv_dict.has_key(MPI_Wrapper.Tags.TASK_ADD):
                     v = recv_dict[MPI_Wrapper.Tags.TASK_ADD]
                     master_log.debug('[Master] From worker %s receive a TASK_ADD msg = %s' % (recv_dict['wid'], v))

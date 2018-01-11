@@ -15,12 +15,13 @@ import python.Util.Config as Config
 
 
 class status:
-    (SUCCESS, FAIL, TIMEOUT, OVERFLOW, ANR) = range(0,5)
+    (SUCCESS, FAIL, TIMEOUT, OVERFLOW, ANR, UNKOWN) = range(0,6)
     DES = {
         FAIL: 'Task fail, return code is not zero',
         TIMEOUT: 'Run time exceeded',
         OVERFLOW: 'Memory overflow',
-        ANR: 'No responding'
+        ANR: 'No responding',
+        UNKOWN:'Unkown error'
     }
     @staticmethod
     def describe(stat):
@@ -158,7 +159,7 @@ class Process_withENV(threading.Thread):
         if self.process is None:
             return -1
         if self.initial is None:
-            return 0
+            return status.SUCCESS
         self.log.write("<process>@init: initial comm = %s\n"%self.initial)
         self.log.flush()
         for comm in self.initial:
@@ -173,7 +174,7 @@ class Process_withENV(threading.Thread):
                 #self.logFile.flush()
                 self.log.write('[ERROR]@Process initial timeout\n')
                 self.log.flush()
-                return -2
+                return status.TIMEOUT
             if self.process.stdout in fs[0]:
                 data = os.read(self.process.stdout.fileno(), 1024)
                 if "recode" in data:
@@ -186,7 +187,7 @@ class Process_withENV(threading.Thread):
                     self.log.write('[Setup_INFO] %s\n'%data)
                     self.log.flush()
             else:
-                return 1
+                return status.UNKOWN
 
     def finalize_and_cleanup(self, task):
         if task and type(task)!=types.StringType:
