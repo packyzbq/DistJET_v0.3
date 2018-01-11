@@ -316,16 +316,23 @@ class WorkerRegistry:
         finally:
             self.lock.release()
 
-    def checkError(self):
+    def checkError(self, wid=None):
         err_list = []
         self.lock.acquire()
         try:
-            for uuid in self.alive_workers:
-                entry=self.get_by_uuid(uuid)
-                if entry and entry.status and entry.status in [WorkerStatus.FINALIZE_FAIL, WorkerStatus.INITIALIZE_FAIL]:
-                    wRegistery_log.warning('[Registry] @checkError: worker %s status error, status = %s'%(entry.wid,WorkerStatus.desc(entry.status)))
-                    err_list.append(entry.wid)
-            return err_list
+            if wid is None:
+                for uuid in self.alive_workers:
+                    entry=self.get_by_uuid(uuid)
+                    if entry and entry.status and entry.status in [WorkerStatus.FINALIZE_FAIL, WorkerStatus.INITIALIZE_FAIL]:
+                        wRegistery_log.warning('[Registry] @checkError: worker %s status error, status = %s'%(entry.wid,WorkerStatus.desc(entry.status)))
+                        err_list.append(entry.wid)
+                return err_list
+            else:
+                entry = self.get_entry(wid)
+                if entry:
+                    return entry.status in [WorkerStatus.FINALIZE_FAIL, WorkerStatus.INITIALIZE_FAIL]
+                else:
+                    return True
         finally:
             self.lock.release()
 

@@ -60,8 +60,10 @@ class WatchDogThread(BaseThread):
 
             #check error status worker
             errworker = self.master.worker_registry.checkError()
-            for wid in errworker:
-                self.master.remove_worker(wid)
+            if errworker:
+                control_log.warning('Find error status worker %s'%errworker) 
+            #for wid in errworker:
+                #self.master.remove_worker(wid)
 
             # print worker status
             master_log.info('[Master] Worker status = %s'%self.master.worker_registry.get_worker_status())
@@ -190,6 +192,7 @@ class HandlerThread(BaseThread):
                             self.master.command_q.put({MPI_Wrapper.Tags.MPI_REGISTY_ACK: send_dict,'uuid':current_uuid})
                         else:
                             # terminate worker
+                            master_log.info('[Master] Send Worker stop to worker %d'%recv_dict['wid'])
                             self.master.command_q.put({MPI_Wrapper.Tags.WORKER_STOP: '','uuid':current_uuid})
                 if recv_dict.has_key(MPI_Wrapper.Tags.TASK_ADD):
                     v = recv_dict[MPI_Wrapper.Tags.TASK_ADD]
