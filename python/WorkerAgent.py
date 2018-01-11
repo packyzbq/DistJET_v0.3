@@ -195,8 +195,8 @@ class WorkerAgent:
             self.client.stop(True)
             wlog.error('[Agent] Client initialize error, errcode = %d'%ret)
             exit()
-
-        self.recoder = Recoder.BaseRecoder(Config.Config.getCFGattr('Rundir')+'/Agent-'+self.uuid)
+        if self.cfg.getCFGattr('delay_rec'):
+            self.recoder = Recoder.BaseRecoder(Config.Config.getCFGattr('Rundir')+'/Agent-'+self.uuid)
 
         self.wid = None
         self.appid = None
@@ -698,9 +698,9 @@ class Worker(BaseThread):
                     if ret != 0:
                         continue
                 self.workeragent.setup_done(self.id, ret, ProcessStatus.describe(ret))
+                self.process.start()
 
             if ret == ProcessStatus.SUCCESS:
-                self.process.start()
                 # ask for tasks
                 tmptime=0 # times of ask tasks
                 while not self.fin_flag:

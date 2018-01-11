@@ -61,7 +61,10 @@ class Config(object):
                         cls.__global_config[key] = cf.get('GlobalCfg', key)
                 if cf.has_section('Policy'):
                     for key in cf.options('Policy'):
-                        cls.__policy[key] = cf.getint('Policy', key)
+                        try:
+                            cls.__policy[key] = cf.getint('Policy', key)
+                        except:
+                            cls.__policy[key] = cf.getboolean('Policy',key)
                 cls.__loaded = True
             finally:
                     GlobalLock.release()
