@@ -721,9 +721,16 @@ class Worker(BaseThread):
                     self.running_task = None
                     self.workeragent.task_done(self.finish_task)
                     self.finish_task = None
+            # TODO need to wait for all worker?
+            #else:
+            #    wlog.info('[Worker_%d] Initialization Error, wait for stop'%self.id)
+            #    self.cond.acquire()
+            #    self.cond.wait()
+            #    self.cond.release()
             wlog.debug('[Worker_%d] Finalize task = %s'%(self.id,self.workeragent.finExecutor))
             self.finalize(self.workeragent.finExecutor)
-            self.status = WorkerStatus.FINALIZING
+            if ret == ProcessStatus.SUCCESS:
+                self.status = WorkerStatus.FINALIZING
             self.workeragent.set_status(self.id, self.status)
             #self.workeragent.finalize_done(self.id,ret)
             while self.finialized:
