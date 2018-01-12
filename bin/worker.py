@@ -1,4 +1,5 @@
 import sys,os
+import time
 assert os.environ['DistJETPATH']
 assert os.environ['JUNOTOP']
 
@@ -33,6 +34,9 @@ if sys.argv[2] != 'null' and not os.path.exists(sys.argv[2]):
 
 CONF.set_inipath(cfg_path)
 cfg = CONF.Config()
+
+while "port.txt" not in os.listdir(cfg.getCFGattr('Rundir')):
+    time.sleep(1)
 '''
 import time
 times=0

@@ -50,7 +50,8 @@ class WatchDogThread(BaseThread):
                 control_log.warning('Lost worker = %s' % lostworker)
                 for wid in lostworker:
                     #TODO: maybe use other method to deal with the lost worker
-                    self.master.remove_worker(wid)
+                    #self.master.remove_worker(wid)
+                    self.master.worker_registry.setStatus(wid,WorkerStatus.LOST)
 
             # check idle timeout worker
             idleworker = self.master.worker_registry.checkIDLETimeout()
@@ -67,6 +68,15 @@ class WatchDogThread(BaseThread):
 
             # print worker status
             master_log.info('[Master] Worker status = %s'%self.master.worker_registry.get_worker_status())
+
+            # save worker status to file
+            with open(self.master.cfg.getCFGattr("Rundir")+'/tmp/worker','w+') as workerfile:
+                workerfile.truncate()
+                workerfile.write('wid\tstatus\trunning\tlasttime')
+                for wid ,entry in self.master.worker_registry.item():
+                    w_d = entry.toDict()
+                    workerfile.write(w_d['wid']+'\t'+w_d['status']+'\t'+w_d['running_task']+'\t'+w_d['last_connect'])
+                workerfile.flush()
 
 
             if not lostworker and not idleworker:
@@ -142,6 +152,7 @@ class HandlerThread(BaseThread):
                             self.master.task_scheduler.task_failed(recv_dict['wid'], task)
                         else:
                             master_log.warning('[Master] Can not recognize the task status %s of Task' % task.status)
+                        self.master.worker_registry.task_complete(recv_dict['wid'])
                 if recv_dict.has_key('health') and recv_dict['health'] and recode_ele:
                     # plan 1
                     #health_log.info('Worker %s : %s'%(recv_dict['wid'], recv_dict['health']))
@@ -154,7 +165,10 @@ class HandlerThread(BaseThread):
                 if recv_dict.has_key('ctime'):
                     replay = 0
                     if (not recv_dict.has_key('flag')) or (recv_dict.has_key('flag') and recv_dict['flag'] != 'LP'):
-                        self.master.worker_registry.setContacttime(recv_dict['uuid'], recv_dict['ctime'])
+                        #self.master.worker_registry.setContacttime(recv_dict['uuid'], recv_dict['ctime'])
+                        if self.master.worker_registry.checkLostWorker(recv_dict['wid']):
+                            self.master.worker_registry.setAlive()
+                        self.master.worker_registry.setContacttime(recv_dict['uuid'],time.time())
                     if recode_ele:
                         replay=time.time()
                         recode_ele.delay=replay-float(recv_dict['ctime'])
@@ -209,6 +223,7 @@ class HandlerThread(BaseThread):
                             master_log.info(
                                 '[Master] Assign task %s to worker %d' % (tid_list, recv_dict['wid']))
                             self.master.worker_registry.setStatus(recv_dict['wid'], WorkerStatus.SCHEDULED)
+                            self.master.worker_registry.setTask(recv_dict['wid'], tid_list[0])
                             self.master.command_q.put({MPI_Wrapper.Tags.TASK_ADD: task_list, 'uuid': current_uuid})
 
                     else:
@@ -261,7 +276,7 @@ class HandlerThread(BaseThread):
                             self.master.task_scheduler.worker_finalized(recv_dict['wid'])
                             self.master.command_q.put({MPI_Wrapper.Tags.WORKER_STOP: '','uuid':current_uuid})
 
-                if recode_ele and recode_ele.check_integrity():
+                if recode_ele and recode_ele.check_integrity() and self.master.recoder:
                     self.master.recoder.set_message(recode_ele.wid,recode_ele)
         handler_log.info('Handler thread stop...')
 
@@ -314,8 +329,9 @@ class JobMaster(IJobMaster):
             master_log.error('[Master] Server initialize error, stop. errcode = %d' % ret)
             # TODO add error handler
             exit()
-
-        self.recoder = BaseRecoder(self.cfg.getCFGattr('Rundir'))
+        self.recoder = None
+        if self.cfg.getCFGattr('PMONITOR') == 'True':
+            self.recoder = BaseRecoder(self.cfg.getCFGattr('Rundir'))
 
         self.__newApp_flag = False
         self.__stop = False
@@ -328,7 +344,8 @@ class JobMaster(IJobMaster):
 
     def stop(self):
         # Recoder finalize
-        self.recoder.finalize()
+        if self.recoder:
+            self.recoder.finalize()
         master_log.info('[Master] Recoder has finalized')
         # TaskScheduler is not a thread
         if self.control_thread and self.control_thread.isAlive():

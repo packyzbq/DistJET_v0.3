@@ -79,5 +79,5 @@ if master.getRunFlag():
     master.startProcessing()
 else:
     print('@master: Load Application error, exit')
-if os.path.exists(os.environ['DistJETPATH']+'/config.ini'):
-    os.remove(os.environ['DistJETPATH']+'/config.ini')
+if os.path.exists(cfg.getCFGattr('Rundir')+'/tmp/config.ini'):
+    os.remove(cfg.getCFGattr('Rundir')+'/tmp/config.ini')

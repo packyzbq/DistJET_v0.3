@@ -23,7 +23,7 @@ class BaseRecoder(object):
     def __init__(self,basepath):
         if basepath and not os.path.exists(basepath):
             os.mkdir(basepath)
-        self.basepath = basepath+'/tmp'
+        self.basepath = basepath+'/monitor'
         if not os.path.exists(self.basepath):
             os.mkdir(self.basepath)
         self.recode_file = {} # worker_id: file

@@ -15,10 +15,11 @@ class WorkerStatus:
     RUNNING,
     ERROR,
     LOST,
+    RECONNECT,
     FINALIZED,
     FINALIZING,
     FINALIZE_FAIL,
-    IDLE) = range(0,12)
+    IDLE) = range(0,13)
     des = {
         NEW: "NEW",
         INITIALIZING: "INITIALIZING",
@@ -27,6 +28,7 @@ class WorkerStatus:
         RUNNING:"RUNNING",
         ERROR:"ERROR",
         LOST:"LOST",
+        RECONNECT:"RECONNECT",
         FINALIZED:"FINALIZED",
         FINALIZING:"FINALIZING",
         FINALIZE_FAIL:"FINALIZE_FAIL",
@@ -96,6 +98,11 @@ class WorkerEntry:
         :return: tid list
         """
         return self.assigned
+
+    def toDict(self):
+        localtime = time.localtime(self.last_contact_time)
+        t = time.strftime("%H:%M:%S",localtime)
+        return {'wid':self.wid, 'status':self.status, 'running_task':self.running_task,'last_connect':t}
 
 
 
@@ -345,6 +352,16 @@ class WorkerRegistry:
             #for uuid in self.__all_workers_uuid.keys():
             #    print uuid+'\n'
 
+    def setTask(self,wid, tid):
+        entry = self.get_entry(wid)
+        if entry:
+            entry.running_task = tid
+
+    def task_complete(self,wid):
+        entry = self.get_entry(wid)
+        if entry:
+            entry.running_task = None
+
 
 
     def setStatus(self,wid,status):
@@ -366,12 +383,31 @@ class WorkerRegistry:
             wentry.lock.release()
             self.alive_workers.add(wentry.w_uuid)
 
+    def setAlive(self,uuid):
+        """
+        when a worker reconnect to master, call this
+        :param wid:
+        :return:
+        """
+        if uuid in self.__all_workers_uuid.keys():
+            self.alive_workers.add(uuid)
+            self.setStatus(self.__all_workers_uuid[uuid],WorkerStatus.RECONNECT)
+        else:
+            wRegistery_log.error("[Registry] uuid %s is not in registery"%uuid)
 
-    def checkLostWorker(self):
+
+    def checkLostWorker(self, wid=None):
         """
         check if there are lost workers, and do some handle
         :return:
         """
+        if wid:
+            entry = self.get_entry(wid)
+            if entry and ((entry.getStatus() == WorkerStatus.LOST) or (entry.isLost())):
+                return True
+            else:
+                return False
+
         lostworker = []
         for w in self.__all_workers.values():
             if w.w_uuid in self.alive_workers and w.isLost():
@@ -379,6 +415,7 @@ class WorkerRegistry:
                 w.alive = False
                 self.alive_workers.remove(w.w_uuid)
         return lostworker
+
 
     def checkIDLETimeout(self):
         list = []
