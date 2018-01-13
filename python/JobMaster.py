@@ -70,12 +70,15 @@ class WatchDogThread(BaseThread):
             master_log.info('[Master] Worker status = %s'%self.master.worker_registry.get_worker_status())
 
             # save worker status to file
-            with open(self.master.cfg.getCFGattr("Rundir")+'/tmp/worker','w+') as workerfile:
+            with open(os.environ['HOME']+'/.DistJET_tmp/worker','w+') as workerfile:
                 workerfile.truncate()
-                workerfile.write('wid\tstatus\trunning\tlasttime')
-                for wid ,entry in self.master.worker_registry.item():
+                workerfile.write('wid\tstatus\trunning\tlasttime\n')
+                for wid in self.master.worker_registry:
+                    entry = self.master.worker_registry.get_entry(wid)
+                    if entry is None:
+                        continue
                     w_d = entry.toDict()
-                    workerfile.write(w_d['wid']+'\t'+w_d['status']+'\t'+w_d['running_task']+'\t'+w_d['last_connect'])
+                    workerfile.write(str(w_d['wid'])+'\t'+str(WorkerStatus.desc(w_d['status']))+'\t'+str(w_d['running_task'])+'\t'+str(w_d['last_connect'])+'\n')
                 workerfile.flush()
 
 
@@ -164,9 +167,9 @@ class HandlerThread(BaseThread):
                     recode_ele.extra=tmpdict['extra']
                 if recv_dict.has_key('ctime'):
                     replay = 0
-                    if (not recv_dict.has_key('flag')) or (recv_dict.has_key('flag') and recv_dict['flag'] != 'LP'):
+                    if (not recv_dict.has_key('flag')): #or (recv_dict.has_key('flag') and recv_dict['flag'] != 'LP'):
                         #self.master.worker_registry.setContacttime(recv_dict['uuid'], recv_dict['ctime'])
-                        if self.master.worker_registry.checkLostWorker(recv_dict['wid']):
+                        if self.master.worker_registry.checkLostWorker(wid=recv_dict['wid']):
                             self.master.worker_registry.setAlive()
                         self.master.worker_registry.setContacttime(recv_dict['uuid'],time.time())
                     if recode_ele:
@@ -330,7 +333,7 @@ class JobMaster(IJobMaster):
             # TODO add error handler
             exit()
         self.recoder = None
-        if self.cfg.getCFGattr('PMONITOR') == 'True':
+        if self.cfg.getCFGattr('pmonitor') == 'True':
             self.recoder = BaseRecoder(self.cfg.getCFGattr('Rundir'))
 
         self.__newApp_flag = False

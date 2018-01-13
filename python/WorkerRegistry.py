@@ -376,7 +376,7 @@ class WorkerRegistry:
             wentry.status = status
             wentry.lock.release()
         else:
-            wRegistery_log.warning('[Registry] Worker %s is not alive')
+            wRegistery_log.warning('[Registry] Worker %s is not alive'%wid)
             wentry.lock.acquire()
             wentry.alive = True
             wentry.status = status
