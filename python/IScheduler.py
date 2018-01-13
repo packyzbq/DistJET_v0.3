@@ -71,12 +71,16 @@ class IScheduler:
         Return ture if current app has more work( when the number of works of app is larger than sum of workers' capacities)
         :return: bool
         """
+        return not self.task_todo_queue.empty()
         #if not self.task_todo_queue.empty():
             #scheduler_log.debug('task_todo_quue has task num = %d'%self.task_todo_queue.qsize())
-        if self.task_todo_queue.empty():
-            return not self.completed_queue.qsize() == len(self.task_list)
-        else:
-            return True
+        #if self.task_todo_queue.empty():
+            #scheduler_log.info('[Scheduler] Complete tasks number: %s; All task number: %s'%(self.completed_queue.qsize(),len(self.task_list)))
+            #return False
+        #if self.task_todo_queue.empty():
+            #return not self.completed_queue.qsize() == len(self.task_list)
+        #else:
+            #return True
 
     def has_scheduled_work(self,wid=None):
         if wid:
@@ -216,7 +220,7 @@ class SimpleTaskScheduler(IScheduler):
 
         else:
             # assign 1 task once
-            print "assign 1 task, todo_queue_size = %d"%self.task_todo_queue.qsize()
+            print "assign 1 task to worker %d, todo_queue_size = %d"%(wid,self.task_todo_queue.qsize())
             task = None
             pre_task = None
             while not self.task_todo_queue.empty():
@@ -224,7 +228,7 @@ class SimpleTaskScheduler(IScheduler):
                 task = self.get_task(tid)
                 if isinstance(task,Task.ChainTask) and task.father_len() != 0:
                     if pre_task and pre_task.tid == task.tid:
-                        scheduler_log.debug("There is only one task with father %s"%task.get_father_list())
+                        scheduler_log.warning("There is only one task with father %s"%task.get_father_list())
                         return task_list
                     else:
                         pre_task = task
@@ -242,9 +246,9 @@ class SimpleTaskScheduler(IScheduler):
             #    task_list.append(tid)
             #    room-=1
             #    self.scheduled_task_list[wid].append(tid)
-        print "task_list = %s"%task_list
+        #print "task_list = %s"%task_list
         if task_list:
-            scheduler_log.debug('[Scheduler] Assign %s to worker %s' % (self.scheduled_task_list[wid][-room:], wid))
+            scheduler_log.info('[Scheduler] Assign %s to worker %s' % (self.scheduled_task_list[wid][-room:], wid))
         return task_list
 
 
@@ -258,7 +262,7 @@ class SimpleTaskScheduler(IScheduler):
         scheduler_log.debug('[Scheduler] Task %s complete, remove form scheduled_task_list, now = %s' % (tid, self.scheduled_task_list))
         self.completed_queue.put(task)
         # update chain task
-        print type(task)
+        #print type(task)
         self.updateTask(task)
         if isinstance(task,Task.ChainTask):
             for child_id in task.get_child_list():

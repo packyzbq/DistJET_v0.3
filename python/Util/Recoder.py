@@ -7,6 +7,8 @@ class BaseElement(object):
         self.cpuid = None
         self.cpurate = None
         self.mem = None
+        self.delay=None
+        self.extra=None
 
     def check_integrity(self):
         if self.cpurate and self.cpuid and self.mem:
@@ -19,7 +21,9 @@ class BaseElement(object):
 
 class BaseRecoder(object):
     def __init__(self,basepath):
-        self.basepath = basepath+'/tmp'
+        if basepath and not os.path.exists(basepath):
+            os.mkdir(basepath)
+        self.basepath = basepath+'/monitor'
         if not os.path.exists(self.basepath):
             os.mkdir(self.basepath)
         self.recode_file = {} # worker_id: file

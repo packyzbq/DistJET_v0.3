@@ -10,7 +10,7 @@ if 'Boost' not in os.environ['PATH']:
 else:
     print("SETUP: Find Boost")
 
-# argv[1] = appfile, argv[2] = config, argv[3]=log_level, argv[4] = app_config_file
+# argv[1] = appfile, argv[2] = config, argv[3]=log_level, argv[4] = app_config_file, argv[5] = log_screen
 if len(sys.argv) < 3:
     print('@master need at least 2 parameter(given %d), args=%s, exit'%(len(sys.argv)-1, sys.argv))
     exit()
@@ -23,6 +23,10 @@ appfile = sys.argv[1]
 config_path = sys.argv[2]
 log_level = sys.argv[3]
 app_config_path = sys.argv[4]
+if len(sys.argv) > 5:
+    log_screen = sys.argv[5]
+else:
+    log_screen = False
 
 if os.path.exists(appfile):
     module_path = os.path.dirname(appfile)
@@ -34,9 +38,9 @@ if os.path.exists(appfile):
 else:
     print('@master: cannot find app module %s, exit'%sys.argv[1])
 
-rundir = os.getcwd()
+#rundir = os.getcwd()
 import python.Util.Config as Conf
-Conf.Config.setCfg('Rundir',rundir)
+#Conf.Config.setCfg('Rundir',rundir)
 
 module=None
 try:
@@ -47,6 +51,7 @@ except ImportError:
 
 import python.Util.logger as logger
 logger.setlevel(log_level)
+logger.setConsole(log_screen)
 
 from python.JobMaster import JobMaster
 applications=[]
@@ -61,7 +66,7 @@ else:
 
 if config_path == 'null' or not os.path.exists(os.path.abspath(config_path)):
     print('@master: Cannot find configuration file [%s]'%os.path.abspath(config_path))
-    config_path = os.getenv('DistJETPATH')+'/config/default.cfg'
+    config_path = os.getenv('DistJETPATH')+'/config/config.ini'
 Conf.set_inipath(config_path)
 cfg = Conf.Config()
 
@@ -72,6 +77,9 @@ if master.getRunFlag():
     #    rf.flush()
     print('@master: start running')
     master.startProcessing()
-	
-    #if 'running.log' in os.listdir('.'):
-    #    os.remove('./running.log')
+else:
+    print('@master: Load Application error, exit')
+
+import shutil
+if os.path.exists(os.environ['HOME']+'/.DistJET_tmp'):
+    shutil.rmtree(os.environ['HOME']+'/.DistJET_tmp')

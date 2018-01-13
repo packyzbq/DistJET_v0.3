@@ -31,6 +31,8 @@ class Tags:
 
     NEW_APP         = 140   # master tell worker has a new app, and restart
 
+    EXTRA           = 150
+
 
 class Server:
     """
@@ -48,6 +50,9 @@ class Server:
         else:
             MPI_log.info('[MPI server]: start server with service_name=%s', self.svcname)
             return ret
+    
+    def set_portfile(self, path):
+        self.server.set_portfile(path)
 
     def send_int(self, int_data, msgsize, dest, tags):
         self.server.send_int(int_data, msgsize, dest, tags)
@@ -79,6 +84,9 @@ class Client:
 
     def initial(self):
         return self.client.initialize()
+    
+    def set_portfile(self, path):
+        self.client.set_portfile(path)
 
     def run(self):
         self.client.run()
@@ -90,8 +98,8 @@ class Client:
     def send_string(self, strs ,msgsize, dest, tags):
         return self.client.send_string(strs, msgsize, dest, tags)
 
-    def stop(self):
-        return self.client.stop()
+    def stop(self,flag):
+        return self.client.stop(flag)
 
 class MSG:
     def __init__(self, tag, pack):

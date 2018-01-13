@@ -1,9 +1,10 @@
 import sys,os
+import time
 assert os.environ['DistJETPATH']
 assert os.environ['JUNOTOP']
 
 sys.path.append(os.environ['DistJETPATH'])
-#argv[1]=capacity, argv[2]=conf_file
+#argv[1]=capacity, argv[2]=conf_file, argv[3]=log_level, argv[4]=log_console
 if len(sys.argv) <= 2:
     print('@worker, need at least 2 parameter(given %d), exit'%(len(sys.argv)-1))
     exit()
@@ -14,14 +15,28 @@ if 'Boost' not in os.environ['PATH']:
 else:
     print('SETUP: find Boost')
 
+import python.Util.logger as logger
+if len(sys.argv) >= 4 and sys.argv[3] in ['info','debug']:
+    logger.setlevel(sys.argv[3])
+else:
+    logger.setlevel('info')
+
+if len(sys.argv)>=5 and sys.argv[4] in [True,False]:
+    logger.setConsole(sys.argv[4])
+else:
+    logger.setConsole(False)
+
 import python.Util.Config as CONF
-CONF.Config.setCfg('Rundir',os.getcwd())
+#CONF.Config.setCfg('Rundir',os.getcwd())
 cfg_path = sys.argv[2]
 if sys.argv[2] != 'null' and not os.path.exists(sys.argv[2]):
     CONF.set_inipath(os.path.abspath(sys.argv[2]))
 
 CONF.set_inipath(cfg_path)
 cfg = CONF.Config()
+
+while "port.txt" not in os.listdir(cfg.getCFGattr('Rundir')):
+    time.sleep(1)
 '''
 import time
 times=0

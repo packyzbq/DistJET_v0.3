@@ -27,6 +27,7 @@ from Task import TaskStatus
 from python.Process.Process import status
 from python.Util.Config import Config, set_inipath
 from python.Util.Recoder import BaseElement,BaseRecoder
+from python.WorkerRegistry import WorkerStatus
 
 
 
@@ -49,15 +50,36 @@ class WatchDogThread(BaseThread):
                 control_log.warning('Lost worker = %s' % lostworker)
                 for wid in lostworker:
                     #TODO: maybe use other method to deal with the lost worker
-                    self.master.remove_worker(wid)
+                    #self.master.remove_worker(wid)
+                    self.master.worker_registry.setStatus(wid,WorkerStatus.LOST)
 
             # check idle timeout worker
             idleworker = self.master.worker_registry.checkIDLETimeout()
             if idleworker:
                 control_log.warning('Find Idle timeout worker %s'%idleworker)
                 # TODO: do something to reduce the resource
+
+            #check error status worker
+            errworker = self.master.worker_registry.checkError()
+            if errworker:
+                control_log.warning('Find error status worker %s'%errworker) 
+            #for wid in errworker:
+                #self.master.remove_worker(wid)
+
             # print worker status
-            master_log.debug('[Master] Worker status = %s'%self.master.worker_registry.get_worker_status())
+            master_log.info('[Master] Worker status = %s'%self.master.worker_registry.get_worker_status())
+
+            # save worker status to file
+            with open(os.environ['HOME']+'/.DistJET_tmp/worker','w+') as workerfile:
+                workerfile.truncate()
+                workerfile.write('wid\tstatus\trunning\tlasttime\n')
+                for wid in self.master.worker_registry:
+                    entry = self.master.worker_registry.get_entry(wid)
+                    if entry is None:
+                        continue
+                    w_d = entry.toDict()
+                    workerfile.write(str(w_d['wid'])+'\t'+str(WorkerStatus.desc(w_d['status']))+'\t'+str(w_d['running_task'])+'\t'+str(w_d['last_connect'])+'\n')
+                workerfile.flush()
 
 
             if not lostworker and not idleworker:
@@ -133,20 +155,38 @@ class HandlerThread(BaseThread):
                             self.master.task_scheduler.task_failed(recv_dict['wid'], task)
                         else:
                             master_log.warning('[Master] Can not recognize the task status %s of Task' % task.status)
-                if recv_dict.has_key('health') and recode_ele:
+                        self.master.worker_registry.task_complete(recv_dict['wid'])
+                if recv_dict.has_key('health') and recv_dict['health'] and recode_ele:
                     # plan 1
                     #health_log.info('Worker %s : %s'%(recv_dict['wid'], recv_dict['health']))
                     # plan 2
                     tmpdict = recv_dict['health']
-                    recode_ele.cpuid = tmpdict['CpuUsage'].keys()[0]
-                    recode_ele.cpurate = tmpdict['CpuUsage'].values()[0]
+                    recode_ele.cpuid = tmpdict['CpuId']
+                    recode_ele.cpurate = tmpdict['CpuUsage']
                     recode_ele.mem = tmpdict['MemoUsage']['MemUsage']
+                    recode_ele.extra=tmpdict['extra']
                 if recv_dict.has_key('ctime'):
-                    if (not recv_dict.has_key('flag')) or (recv_dict.has_key('flag') and recv_dict['flag'] != 'LP'):
-                        self.master.worker_registry.setContacttime(recv_dict['uuid'], recv_dict['ctime'])
+                    replay = 0
+                    if (not recv_dict.has_key('flag')): #or (recv_dict.has_key('flag') and recv_dict['flag'] != 'LP'):
+                        #self.master.worker_registry.setContacttime(recv_dict['uuid'], recv_dict['ctime'])
+                        if self.master.worker_registry.checkLostWorker(wid=recv_dict['wid']):
+                            self.master.worker_registry.setAlive(recv_dict['uuid'])
+                        self.master.worker_registry.setContacttime(recv_dict['uuid'],time.time())
+                    if recode_ele:
+                        replay=time.time()
+                        recode_ele.delay=replay-float(recv_dict['ctime'])
+                        if recode_ele.delay < 0:
+                            master_log.error('[Master] error response time, wid=%d ,start=%f, response=%f'%(recv_dict['wid'],float(recv_dict['ctime']),replay))
+                    if self.master.cfg.getCFGattr('delay_rec'):
+                        #for testing, reply a ack msg
+                        send_dict = {'ctime':recv_dict['ctime'],'response':replay}
+                        send_str = Pack.pack2json({'uuid':current_uuid,'dict':Pack.pack_obj({MPI_Wrapper.Tags.EXTRA:send_dict})})
+                        #if self.master.worker_registry.isAlive(recv_dict['wid']):
+                        if not recv_dict.has_key('flag'):
+                    	    self.master.server.send_string(send_str, len(send_str), current_uuid, int(MPI_Wrapper.Tags.EXTRA))
                 if recv_dict.has_key('wstatus'):
                     self.master.worker_registry.setStatus(recv_dict['wid'], recv_dict['wstatus'])
-                    master_log.debug('[Master] Set worker %s status = %s' % (recv_dict['wid'], recv_dict['wstatus']))
+                    master_log.debug('[Master] Set worker %s status = %s' % (recv_dict['wid'], WorkerStatus.desc(recv_dict['wstatus'])))
                 if recv_dict.has_key('rTask') and recode_ele:
                     recode_ele.running_task = recv_dict['rTask']
 
@@ -154,22 +194,25 @@ class HandlerThread(BaseThread):
                     # result of slave setup
                     # wid:int, uuid:str, APP_INI:{recode:int, errmsg:str}
                     v = recv_dict[MPI_Wrapper.Tags.APP_INI]
-                    master_log.debug('[Master] From worker %d receive a App_INI msg = %s' % (recv_dict['wid'], v))
+                    master_log.info('[Master] From worker %d receive a App_INI msg = %s' % (recv_dict['wid'], v))
                     if v['recode'] == status.SUCCESS:
                         master_log.info('worker %d initialize successfully' % recv_dict['wid'])
                     else:
                         # initial worker failed
                         master_log.error('worker %d initialize error, errmsg=%s' % (recv_dict['wid'], v['errmsg']))
-                        if self.master.worker_registry.worker_refin(recv_dict['wid']):
+                        '''
+                        if self.master.worker_registry.worker_reinit(recv_dict['wid']):
                             init_comm = self.master.task_scheduler.setup_worker()
                             send_dict = {'wid': recv_dict['wid'],
                                          'appid': self.master.task_scheduler.appid,
                                          'init': init_comm,
                                          'uuid': recv_dict['uuid']}
                             self.master.command_q.put({MPI_Wrapper.Tags.MPI_REGISTY_ACK: send_dict,'uuid':current_uuid})
-                        else:
-                            # terminate worker
-                            self.master.command_q.put({MPI_Wrapper.Tags.WORKER_STOP: '','uuid':current_uuid})
+                        '''
+                        #else:
+                        # terminate worker
+                        master_log.info('[Master] Send Worker stop to worker %d'%recv_dict['wid'])
+                        self.master.command_q.put({MPI_Wrapper.Tags.WORKER_STOP: '','uuid':current_uuid})
                 if recv_dict.has_key(MPI_Wrapper.Tags.TASK_ADD):
                     v = recv_dict[MPI_Wrapper.Tags.TASK_ADD]
                     master_log.debug('[Master] From worker %s receive a TASK_ADD msg = %s' % (recv_dict['wid'], v))
@@ -182,10 +225,12 @@ class HandlerThread(BaseThread):
                             tid_list = [task.tid for task in task_list]
                             master_log.info(
                                 '[Master] Assign task %s to worker %d' % (tid_list, recv_dict['wid']))
+                            self.master.worker_registry.setStatus(recv_dict['wid'], WorkerStatus.SCHEDULED)
+                            self.master.worker_registry.setTask(recv_dict['wid'], tid_list[0])
                             self.master.command_q.put({MPI_Wrapper.Tags.TASK_ADD: task_list, 'uuid': current_uuid})
 
                     else:
-                        master_log.debug('[Master] No more task to do')
+                        master_log.info('[Master] No more task to do')
                         # according to Policy ,check other worker status and idle worker
                         if Config.getPolicyattr('WORKER_SYNC_QUIT'):
                             if self.master.worker_registry.checkIdle(exp=[recv_dict['wid']]):  # exp=[recv_dict['wid']]
@@ -193,11 +238,11 @@ class HandlerThread(BaseThread):
                                     master_log.info('[Master] Have send all finalize msg, skip this')
                                 else:
                                     # finalize all worker
-                                    master_log.debug('[Master] All worker have done, finalize all worker')
+                                    master_log.info('[Master] All worker have done, finalize all worker')
                                     fin_task = self.master.task_scheduler.uninstall_worker()
                                     self.master.command_q.put({MPI_Wrapper.Tags.APP_FIN: fin_task, 'extra': [],'uuid':current_uuid})
                             else:
-                                master_log.debug('[Master] There are still running worker, halt')
+                                master_log.info('[Master] There are still running worker, halt')
                                 self.master.command_q.put({MPI_Wrapper.Tags.WORKER_HALT: '','uuid':current_uuid})
                         else:
                             master_log.info('[Master] Finalize worker %s' % recv_dict['wid'])
@@ -207,21 +252,24 @@ class HandlerThread(BaseThread):
 
                 if recv_dict.has_key(MPI_Wrapper.Tags.APP_FIN):
                     v = recv_dict[MPI_Wrapper.Tags.APP_FIN]
-                    master_log.debug('[Master] From worker %s receive a APP_FIN msg = %s' % (recv_dict['wid'], v))
+                    master_log.info('[Master] From worker %s receive a APP_FIN msg = %s' % (recv_dict['wid'], v))
                     if v['recode'] == status.SUCCESS:
                         self.master.task_scheduler.worker_finalized(recv_dict['wid'])
-                        master_log.debug('[Master] Have finalized worker %s' % recv_dict['wid'])
+                        master_log.info('[Master] Have finalized worker %s' % recv_dict['wid'])
                         #check all worker finalized
-                        if self.master.worker_registry.checkFinalize():
-                            # after all alive worker finalized, load new app
-                            # if more app need to be done, wait for old app finish and load new app
-                            if self.master.appmgr.has_next_app():
-                                #self.master.command_q.put({MPI_Wrapper.Tags.WORKER_HALT:'','uuid':current_uuid})
-                                self.master.acquire_newApp()
-                            else:
-                                # no more app need to do, logout all worker
-                                for uuid in self.master.worker_registry.alive_workers:
-                                    self.master.command_q.put({MPI_Wrapper.Tags.LOGOUT: '','uuid':uuid})
+                        if self.master.worker_registry.checkError(recv_dict['wid']):
+                            self.master.command_q.put({MPI_Wrapper.Tags.LOGOUT:'','uuid':recv_dict['uuid']})
+                        else:
+                            if self.master.worker_registry.checkFinalize():
+                                # after all alive worker finalized, load new app
+                                # if more app need to be done, wait for old app finish and load new app
+                                if self.master.appmgr.has_next_app():
+                                    #self.master.command_q.put({MPI_Wrapper.Tags.WORKER_HALT:'','uuid':current_uuid})
+                                    self.master.acquire_newApp()
+                                else:
+                                    # no more app need to do, logout all worker
+                                    for uuid in self.master.worker_registry.alive_workers:
+                                        self.master.command_q.put({MPI_Wrapper.Tags.LOGOUT: '','uuid':uuid})
                     else:
                         master_log.error('worker %d finalize error, errmsg=%s' % (recv_dict['wid'], v['errmsg']))
                         if self.master.worker_registry.worker_refin(recv_dict['wid']):
@@ -231,7 +279,7 @@ class HandlerThread(BaseThread):
                             self.master.task_scheduler.worker_finalized(recv_dict['wid'])
                             self.master.command_q.put({MPI_Wrapper.Tags.WORKER_STOP: '','uuid':current_uuid})
 
-                if recode_ele and recode_ele.check_integrity():
+                if recode_ele and recode_ele.check_integrity() and self.master.recoder:
                     self.master.recoder.set_message(recode_ele.wid,recode_ele)
         handler_log.info('Handler thread stop...')
 
@@ -278,13 +326,15 @@ class JobMaster(IJobMaster):
         #master_log.debug('[Master] Appmgr has instanced')
 
         self.server = MPI_Wrapper.Server(self.recv_buffer, self.svc_name)
+        self.server.set_portfile(self.cfg.getCFGattr('Rundir')+"/port.txt")
         ret = self.server.initialize()
         if ret != 0:
             master_log.error('[Master] Server initialize error, stop. errcode = %d' % ret)
             # TODO add error handler
             exit()
-
-        self.recoder = BaseRecoder(self.cfg.getCFGattr('Rundir'))
+        self.recoder = None
+        if self.cfg.getCFGattr('pmonitor') == 'True':
+            self.recoder = BaseRecoder(self.cfg.getCFGattr('Rundir'))
 
         self.__newApp_flag = False
         self.__stop = False
@@ -297,7 +347,8 @@ class JobMaster(IJobMaster):
 
     def stop(self):
         # Recoder finalize
-        self.recoder.finalize()
+        if self.recoder:
+            self.recoder.finalize()
         master_log.info('[Master] Recoder has finalized')
         # TaskScheduler is not a thread
         if self.control_thread and self.control_thread.isAlive():
@@ -322,7 +373,7 @@ class JobMaster(IJobMaster):
         self.__stop = True
 
     def register_worker(self, w_uuid, capacity=1):
-        master_log.debug('[Master] register worker %s' % w_uuid)
+        master_log.info('[Master] register worker %s' % w_uuid)
         worker = self.worker_registry.add_worker(w_uuid, capacity)
         if not worker:
             master_log.warning('[Master] The uuid=%s of worker has already registered', w_uuid)
@@ -378,7 +429,12 @@ class JobMaster(IJobMaster):
                 while not self.command_q.empty():
                     send_dict = self.command_q.get()
                     if len(send_dict) != 0:
-                        tag = send_dict.keys()[0]
+                        tag = None
+                        for k in send_dict.keys():
+                            if k not in ['uuid','extra']:
+                                tag = k
+                        #tag = send_dict.keys()[0]
+                        #print("%s, tag=%s"%(send_dict.keys(),tag))
                         if not send_dict.has_key('uuid'):
                             master_log.error('Send message error, uuid not found')
                             continue
@@ -403,44 +459,47 @@ class JobMaster(IJobMaster):
                                 self.server.send_string(send_final, len(send_final), uuid, tag)
                         else:
                             send_str = Pack.pack_obj(send_dict)
-                            master_log.debug('[Master] Send to worker %s msg = %s' % (current_uuid, send_dict))
+                            master_log.debug('[Master] Send to worker %s msg = %s, tag=%s' % (current_uuid, send_dict,tag))
                             send_final = Pack.pack2json({'uuid':current_uuid,'dict':send_str})
-                            self.server.send_string(send_final, len(send_final), current_uuid, tag)
+                            self.server.send_string(send_final, len(send_final), current_uuid, int(tag))
                 # master stop condition
 
                 # time.sleep(1)
                 if not self.task_scheduler.has_more_work() and not self.task_scheduler.has_scheduled_work():
                     #TODO: app finalize/merge need to be a single module
-                    self.appmgr.finalize_app()
-                    #check all worker finalized
-                    if self.worker_registry.checkFinalize() and self.__newApp_flag:
-                        # has more app need to be done
-                        if self.appmgr.has_next_app():
-                            self.load_app(napp=True)
-                            init_comm = self.task_scheduler.setup_worker()
-                            worker_path = self.appmgr.current_app.specifiedWorker
-                            send_dict = {'appid': self.task_scheduler.appid,
-                                         'init': init_comm,
-                                         'flag':'NEWAPP',
-                                         'wmp':worker_path}
-                            for uuid in self.worker_registry.alive_workers:
-                                send_dict['uuid'] = uuid
-                                send_dict['wid'] = self.worker_registry.get_by_uuid(uuid).wid
-                                send_str = Pack.pack_obj({MPI_Wrapper.Tags.MPI_REGISTY_ACK:send_dict})
-                                send_final = Pack.pack2json({'uuid':uuid,'dict':send_str})
-                                master_log.debug('[Master] Send new App message') 
-                                self.server.send_string(send_final,len(send_final),uuid,MPI_Wrapper.Tags.MPI_REGISTY_ACK)
-                            self.__newApp_flag = False
+                    #check all worker stop working
+                    if not self.worker_registry.checkRunning():
+                        #master_log.info('[Scheduler] Complete tasks number: %s; All task number: %s' % (self.task_scheduler.completed_queue.qsize(), len(self.task_scheduler.task_list)))
+                        self.appmgr.finalize_app()
+                        #check all worker finalized
+                        if self.worker_registry.checkFinalize() and self.__newApp_flag:
+                            # has more app need to be done
+                            if self.appmgr.has_next_app():
+                                self.load_app(napp=True)
+                                init_comm = self.task_scheduler.setup_worker()
+                                worker_path = self.appmgr.current_app.specifiedWorker
+                                send_dict = {'appid': self.task_scheduler.appid,
+                                             'init': init_comm,
+                                             'flag':'NEWAPP',
+                                             'wmp':worker_path}
+                                for uuid in self.worker_registry.alive_workers:
+                                    send_dict['uuid'] = uuid
+                                    send_dict['wid'] = self.worker_registry.get_by_uuid(uuid).wid
+                                    send_str = Pack.pack_obj({MPI_Wrapper.Tags.MPI_REGISTY_ACK:send_dict})
+                                    send_final = Pack.pack2json({'uuid':uuid,'dict':send_str})
+                                    master_log.info('[Master] Send new App message')
+                                    self.server.send_string(send_final,len(send_final),uuid,MPI_Wrapper.Tags.MPI_REGISTY_ACK)
+                                self.__newApp_flag = False
 
-                    elif not self.appmgr.has_next_app() and self.worker_registry.size() == 0:
-                        master_log.info("[Master] Application done, logout workers")
-                        if self.worker_registry.hasAlive():
-                            #TODO logout/disconnect worker -- force stop?
-                            stop_line = Pack.pack_obj({MPI_Wrapper.Tags.WORKER_STOP:''})
-                            for uuid in self.worker_registry.alive_workers:
-                                self.server.send_string(stop_line,len(stop_line),uuid,MPI_Wrapper.Tags.WORKER_STOP)
-                            continue
-                        self.stop()
+                        elif not self.appmgr.has_next_app() and self.worker_registry.size() == 0:
+                            master_log.info("[Master] Application done, logout workers")
+                            if self.worker_registry.hasAlive():
+                                #TODO logout/disconnect worker -- force stop?
+                                stop_line = Pack.pack_obj({MPI_Wrapper.Tags.WORKER_STOP:''})
+                                for uuid in self.worker_registry.alive_workers:
+                                    self.server.send_string(stop_line,len(stop_line),uuid,MPI_Wrapper.Tags.WORKER_STOP)
+                                continue
+                            self.stop()
 
 
         except KeyboardInterrupt, Exception:

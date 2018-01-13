@@ -6,20 +6,22 @@ sys.path.append(os.environ['DistJETPATH'])
 import threading
 import select
 import subprocess
+import psutil
 import Queue
 import traceback
 from Parser import Parser
 from python.Task import Task
-import python.Util.logger as logger
+import python.Util.Config as Config
 
 
 class status:
-    (SUCCESS, FAIL, TIMEOUT, OVERFLOW, ANR) = range(0,5)
+    (SUCCESS, FAIL, TIMEOUT, OVERFLOW, ANR, UNKOWN) = range(0,6)
     DES = {
         FAIL: 'Task fail, return code is not zero',
         TIMEOUT: 'Run time exceeded',
         OVERFLOW: 'Memory overflow',
-        ANR: 'No responding'
+        ANR: 'No responding',
+        UNKOWN:'Unkown error'
     }
     @staticmethod
     def describe(stat):
@@ -56,7 +58,7 @@ class Process_withENV(threading.Thread):
 
         self.shell = shell
         self.ignoreFail = ignoreFail
-        print "@Process: ignoreFail = %s"%str(self.ignoreFail)
+        #print "@Process: ignoreFail = %s"%str(self.ignoreFail)
         self.exec_queue_lock = threading.RLock()
         self.executable = Queue.Queue()
 
@@ -71,7 +73,7 @@ class Process_withENV(threading.Thread):
 
         self.stdout = subprocess.PIPE
         self.stdin = subprocess.PIPE
-        self.process = subprocess.Popen(['bash'], stdin=self.stdin, stdout=self.stdout, stderr=subprocess.STDOUT,preexec_fn=os.setsid)
+        self.process = psutil.Popen(['bash'], stdin=self.stdin, stdout=self.stdout, stderr=subprocess.STDOUT,preexec_fn=os.setsid)
         self.pid = self.process.pid
 
         #self.logFile.write('@Process: create process for tasks, pid= %d\n' %self.pid)\
@@ -90,6 +92,15 @@ class Process_withENV(threading.Thread):
 
         self.stop_flag = False
 
+        self.TaskLogDir = Config.Config.getCFGattr('Rundir')+'/task_log'
+        #print 'task dir= %s'%self.TaskLogDir
+        if not os.path.exists(self.TaskLogDir):
+            try:
+                os.mkdir(self.TaskLogDir)
+            except:
+                pass
+
+
     def set_task(self,task, genLog=True):
         command_list=[]
         if genLog:
@@ -104,9 +115,11 @@ class Process_withENV(threading.Thread):
         else:
             command_list.extend(task.boot)
 
+        task_log=self.TaskLogDir+'/task_'+str(task.tid)+'.tmp'
+
         if genLog:
-            print "res_dir=%s, tid=%s"%(task.res_dir,str(task.tid))
-            commpack = CommandPack(task.tid,command_list,task_log=task.res_dir+'/task_'+str(task.tid)+'_log.log')
+            #print "res_dir=%s, tid=%s"%(task.res_dir,str(task.tid))
+            commpack = CommandPack(task.tid,command_list,task_log=task_log)
         else:
             commpack = CommandPack(task.tid,command_list,proc_log=self.log, finalize_flag=True)
         self.executable.put(commpack)
@@ -128,7 +141,7 @@ class Process_withENV(threading.Thread):
         '''
 
     def stop(self,force=False):
-        print "someone call stop\n"
+        #print "someone call stop\n"
         self.stop_flag = True
         if force:
             self._kill_task()
@@ -146,7 +159,7 @@ class Process_withENV(threading.Thread):
         if self.process is None:
             return -1
         if self.initial is None:
-            return 0
+            return status.SUCCESS
         self.log.write("<process>@init: initial comm = %s\n"%self.initial)
         self.log.flush()
         for comm in self.initial:
@@ -155,13 +168,13 @@ class Process_withENV(threading.Thread):
             self.process.stdin.write(comm)
         self.process.stdin.write('echo "recode=$?"\n')
         while True:
-            fs = select.select([self.process.stdout],[],[],10)
+            fs = select.select([self.process.stdout],[],[],60)
             if not fs[0]:
                 #self.logFile.write('@Process initial timeout')
                 #self.logFile.flush()
                 self.log.write('[ERROR]@Process initial timeout\n')
                 self.log.flush()
-                return -2
+                return status.TIMEOUT
             if self.process.stdout in fs[0]:
                 data = os.read(self.process.stdout.fileno(), 1024)
                 if "recode" in data:
@@ -174,7 +187,7 @@ class Process_withENV(threading.Thread):
                     self.log.write('[Setup_INFO] %s\n'%data)
                     self.log.flush()
             else:
-                return 1
+                return status.UNKOWN
 
     def finalize_and_cleanup(self, task):
         if task and type(task)!=types.StringType:
@@ -182,7 +195,7 @@ class Process_withENV(threading.Thread):
         else:
             task = Task(-1)
             task.boot.append('#exit#')
-        print "finalize task boot = %s"%task.boot
+        #print "finalize task boot = %s"%task.boot
         self.set_task(task,genLog=False)
 
     def run(self):
@@ -203,8 +216,7 @@ class Process_withENV(threading.Thread):
                         logfile = commpack.proc_log
                     if commpack.finalize_flag:
                         self.hook = self.finalize_callback
-                    #fin_flag = commpack.finzlize_flag
-                    print "script_list = %s"%script_list
+                    #print "script_list = %s"%script_list
                     sc_len = len(script_list)
                     index = 0
                     while len(script_list) != 0 and len(script_list) > index:
@@ -212,11 +224,11 @@ class Process_withENV(threading.Thread):
                         index+=1
                         if '#exit#' not in script and not script.endswith('\n'):
                             script+='\n'
-                        print "<process> get script=%s"%script
+                        #print "<process> get script=%s"%script
                         if '#exit#' in script:
                             print "<process> exiting..."
                             if self.hook and callable(self.hook):
-                                self.hook(status.SUCCESS,0,self.start,self.end)
+                                self.hook(status.SUCCESS,0,self.start,self.end, os.path.abspath(logfile.name))
                             logfile.write("[Proc] Ready to exit\n")
                             logfile.flush()
                             self.stop_flag=True
@@ -238,7 +250,7 @@ class Process_withENV(threading.Thread):
                                 logfile.flush()
                                 self.end = time.time()
                                 if self.hook and callable(self.hook):
-                                    self.hook(self.status,self.recode, self.start_time, self.end)
+                                    self.hook(self.status,self.recode, self.start_time, self.end, os.path.abspath(logfile.name))
                                 self._kill_task()
                                 #tmp_list=[]
                                 #while not self.executable.empty():
@@ -286,7 +298,7 @@ class Process_withENV(threading.Thread):
                                     time.asctime(time.localtime(self.start_time)), time.asctime(time.localtime(self.end))))
                                     logfile.flush()
                                     if self.hook and callable(self.hook):
-                                        self.hook(self.status, self.recode, self.start_time, self.end)
+                                        self.hook(self.status, self.recode, self.start_time, self.end, os.path.abspath(logfile.name))
                                 self._clean_process()
                                 break
                             elif not self.ignoreFail and (self.logParser and (not self._parseLog(data))):
@@ -294,7 +306,7 @@ class Process_withENV(threading.Thread):
                                 self.recode = -1
                                 self.end = time.time()
                                 if self.hook and callable(self.hook):
-                                    self.hook(self.status, self.recode, self.start_time, self.end)
+                                    self.hook(self.status, self.recode, self.start_time, self.end, os.path.abspath(logfile.name))
                                 #logfile.write(line)
                                 logfile.write("\n\n\n @execute error, stop running")
                                 logfile.flush()
@@ -303,45 +315,10 @@ class Process_withENV(threading.Thread):
                                 script_list = []
                                 self._clean_process()
                                 break
-                            '''
-                            for line in st:
-                                if "@recode" in st:
-                                    fin_flag = True
-                                    self.end = time.time()
-                                    self.recode = line[line.find("@recode=")+8:]
-                                    logfile.write("\n\n\nreturn code = %s"%self.recode)
-                                    logfile.write("\nstart time = %s \nend time = %s\n\n"%(time.asctime(time.localtime(self.start_time)), time.asctime(time.localtime(self.end))))
-                                    logfile.flush()
-                                    if int(self.recode) == 0:
-                                        self.status = status.SUCCESS
-                                    if self.hook and callable(self.hook):
-                                        self.hook(self.status, self.recode, self.start_time, self.end)
-                                    break
-
-                                elif not self.ignoreFail and (self.logParser and (not self._parseLog(line))):
-                                    fin_flag = True
-                                    self.status = status.FAIL
-                                    self.recode = -1
-                                    self.end = time.time()
-                                    if self.hook and callable(self.hook):
-                                        self.hook(self.status, self.recode, self.start_time, self.end)
-                                    logfile.write(line)
-                                    logfile.write("\n\n\n @execute error, stop running")
-                                    logfile.flush()
-                                    #self._kill_task()
-                                    #self.process = self._restart()
-                                    script_list = []
-                                    break
-                                #else:
-                                #    logfile.write(line)
-                                #    logfile.flush()
-                            if fin_flag:
-                                break
-                            '''
-
-                        if commpack.task_log:
-                            logfile.flush()
-                            logfile.close()
+                            
+                    if commpack.task_log:
+                        logfile.flush()
+                        logfile.close()
 
                 else:
                     self.exec_queue_lock.release()
@@ -353,7 +330,7 @@ class Process_withENV(threading.Thread):
         self._burnProcess()
 
     def _clean_process(self):
-        rc = subprocess.Popen(['ps -ef|grep %s | grep -v grep| awk \'{if($3==1 && $8!="hydra_nameserver") print $2}\'|xargs kill'%getpass.getuser()],shell=True)
+        rc = psutil.Popen(['ps -ef|grep %s | grep -v grep| awk \'{if($3==1 && $8!="hydra_nameserver") print $2}\'|xargs kill'%getpass.getuser()],shell=True)
         rc.wait()
         self.log.write('\n [Proc]Clean up process...\n')
 
@@ -374,7 +351,7 @@ class Process_withENV(threading.Thread):
         self.log.flush()
 
     def _restart(self):
-        proc = subprocess.Popen(['bash'], shell=self.shell, stdin=self.stdin, stdout=self.stdout, stderr=subprocess.STDOUT,preexec_fn=os.setsid)
+        proc = psutil.Popen(['bash'], shell=self.shell, stdin=self.stdin, stdout=self.stdout, stderr=subprocess.STDOUT,preexec_fn=os.setsid)
         self.pid = proc.pid
         #self.logFile.write('[Proc] Restart a new process,pid=%d'%self.pid)
         #self.logFile.flush()

@@ -1,6 +1,7 @@
 import sys,os
 sys.path.append(os.environ['DistJETPATH'])
 from python.IApplication.JunoApp import JunoApp
+from python.IApplication.IApplication import IApplication
 from python.Task import ChainTask,Task
 import python.Util.Config as Config
 import subprocess
@@ -21,6 +22,8 @@ class ProdApp(JunoApp):
         self.driver_dir = []
         self.driver={} # driver_name: scripts_list
         self.sample_list=[]
+     
+        #self.JUNOTOP=os.environ['JUNOTOP']
 
         self.setStatus('boot')
         self.setStatus('data')
@@ -77,7 +80,7 @@ class ProdApp(JunoApp):
             sample_dir = self.res_dir+'/'+sample
             MakeandCD(sample_dir)
 
-            tags = self.cfg.get('tags',sec=sample).strip().split(' ')
+            tags = self.cfg.get('tags',sec=sample).strip().split()
             workflow = self.cfg.get('workflow',sec=sample).strip().split(' ')
 
             seed_base = int(self.cfg.get('seed',sec=sample))
@@ -98,7 +101,8 @@ class ProdApp(JunoApp):
                     os.mkdir(task_resdir)
                 MakeandCD(sample_dir+'/'+worksubdir)
                 pre_task = None
-                for tag in tags:
+                for tag in tags: 
+                    evt_count = 0
                     # Add detsim 0
                     detsim0 = ChainTask()
                     detsim0.boot.append("bash %s/run-%s-%s.sh" % (os.getcwd() + '/' + tag + '/detsim', 'detsim', '0'))
@@ -213,4 +217,4 @@ if __name__ == '__main__':
     tasklist = app.split()
     print len(tasklist)
     for task in tasklist:
-        print('%s - child: %s, father: %s\n'%(task.tid, [child.tid for child in task.get_child_list()],[father.tid for father in task.get_father_list()]))
+        print('%s - child: %s, father: %s\n'%(task.tid, [child for child in task.get_child_list()],[father for father in task.get_father_list()]))
