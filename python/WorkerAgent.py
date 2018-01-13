@@ -432,6 +432,10 @@ class WorkerAgent:
                     #else:
                     #    self.stop()
                 wlog.debug('[Agent] All worker status = %s'%self.worker_status)
+
+                #Worker Error, logout
+                if self.fin_flag and len(self.worker_list) == 0:
+                    self.stop()
             #self.stop()
             wlog.debug('[Agent] remains %d alive thread, [%s]' % (threading.active_count(), threading.enumerate()))
         except KeyboardInterrupt:
@@ -700,7 +704,7 @@ class Worker(BaseThread):
                 self.workeragent.setup_done(self.id, ret, ProcessStatus.describe(ret))
                 self.process.start()
 
-            if ret == ProcessStatus.SUCCESS:
+            if self.initialized:
                 # ask for tasks
                 tmptime=0 # times of ask tasks
                 while not self.fin_flag:
