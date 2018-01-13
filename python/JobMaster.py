@@ -258,7 +258,7 @@ class HandlerThread(BaseThread):
                         master_log.info('[Master] Have finalized worker %s' % recv_dict['wid'])
                         #check all worker finalized
                         if self.master.worker_registry.checkError(recv_dict['wid']):
-                            self.master.command_q.put({MPI_Wrapper.Tags.LOGOUT:'','uuid':uuid})
+                            self.master.command_q.put({MPI_Wrapper.Tags.LOGOUT:'','uuid':recv_dict['uuid']})
                         else:
                             if self.master.worker_registry.checkFinalize():
                                 # after all alive worker finalized, load new app

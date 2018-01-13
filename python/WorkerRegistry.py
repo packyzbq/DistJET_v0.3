@@ -317,7 +317,7 @@ class WorkerRegistry:
             for uuid in self.alive_workers:
                 entry = self.get_by_uuid(uuid)
                 if entry and entry.status and entry.status != WorkerStatus.FINALIZED:
-                    #wRegistery_log.warning('[Registry] @checkFinalize: worker %s status = %s'%(entry.wid,WorkerStatus.desc(entry.status)))
+                    wRegistery_log.warning('[Registry] @checkFinalize: worker %s status = %s'%(entry.wid,WorkerStatus.desc(entry.status)))
                     return False
             return True
         finally:
@@ -339,7 +339,7 @@ class WorkerRegistry:
                 if entry:
                     return entry.status in [WorkerStatus.FINALIZE_FAIL, WorkerStatus.INITIALIZE_FAIL]
                 else:
-                    return True
+                    return False
         finally:
             self.lock.release()
 
@@ -417,7 +417,7 @@ class WorkerRegistry:
                 return False
 
         lostworker = []
-        for w in self.__all_workers.values():
+        for w in self.alive_workers:
             if w.w_uuid in self.alive_workers and w.isLost():
                 lostworker.append(w.wid)
                 w.alive = False

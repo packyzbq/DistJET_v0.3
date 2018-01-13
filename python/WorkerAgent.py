@@ -443,6 +443,7 @@ class WorkerAgent:
 
     def stop(self):
         self.__should_stop = True
+        wlog.info('[WorkerAgent] HeartBeat stop...')
         if self.heartbeat:
             self.heartbeat.stop()
             self.heartbeat.join()
