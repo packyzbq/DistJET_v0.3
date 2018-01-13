@@ -214,11 +214,15 @@ class WorkerRegistry:
         :return: list of wid
         """
         avalible_list = []
-        for uuid in self.alive_workers:
-            entry = self.get_by_uuid(uuid)
-            # the smaller wid has the high priority
-            if entry and (entry.capacity() > 0):
-                avalible_list.append(entry)
+        self.lock.acqurie()
+        try:
+            for uuid in self.alive_workers:
+                entry = self.get_by_uuid(uuid)
+                # the smaller wid has the high priority
+                if entry and (entry.capacity() > 0):
+                    avalible_list.append(entry)
+        finally:
+            self.lock.release()
         return avalible_list
 
     def isAlive(self,wid):
@@ -417,7 +421,8 @@ class WorkerRegistry:
                 return False
 
         lostworker = []
-        for w in self.alive_workers:
+        for w_u in self.alive_workers.copy():
+            w = self.get_by_uuid(w_u)
             if w.w_uuid in self.alive_workers and w.isLost():
                 lostworker.append(w.wid)
                 w.alive = False

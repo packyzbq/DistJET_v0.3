@@ -170,7 +170,7 @@ class HandlerThread(BaseThread):
                     if (not recv_dict.has_key('flag')): #or (recv_dict.has_key('flag') and recv_dict['flag'] != 'LP'):
                         #self.master.worker_registry.setContacttime(recv_dict['uuid'], recv_dict['ctime'])
                         if self.master.worker_registry.checkLostWorker(wid=recv_dict['wid']):
-                            self.master.worker_registry.setAlive()
+                            self.master.worker_registry.setAlive(recv_dict['uuid'])
                         self.master.worker_registry.setContacttime(recv_dict['uuid'],time.time())
                     if recode_ele:
                         replay=time.time()
