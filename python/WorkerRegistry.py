@@ -381,7 +381,11 @@ class WorkerRegistry:
             wentry.alive = True
             wentry.status = status
             wentry.lock.release()
-            self.alive_workers.add(wentry.w_uuid)
+            self.lock.acquire()
+            try:
+                self.alive_workers.add(wentry.w_uuid)
+            finally:
+                self.lock.release()
 
     def setAlive(self,uuid):
         """
@@ -390,7 +394,11 @@ class WorkerRegistry:
         :return:
         """
         if uuid in self.__all_workers_uuid.keys():
-            self.alive_workers.add(uuid)
+            self.lock.acquire()
+            try:
+                self.alive_workers.add(uuid)
+            finally:
+                self.lock.release()
             self.setStatus(self.__all_workers_uuid[uuid],WorkerStatus.RECONNECT)
         else:
             wRegistery_log.error("[Registry] uuid %s is not in registery"%uuid)
@@ -413,7 +421,11 @@ class WorkerRegistry:
             if w.w_uuid in self.alive_workers and w.isLost():
                 lostworker.append(w.wid)
                 w.alive = False
-                self.alive_workers.remove(w.w_uuid)
+                self.lock.acquire()
+                try:
+                    self.alive_workers.remove(w.w_uuid)
+                finally:
+                    self.lock.release()
         return lostworker
 
 
