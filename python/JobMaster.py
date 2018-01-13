@@ -45,13 +45,15 @@ class WatchDogThread(BaseThread):
         control_log.info('Control Thread start...')
         while not self.get_stop_flag():
             # check if lost
-            lostworker = self.master.worker_registry.checkLostWorker()
-            if lostworker:
-                control_log.warning('Lost worker = %s' % lostworker)
-                for wid in lostworker:
-                    #TODO: maybe use other method to deal with the lost worker
-                    #self.master.remove_worker(wid)
-                    self.master.worker_registry.setStatus(wid,WorkerStatus.LOST)
+            if not self.master.get_all_final():
+                lostworker = self.master.worker_registry.checkLostWorker()
+                if lostworker:
+                    control_log.warning('Lost worker = %s' % lostworker)
+                    for wid in lostworker:
+                        #TODO: maybe use other method to deal with the lost worker
+                        #self.master.remove_worker(wid)
+                        self.master.worker_registry.setStatus(wid,WorkerStatus.LOST)
+                        self.master.lost_worker(wid)
 
             # check idle timeout worker
             idleworker = self.master.worker_registry.checkIDLETimeout()
@@ -72,13 +74,13 @@ class WatchDogThread(BaseThread):
             # save worker status to file
             with open(os.environ['HOME']+'/.DistJET_tmp/worker','w+') as workerfile:
                 workerfile.truncate()
-                workerfile.write('wid\tstatus\trunning\tlasttime\n')
+                workerfile.write('wid\tstatus\trunning\tlasttime')
                 for wid in self.master.worker_registry:
                     entry = self.master.worker_registry.get_entry(wid)
                     if entry is None:
                         continue
                     w_d = entry.toDict()
-                    workerfile.write(str(w_d['wid'])+'\t'+str(WorkerStatus.desc(w_d['status']))+'\t'+str(w_d['running_task'])+'\t'+str(w_d['last_connect'])+'\n')
+                    workerfile.write(str(w_d['wid'])+'\t'+str(WorkerStatus.desc(w_d['status']))+'\t'+str(w_d['running_task'])+'\t'+str(w_d['last_connect']))
                 workerfile.flush()
 
 
@@ -241,6 +243,7 @@ class HandlerThread(BaseThread):
                                     master_log.info('[Master] All worker have done, finalize all worker')
                                     fin_task = self.master.task_scheduler.uninstall_worker()
                                     self.master.command_q.put({MPI_Wrapper.Tags.APP_FIN: fin_task, 'extra': [],'uuid':current_uuid})
+                                    self.master.set_all_fianl()
                             else:
                                 master_log.info('[Master] There are still running worker, halt')
                                 self.master.command_q.put({MPI_Wrapper.Tags.WORKER_HALT: '','uuid':current_uuid})
@@ -341,6 +344,9 @@ class JobMaster(IJobMaster):
 	
     def get_all_final(self):
         return self.__all_final_flag
+
+    def set_all_final(self):
+        self.__all_final_flag = True
 
     def acquire_newApp(self):
         self.__newApp_flag = True
@@ -518,7 +524,8 @@ class JobMaster(IJobMaster):
             self.task_scheduler = IScheduler.SimpleScheduler(self, self.appmgr, self.worker_registry)
         self.task_scheduler.appid = self.appmgr.get_current_appid()
 
-
+    def lost_worker(self,wid):
+        self.task_scheduler.worker_removed(wid)
     def getRunFlag(self):
         return self.appmgr.runflag
 
