@@ -93,7 +93,10 @@ class HeartbeatThread(BaseThread):
                     send_dict['Task'].append(task)
                 send_dict['uuid'] = self.worker_agent.uuid
                 send_dict['wid'] = self.worker_agent.wid
-                send_dict['wstatus'] = self.worker_agent.get_status()
+                st = self.worker_agent.get_status()
+                if st:
+                    self.worker_agent.status = st
+                send_dict['wstatus'] = self.worker_agent.status
                 if send_dict['wstatus'] == WorkerStatus.IDLE and self.worker_agent.halt_flag:
                     if task_acquire == 100:
                         send_dict[Tags.TASK_ADD] = 1
@@ -223,6 +226,9 @@ class WorkerAgent:
         self.worker_list = {}
         self.worker_status={}
         self.cond_list = {}
+        self.status = WorkerStatus.NEW
+
+        self.loop_time = 0.1
 
     def run(self):
         try:
@@ -230,7 +236,7 @@ class WorkerAgent:
             self.heartbeat.start()
             wlog.info('[WorkerAgent] HeartBeat thread start...')
             while not self.__should_stop:
-                time.sleep(0.1) #TODO temporary config for loop interval
+                time.sleep(self.loop_time) #TODO temporary config for loop interval
                 if not self.recv_buff.empty():
                     msg = self.recv_buff.get()
                     if msg.tag == -1:
@@ -375,6 +381,7 @@ class WorkerAgent:
                         elif int(k) == Tags.WORKER_HALT:
                             wlog.info('[Agent] Receive WORKER_HALT command')
                             self.halt_flag=True
+                            self.loop_time = 1
 
                         # for test v={ctime, response}
                         elif int(k) == Tags.EXTRA:
@@ -474,9 +481,11 @@ class WorkerAgent:
 
     def setup_done(self,wid,retcode,errmsg=None):
         if retcode!=0:
+            self.status = WorkerStatus.INITIALIZE_FAIL
             self.worker_status[wid] = WorkerStatus.INITIALIZE_FAIL
             wlog.error('[Error] Worker %s initialization error, error msg = %s' % (wid, errmsg))
         else:
+            self.worker_status = WorkerStatus.INITIALIZED
             self.worker_status[wid] = WorkerStatus.INITIALIZED
             if not self.initial_flag:
                 self.initial_flag = True
@@ -486,9 +495,11 @@ class WorkerAgent:
     def finalize_done(self,wid,retcode, errmsg=None):
         if retcode != 0:
             self.worker_status[wid] = WorkerStatus.FINALIZE_FAIL
+            self.status = WorkerStatus.FINALIZE_FAIL
             wlog.error('[Agent-Error] Worker %s finalize error, error msg = %s' % (wid, errmsg))
         else:
             self.worker_status[wid] = WorkerStatus.FINALIZED
+            self.status = WorkerStatus.FINALIZED
             self.remove_worker(wid)
             wlog.info('[Agent] Worker %s finalized, remove from list'%wid)
         self.heartbeat.acquire_queue.put({Tags.APP_FIN: {'recode':retcode,'errmsg':errmsg}})

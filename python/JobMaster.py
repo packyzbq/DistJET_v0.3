@@ -230,7 +230,9 @@ class HandlerThread(BaseThread):
                             self.master.worker_registry.setStatus(recv_dict['wid'], WorkerStatus.SCHEDULED)
                             self.master.worker_registry.setTask(recv_dict['wid'], tid_list[0])
                             self.master.command_q.put({MPI_Wrapper.Tags.TASK_ADD: task_list, 'uuid': current_uuid})
-
+                    elif not self.master.task_scheduler.is_all_task_scheduled():
+                        master_log.info('[Master] Has Chain task need to do, worker Halt')
+                        self.master.command_q.put({MPI_Wrapper.Tags.WORKER_HALT: '', 'uuid': current_uuid})
                     else:
                         master_log.info('[Master] No more task to do')
                         # according to Policy ,check other worker status and idle worker

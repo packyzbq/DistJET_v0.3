@@ -265,7 +265,7 @@ class WorkerRegistry:
         e = self.get_entry(wid)
         if e:
             return e.refin()
-        return
+        return False
 
     def sync_capacity(self, wid, capacity):
         # TODO the num of assigned task is incompatable with worker

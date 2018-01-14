@@ -82,6 +82,19 @@ class IScheduler:
         #else:
             #return True
 
+    def is_all_task_scheduled(self):
+        if self.task_todo_queue.empty():
+            return False
+        schedule_list_copy = self.scheduled_task_list.copy()
+        sum = 0
+        for l in schedule_list_copy.values():
+            if l:
+                sum+=len(l)
+        if sum+self.completed_queue.qsize() >= len(self.task_list):
+            return True
+        else:
+            return False
+
     def has_scheduled_work(self,wid=None):
         if wid:
             return len(self.scheduled_task_list[wid])!=0
