@@ -243,7 +243,7 @@ class HandlerThread(BaseThread):
                                     master_log.info('[Master] All worker have done, finalize all worker')
                                     fin_task = self.master.task_scheduler.uninstall_worker()
                                     self.master.command_q.put({MPI_Wrapper.Tags.APP_FIN: fin_task, 'extra': [],'uuid':current_uuid})
-                                    self.master.set_all_fianl()
+                                    self.master.set_all_final()
                             else:
                                 master_log.info('[Master] There are still running worker, halt')
                                 self.master.command_q.put({MPI_Wrapper.Tags.WORKER_HALT: '','uuid':current_uuid})
@@ -263,16 +263,17 @@ class HandlerThread(BaseThread):
                         if self.master.worker_registry.checkError(recv_dict['wid']):
                             self.master.command_q.put({MPI_Wrapper.Tags.LOGOUT:'','uuid':recv_dict['uuid']})
                         else:
-                            if self.master.worker_registry.checkFinalize():
+                            if self.master.appmgr.has_next_app() and self.master.worker_registry.checkFinalize():
                                 # after all alive worker finalized, load new app
                                 # if more app need to be done, wait for old app finish and load new app
-                                if self.master.appmgr.has_next_app():
                                     #self.master.command_q.put({MPI_Wrapper.Tags.WORKER_HALT:'','uuid':current_uuid})
-                                    self.master.acquire_newApp()
-                                else:
-                                    # no more app need to do, logout all worker
-                                    for uuid in self.master.worker_registry.alive_workers:
-                                        self.master.command_q.put({MPI_Wrapper.Tags.LOGOUT: '','uuid':uuid})
+                                self.master.acquire_newApp()
+                            else:
+                                # no more app need to do, logout all worker
+                                #for uuid in self.master.worker_registry.alive_workers:
+                                #    self.master.command_q.put({MPI_Wrapper.Tags.LOGOUT: '','uuid':uuid})
+                                self.master.command_q.put({MPI_Wrapper.Tags.LOGOUT: '','uuid':recv_dict['uuid']})
+
                     else:
                         master_log.error('worker %d finalize error, errmsg=%s' % (recv_dict['wid'], v['errmsg']))
                         if self.master.worker_registry.worker_refin(recv_dict['wid']):

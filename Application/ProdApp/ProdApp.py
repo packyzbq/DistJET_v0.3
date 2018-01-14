@@ -12,6 +12,7 @@ def MakeandCD(path):
     os.chdir(path)
 
 class ProdApp(JunoApp):
+#class ProdApp(IApplication):
     def __init__(self,rootdir, name, config_path=None):
         if not config_path or not os.path.exists(os.path.abspath(config_path)):
             #self.log.warning('[ProdApp] Cannot find config file = %s, use default'%config_path)
@@ -40,7 +41,8 @@ class ProdApp(JunoApp):
             self.tags[sample] = []
             self.tags[sample].extend(self.cfg.get('tags',sample).strip().split(' '))
 
-
+    def setup(self):
+        return []
 
     def split(self):
         task_list = []
