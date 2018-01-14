@@ -109,7 +109,7 @@ class HeartbeatThread(BaseThread):
                 #self.worker_agent.status_lock.release()
                 send_str = Package.pack_obj(send_dict)
                 send_str = Package.pack2json({'uuid':self.worker_agent.uuid,'dict':send_str})
-#                wlog.debug('[HeartBeat] Send msg = %s'%send_str)
+                wlog.debug('[HeartBeat] Send msg = %s'%send_dict)
                 ret = self._client.send_string(send_str, len(send_str), 0, Tags.MPI_PING)
                 # -----test----
                 #ret = 0
@@ -411,8 +411,8 @@ class WorkerAgent:
 
                 # Finalize worker
                 if self.app_fin_flag and self.task_queue.empty():
-                    wlog.debug('[Agent] Wait for worker thread join')
                     if len(self.worker_list) != 0:
+                        wlog.debug('[Agent] Wait for worker thread join')
                         #TODO wait for all worker finalized, handle maybe finalize task infinte loop
                         wlog.debug('[Agent] set fin_flag for all workers')
                         self.list_lock.acquire()
@@ -431,6 +431,8 @@ class WorkerAgent:
                         #time.sleep(0.1)
                     #else:
                     #    self.stop()
+                    else:
+                        wlog.debug('[Agent] Wait for master logout message')
                 wlog.debug('[Agent] All worker status = %s'%self.worker_status)
 
                 #Worker Error, logout

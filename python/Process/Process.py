@@ -17,6 +17,7 @@ import python.Util.Config as Config
 class status:
     (SUCCESS, FAIL, TIMEOUT, OVERFLOW, ANR, UNKOWN) = range(0,6)
     DES = {
+        SUCCESS: 'SUCCESS',
         FAIL: 'Task fail, return code is not zero',
         TIMEOUT: 'Run time exceeded',
         OVERFLOW: 'Memory overflow',
