@@ -382,7 +382,7 @@ class WorkerAgent:
                         elif int(k) == Tags.WORKER_HALT:
                             wlog.info('[Agent] Receive WORKER_HALT command')
                             self.halt_flag=True
-                            self.loop_time = 1
+                            #self.loop_time = 1
 
                         # for test v={ctime, response}
                         elif int(k) == Tags.EXTRA:

@@ -235,8 +235,13 @@ class HandlerThread(BaseThread):
                         self.master.command_q.put({MPI_Wrapper.Tags.WORKER_HALT: '', 'uuid': current_uuid})
                     else:
                         master_log.info('[Master] No more task to do')
+                        if self.master.get_all_final():
+                            st = self.master.worker_registry.get_worker_status(recv_dict['wid'])
+                            if st == WorkerStatus.FINALIZED:
+                                master_log('[Master] ReSend LOGOUT msg to worker %s'%str(recv_dict['wid']))
+                                self.master.command_q.put({MPI_Wrapper.Tags.LOGOUT: '', 'uuid': recv_dict['uuid']})
                         # according to Policy ,check other worker status and idle worker
-                        if Config.getPolicyattr('WORKER_SYNC_QUIT'):
+                        elif Config.getPolicyattr('WORKER_SYNC_QUIT'):
                             if self.master.worker_registry.checkIdle(exp=[recv_dict['wid']]):  # exp=[recv_dict['wid']]
                                 if self.master.get_all_final():
                                     master_log.info('[Master] Have send all finalize msg, skip this')
@@ -463,6 +468,7 @@ class JobMaster(IJobMaster):
                             for uuid in self.worker_registry.alive_workers:
                                 send_final=Pack.pack2json({'uuid':uuid,'dict':send_str})
                                 self.server.send_string(send_final, len(send_final), str(uuid), tag)
+                                master_log.debug('[Master] Send completed')
                         elif send_dict.has_key('extra') and send_dict['extra']:
                             tmplist = send_dict['extra']
                             del (send_dict['extra'])
@@ -471,11 +477,13 @@ class JobMaster(IJobMaster):
                             for uuid in tmplist:
                                 send_final=Pack.pack2json({'uuid':uuid,'dict':send_str})
                                 self.server.send_string(send_final, len(send_final), uuid, tag)
+                                master_log.debug('[Master] Send completed')
                         else:
                             send_str = Pack.pack_obj(send_dict)
                             master_log.debug('[Master] Send to worker %s msg = %s, tag=%s' % (current_uuid, send_dict,tag))
                             send_final = Pack.pack2json({'uuid':current_uuid,'dict':send_str})
                             self.server.send_string(send_final, len(send_final), current_uuid, int(tag))
+                            master_log.debug('[Master] Send completed')
                 # master stop condition
 
                 # time.sleep(1)
