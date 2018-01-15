@@ -74,13 +74,13 @@ class WatchDogThread(BaseThread):
             # save worker status to file
             with open(os.environ['HOME']+'/.DistJET_tmp/worker','w+') as workerfile:
                 workerfile.truncate()
-                workerfile.write('wid\tstatus\trunning\tlasttime')
+                workerfile.write('wid\tstatus\trunning\tlasttime\n')
                 for wid in self.master.worker_registry:
                     entry = self.master.worker_registry.get_entry(wid)
                     if entry is None:
                         continue
                     w_d = entry.toDict()
-                    workerfile.write(str(w_d['wid'])+'\t'+str(WorkerStatus.desc(w_d['status']))+'\t'+str(w_d['running_task'])+'\t'+str(w_d['last_connect']))
+                    workerfile.write(str(w_d['wid'])+'\t'+str(WorkerStatus.desc(w_d['status']))+'\t'+str(w_d['running_task'])+'\t'+str(w_d['last_connect']+'\n'))
                 workerfile.flush()
 
 
@@ -265,11 +265,13 @@ class HandlerThread(BaseThread):
                         if self.master.worker_registry.checkError(recv_dict['wid']):
                             self.master.command_q.put({MPI_Wrapper.Tags.LOGOUT:'','uuid':recv_dict['uuid']})
                         else:
-                            if self.master.appmgr.has_next_app() and self.master.worker_registry.checkFinalize():
+                            if self.master.appmgr.has_next_app():
+                                master_log.info('[Master] New application need to be done')
+                                if self.master.worker_registry.checkFinalize():
                                 # after all alive worker finalized, load new app
                                 # if more app need to be done, wait for old app finish and load new app
                                     #self.master.command_q.put({MPI_Wrapper.Tags.WORKER_HALT:'','uuid':current_uuid})
-                                self.master.acquire_newApp()
+                                    self.master.acquire_newApp()
                             else:
                                 # no more app need to do, logout all worker
                                 #for uuid in self.master.worker_registry.alive_workers:
@@ -426,7 +428,10 @@ class JobMaster(IJobMaster):
                     except:
                         master_log.error("[Master] Parse msg error, errmsg=%s, "%traceback.format_exc())
                     current_uuid = recv_dict['uuid']
-                    master_log.debug('[Master] Receive message from %s'%current_uuid)
+                    if recv_dict.has_key('wid'):
+                        master_log.debug('[Master] Receive message from %s'%str(recv_dict['wid']))
+                    else:
+                        master_log.debug('[Master] Receive message from %s'%current_uuid)
                     # pass message to handler thread
                     self.handler.setMessage(msg,current_uuid)
                     if self.handler.isSleep():
@@ -481,7 +486,7 @@ class JobMaster(IJobMaster):
                         #master_log.info('[Scheduler] Complete tasks number: %s; All task number: %s' % (self.task_scheduler.completed_queue.qsize(), len(self.task_scheduler.task_list)))
                         self.appmgr.finalize_app()
                         #check all worker finalized
-                        if self.worker_registry.checkFinalize() and self.__newApp_flag:
+                        if self.__newApp_flag and self.worker_registry.checkFinalize():
                             # has more app need to be done
                             if self.appmgr.has_next_app():
                                 self.load_app(napp=True)

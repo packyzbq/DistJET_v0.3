@@ -98,7 +98,8 @@ class HeartbeatThread(BaseThread):
                     self.worker_agent.status = st
                 send_dict['wstatus'] = self.worker_agent.status
                 if send_dict['wstatus'] == WorkerStatus.IDLE and self.worker_agent.halt_flag:
-                    if task_acquire == 100:
+                    if task_acquire == 10:
+                        wlog.debug('[HeartBeat] Send Task add msg')
                         send_dict[Tags.TASK_ADD] = 1
                         task_acquire=0
                     else:
@@ -395,7 +396,7 @@ class WorkerAgent:
                             self.recoder.set_message(self.wid,ele)
 
 
-                    continue
+                    #continue
 			    
                 #if self.initial_flag and len(self.worker_list) == 0 and not self.app_fin_flag:
                 #    self.halt_flag = False
@@ -485,7 +486,7 @@ class WorkerAgent:
             self.worker_status[wid] = WorkerStatus.INITIALIZE_FAIL
             wlog.error('[Error] Worker %s initialization error, error msg = %s' % (wid, errmsg))
         else:
-            self.worker_status = WorkerStatus.INITIALIZED
+            self.status = WorkerStatus.INITIALIZED
             self.worker_status[wid] = WorkerStatus.INITIALIZED
             if not self.initial_flag:
                 self.initial_flag = True

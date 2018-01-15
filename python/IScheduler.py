@@ -83,7 +83,8 @@ class IScheduler:
             #return True
 
     def is_all_task_scheduled(self):
-        if self.task_todo_queue.empty():
+        if not self.task_todo_queue.empty():
+            scheduler_log.debug('@is_all_task_sch: todo queue has tasks')
             return False
         schedule_list_copy = self.scheduled_task_list.copy()
         sum = 0
@@ -93,6 +94,7 @@ class IScheduler:
         if sum+self.completed_queue.qsize() >= len(self.task_list):
             return True
         else:
+            scheduler_log.debug('@is_all_task_sch: has chain tasks')
             return False
 
     def has_scheduled_work(self,wid=None):
