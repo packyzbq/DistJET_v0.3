@@ -199,7 +199,7 @@ class WorkerAgent:
             self.client.stop(True)
             wlog.error('[Agent] Client initialize error, errcode = %d'%ret)
             exit()
-        if self.cfg.getCFGattr('delay_rec'):
+        if self.cfg.getCFGattr('delay_rec') == 'True':
             self.recoder = Recoder.BaseRecoder(Config.Config.getCFGattr('Rundir')+'/Agent-'+self.uuid)
 
         self.wid = None
@@ -335,7 +335,7 @@ class WorkerAgent:
                                         break
                             self.list_lock.release()
                             self.task_acquire = False
-							continue
+                            continue
                         # remove task, v={flag:F/V, list:[tid]}
                         elif int(k) == Tags.TASK_REMOVE:
                             wlog.info('[WorkerAgent] Receive TASK_REMOVE msg = %s' % v)

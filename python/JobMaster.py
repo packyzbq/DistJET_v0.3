@@ -179,7 +179,8 @@ class HandlerThread(BaseThread):
                         recode_ele.delay=replay-float(recv_dict['ctime'])
                         if recode_ele.delay < 0:
                             master_log.error('[Master] error response time, wid=%d ,start=%f, response=%f'%(recv_dict['wid'],float(recv_dict['ctime']),replay))
-                    if self.master.cfg.getCFGattr('delay_rec'):
+                    if self.master.cfg.getCFGattr('delay_rec')=="True":
+                        print("DELAY_REC = %s"%self.master.cfg.getCFGattr('delay_rec'))
                         #for testing, reply a ack msg
                         send_dict = {'ctime':recv_dict['ctime'],'response':replay}
                         send_str = Pack.pack2json({'uuid':current_uuid,'dict':Pack.pack_obj({MPI_Wrapper.Tags.EXTRA:send_dict})})
