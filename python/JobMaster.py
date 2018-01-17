@@ -53,7 +53,7 @@ class WatchDogThread(BaseThread):
                         #TODO: maybe use other method to deal with the lost worker
                         #self.master.remove_worker(wid)
                         self.master.worker_registry.setStatus(wid,WorkerStatus.LOST)
-                        self.master.lost_worker(wid)
+                        #self.master.lost_worker(wid)
 
             # check idle timeout worker
             idleworker = self.master.worker_registry.checkIDLETimeout()

@@ -237,7 +237,7 @@ class WorkerAgent:
             self.heartbeat.start()
             wlog.info('[WorkerAgent] HeartBeat thread start...')
             while not self.__should_stop:
-                time.sleep(self.loop_time) #TODO temporary config for loop interval
+                #time.sleep(self.loop_time) #TODO temporary config for loop interval
                 if not self.recv_buff.empty():
                     msg = self.recv_buff.get()
                     if msg.tag == -1:
@@ -335,6 +335,7 @@ class WorkerAgent:
                                         break
                             self.list_lock.release()
                             self.task_acquire = False
+							continue
                         # remove task, v={flag:F/V, list:[tid]}
                         elif int(k) == Tags.TASK_REMOVE:
                             wlog.info('[WorkerAgent] Receive TASK_REMOVE msg = %s' % v)

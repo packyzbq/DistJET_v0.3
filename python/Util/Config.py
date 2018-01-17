@@ -26,7 +26,9 @@ class Config(object):
         'Rundir': None,
         'LogConsole': False,
         'HeartBeatInterval': 0.5,
-        'Halt_Recv_Interval': 10
+        'Halt_Recv_Interval': 10,
+		'DELAY_REC': False,
+		'PMONITOR': False
     }
 
     __policy = {
