@@ -237,7 +237,7 @@ class WorkerAgent:
             self.heartbeat.start()
             wlog.info('[WorkerAgent] HeartBeat thread start...')
             while not self.__should_stop:
-                #time.sleep(self.loop_time) #TODO temporary config for loop interval
+                time.sleep(self.loop_time) #TODO temporary config for loop interval
                 if not self.recv_buff.empty():
                     msg = self.recv_buff.get()
                     if msg.tag == -1:
@@ -414,9 +414,10 @@ class WorkerAgent:
                         break
                 if not self.task_acquire and ask_flag and not self.fin_flag and len(self.worker_list) != 0:
                 #if not self.task_acquire and self.task_queue.empty() and not self.fin_flag and len(self.worker_list) != 0:
-                    wlog.debug('[Agent] Worker need more tasks, ask for new task')
-                    self.heartbeat.acquire_queue.put({Tags.TASK_ADD:1})
-                    self.task_acquire = True
+                    if self.task_queue.empty() and self.worker_list[0].status == WorkerStatus.IDLE:
+                        wlog.debug('[Agent] Worker need more tasks, ask for new task')
+                        self.heartbeat.acquire_queue.put({Tags.TASK_ADD:1})
+                        self.task_acquire = True
 
                 # Finalize worker
                 if self.app_fin_flag and self.task_queue.empty():
