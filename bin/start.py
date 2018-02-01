@@ -1,6 +1,7 @@
 import argparse
 import subprocess
 import os,sys
+import time
 
 assert os.environ.has_key("DistJETPATH")
 
@@ -23,7 +24,7 @@ def gen_submit(num):
         subfile+="_1"
     with open(subfile,'w+') as sub:
         sub.write("Universe = vanilla")
-        sub.write("Executable = %s"%os.environ['DistJETPATH']+'/bin/run-sshd.sh')
+        sub.write("Executable = %s"%os.environ['DistJETPATH']+'/bin/ssh/run-sshd.sh')
         sub.write("Accounting_Group = juno")
         sub.write("getenv = True")
         sub.write("initialdir = tmp/res")
@@ -32,9 +33,6 @@ def gen_submit(num):
 
 
 args = getArgs()
-
-#submit condor_job
-proc = subprocess.Popen(['condor_submit %s'%()])
 
 
 #config path
@@ -50,11 +48,56 @@ if args.log_level:
 #app config
 app_config = args.app_config
 if app_config is None:
-    app_config
+    app_config = "null"
 
-master = subprocess.Popen(['mpiexec -nameserver localhost python %s %s %s %s %s'%(os.environ['DistJETPATH']+'/bin/master.py',args.app_module, config_path,loglevel,args.screen)],shell=True)
+#server_host
+server = args.server_host
+if server is None:
+	server = "localhost"
 
-worker = subprocess.Popen(['mpiexec -nameserver localhost python %s '])
+#Rundir 
+curr_dir = os.path.abspath(os.getcwd("."))
+runno = 0
+while os.path.exists(curr_dir+"/Rundir_"+runno):
+	runno = runno+1
+rundir = curr_dir+"/Rundir_"+runno
+os.mkdir(rundir)
+os.chdir(rundir)
+
+gen_submit(args.worker_num)
+#submit job script
+rc = subprocess.Popen(['condor_submit job_desc'],shell=True)
+rc.wait()
+
+os.chdir(rundir)
+#check job is running
+rc = subprocess.Popen(['/bin/bash %s'%os.environ["DistJETPATH"]+'/bin/ssh/refresh-running-node.sh'],stdout=subprocess.PIPE,shell=True)
+output,err = rc.communicate()
+ask_time = 1
+while int(output[-2:]) != args.worker_num:
+	time.sleep(ask_time*2)
+	ask_time = ask_time+1
+	if ask_time > 100:
+		ask_time=100
+
+os.chdir(curr_dir)
+
+
+master = subprocess.Popen(['mpiexec -nameserver %s python %s %s %s %s %s %s'
+						%(server,os.environ['DistJETPATH']+'/bin/master.py',args.app_module, config_path,loglevel,args.screen,rundir)],shell=True)
+
+while not os.path.exists(rundir+'/port.txt'):
+	time.sleep(1)
+
+worker = subprocess.Popen(['mpiexec -n %s -nameserver %s -f %s python %s %s %s %s %s'
+						%(str(args.worker_num),server,environ['DistJETPATH']+'/bin/worker.py'), 1, 'null',loglevel,rundir])
+
+master.wait()
+
+#clean ssh jobs
+rc = subprocess.Popen(['condor_rm %s'%os.environ['USER']],shell=True)
+rc.wait()
+
 
 
 

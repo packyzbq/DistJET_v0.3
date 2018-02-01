@@ -4,7 +4,7 @@ assert os.environ['DistJETPATH']
 assert os.environ['JUNOTOP']
 
 sys.path.append(os.environ['DistJETPATH'])
-#argv[1]=capacity, argv[2]=conf_file, argv[3]=log_level, argv[4]=log_console
+#argv[1]=capacity, argv[2]=conf_file, argv[3]=log_level, argv[4]=log_console, argv[5]=rundir
 if len(sys.argv) <= 2:
     print('@worker, need at least 2 parameter(given %d), exit'%(len(sys.argv)-1))
     exit()
@@ -34,6 +34,7 @@ if sys.argv[2] != 'null' and not os.path.exists(sys.argv[2]):
 
 CONF.set_inipath(cfg_path)
 cfg = CONF.Config()
+cfg.setCfg('Rundir',argv[5])
 
 while "port.txt" not in os.listdir(cfg.getCFGattr('Rundir')):
     time.sleep(1)

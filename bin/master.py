@@ -10,8 +10,8 @@ if 'Boost' not in os.environ['PATH']:
 else:
     print("SETUP: Find Boost")
 
-# argv[1] = appfile, argv[2] = config, argv[3]=log_level, argv[4] = app_config_file, argv[5] = log_screen
-if len(sys.argv) < 3:
+# argv[1] = appfile, argv[2] = config, argv[3]=log_level, argv[4] = app_config_file, argv[5] = log_screen, argv[6] = Rundir
+if len(sys.argv) < 4:
     print('@master need at least 2 parameter(given %d), args=%s, exit'%(len(sys.argv)-1, sys.argv))
     exit()
 
@@ -23,6 +23,7 @@ appfile = sys.argv[1]
 config_path = sys.argv[2]
 log_level = sys.argv[3]
 app_config_path = sys.argv[4]
+rundir = sys.argv[6]
 if len(sys.argv) > 5:
     log_screen = sys.argv[5]
 else:
@@ -40,7 +41,8 @@ else:
 
 #rundir = os.getcwd()
 import python.Util.Config as Conf
-#Conf.Config.setCfg('Rundir',rundir)
+if rundir != 'null'
+Conf.Config.setCfg('Rundir',rundir)
 
 module=None
 try:
@@ -81,5 +83,5 @@ else:
     print('@master: Load Application error, exit')
 
 import shutil
-if os.path.exists(os.environ['HOME']+'/.DistJET_tmp'):
-    shutil.rmtree(os.environ['HOME']+'/.DistJET_tmp')
+if os.path.exists(rundir+'/.DistJET_tmp'):
+    shutil.rmtree(rundir+'/.DistJET_tmp')
