@@ -1,0 +1,110 @@
+#!/afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre2/ExternalLibs/Python/2.7.6/bin/python
+import argparse
+import subprocess
+import os,sys
+import time
+
+assert os.environ.has_key("DistJETPATH")
+
+def getArgs():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-c","--conf",dest="config_path", type=str,help="configure file path")
+    parser.add_argument("--server",dest="server_host", type=str,help="where to start name service")
+    parser.add_argument("-m","--app", dest="app_module", type=str,help="the app you want to run")
+    parser.add_argument("--app-conf",dest="app_config", type=str,help="the configure file of Application")
+    parser.add_argument("-n","--worker-num",dest="worker_num", type=int,help="the number of worker you want to start")
+    parser.add_argument("-d",dest="log_level",action="store_true", default=False, help="debug mode")
+    parser.add_argument("-s","--screen", dest="screen",action="store_true", help="print log output into screen")
+    args = parser.parse_args()
+    if (not args.app_module) or (not args.worker_num):
+        print parser.error("less of app or worker number")
+    return args
+
+def gen_submit(num):
+    subfile = "job_submit"
+    while subfile in os.listdir("."):
+        subfile+="_1"
+    with open(subfile,'w+') as sub:
+        sub.write("Universe = vanilla\n")
+        sub.write("Executable = %s"%os.environ['DistJETPATH']+'/bin/ssh/run-sshd.sh\n')
+        sub.write("Accounting_Group = juno\n")
+        sub.write("getenv = True\n")
+        #sub.write("initialdir = tmp/res\n")
+        sub.write('Requirements = Target.OpSysAndVer =?= "SL6" && regexp("jnws*", Name)\n')
+        sub.write("Queue %s\n"%str(num))
+
+
+args = getArgs()
+
+print args.__dict__
+
+#config path
+config_path = args.config_path
+if config_path is None:
+   config_path="null"
+
+#loglevel
+loglevel = "info"
+if args.log_level:
+    loglevel = "debug"
+
+#app config
+app_config = args.app_config
+if app_config is None:
+    app_config = "null"
+
+#server_host
+server = args.server_host
+if server is None:
+	server = "localhost"
+
+#Rundir 
+curr_dir = os.path.abspath(os.getcwd())
+runno = 0
+while os.path.exists(curr_dir+"/Rundir_"+str(runno)):
+	runno = runno+1
+rundir = curr_dir+"/Rundir_"+str(runno)
+os.mkdir(rundir)
+os.chdir(rundir)
+
+gen_submit(args.worker_num)
+#submit job script
+rc = subprocess.Popen(['condor_submit job_submit'],shell=True)
+rc.wait()
+
+output = 0
+ask_time = 1
+while int(output) != args.worker_num:
+    os.chdir(rundir)
+    #check job is running
+    rc = subprocess.Popen(['/bin/bash %s'%os.environ["DistJETPATH"]+'/bin/ssh/refresh-running-node.sh %s'%rundir],stdout=subprocess.PIPE,shell=True)
+    output,err = rc.communicate()
+    print output
+    print "Waiting for computing resource, now running nodes number: %d"%int(output)
+    time.sleep(ask_time*2)
+    ask_time = ask_time+1
+    if ask_time > 100:
+        ask_time=100
+
+os.chdir(curr_dir)
+
+
+master = subprocess.Popen(['mpiexec -nameserver %s python %s %s %s %s %s %s'
+						%(server,os.environ['DistJETPATH']+'/bin/master.py',args.app_module, config_path,loglevel,args.screen,rundir)],shell=True)
+
+while not os.path.exists(rundir+'/port.txt'):
+	time.sleep(1)
+
+worker = subprocess.Popen(['mpiexec -n %s -nameserver %s -f %s python %s %s %s %s %s'
+						%(str(args.worker_num),server,environ['DistJETPATH']+'/bin/worker.py'), 1, 'null',loglevel,rundir])
+
+master.wait()
+
+#clean ssh jobs
+rc = subprocess.Popen(['condor_rm %s'%os.environ['USER']],shell=True)
+rc.wait()
+
+
+
+
+
