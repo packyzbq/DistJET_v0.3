@@ -1,0 +1,12 @@
+#!/afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre2/ExternalLibs/Python/2.7.6/bin/python
+import os
+
+tmp_dir = os.environ['HOME']+'/.DistJET_tmp'
+if not os.path.exists(tmp_dir):
+    print "No DistJET App found, exit"
+    exit()
+
+with open(os.environ['HOME']+'/.DistJET_tmp/worker','r') as worker:
+    lines = worker.readlines()
+for line in lines:
+    print line

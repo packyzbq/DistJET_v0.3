@@ -1,0 +1,30 @@
+Universe = vanilla
+Executable = run-sshd.sh
+Accounting_Group = juno
+getenv = True
+#initialdir = res
+
+Requirements = Target.OpSysAndVer =?= "SL6" && regexp("jnws*", Name)
+Queue 1
+
+
+#Requirements = Target.OpSysAndVer =?= "SL6" && regexp("jnws031", Name)
+#Queue 
+#Requirements = Target.OpSysAndVer =?= "SL6" && regexp("jnws032", Name)
+#Queue 
+#Requirements = Target.OpSysAndVer =?= "SL6" && regexp("jnws033", Name)
+#Queue 
+#Requirements = Target.OpSysAndVer =?= "SL6" && regexp("jnws034", Name)
+#Queue 
+#Requirements = Target.OpSysAndVer =?= "SL6" && regexp("jnws035", Name)
+#Queue 
+#Requirements = Target.OpSysAndVer =?= "SL6" && regexp("jnws036", Name)
+#Queue 
+#Requirements = Target.OpSysAndVer =?= "SL6" && regexp("jnws037", Name)
+#Queue 
+#Requirements = Target.OpSysAndVer =?= "SL6" && regexp("jnws038", Name)
+#Queue 
+#Requirements = Target.OpSysAndVer =?= "SL6" && regexp("jnws039", Name)
+#Queue 
+#Requirements = Target.OpSysAndVer =?= "SL6" && regexp("jnws030", Name)
+#Queue 

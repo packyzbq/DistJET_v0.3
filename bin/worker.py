@@ -26,6 +26,11 @@ if len(sys.argv)>=5 and sys.argv[4] in [True,False]:
 else:
     logger.setConsole(False)
 
+if len(sys.argv) >=6:
+    rundir=sys.argv[5]
+else:
+    rundir=os.getcwd()+'/Rundir'
+
 import python.Util.Config as CONF
 #CONF.Config.setCfg('Rundir',os.getcwd())
 cfg_path = sys.argv[2]
@@ -34,9 +39,11 @@ if sys.argv[2] != 'null' and not os.path.exists(sys.argv[2]):
 
 CONF.set_inipath(cfg_path)
 cfg = CONF.Config()
-cfg.setCfg('Rundir',argv[5])
+cfg.setCfg('Rundir',rundir)
 
+print "rundir = "+rundir
 while "port.txt" not in os.listdir(cfg.getCFGattr('Rundir')):
+    print "cannot find port"
     time.sleep(1)
 '''
 import time

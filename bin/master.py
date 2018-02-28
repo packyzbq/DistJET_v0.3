@@ -23,11 +23,15 @@ appfile = sys.argv[1]
 config_path = sys.argv[2]
 log_level = sys.argv[3]
 app_config_path = sys.argv[4]
-rundir = sys.argv[6]
 if len(sys.argv) > 5:
     log_screen = sys.argv[5]
 else:
     log_screen = False
+
+if len(sys.argv) > 6:
+    rundir = sys.argv[6]
+else:
+	rundir = 'null'
 
 if os.path.exists(appfile):
     module_path = os.path.dirname(appfile)
@@ -41,8 +45,8 @@ else:
 
 #rundir = os.getcwd()
 import python.Util.Config as Conf
-if rundir != 'null'
-Conf.Config.setCfg('Rundir',rundir)
+if rundir != 'null':
+    Conf.Config.setCfg('Rundir',rundir)
 
 module=None
 try:
