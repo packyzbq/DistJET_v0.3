@@ -1,5 +1,5 @@
 #!/bin/bash
-topdir="$DistJETPATH/bin/ssh"
+topdir="$DistJETPATH/Backend/HTCondor"
 confdir="$HOME/.DistJET"
 if [ ! -d $confdir ]; then
 	mkdir $confdir
