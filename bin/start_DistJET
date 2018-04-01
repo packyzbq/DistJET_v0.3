@@ -5,6 +5,7 @@ import os,sys
 import time
 
 assert os.environ.has_key("DistJETPATH")
+DistTempDir = os.environ['$HOME/.DistJET']
 
 def getArgs():
     parser = argparse.ArgumentParser()
@@ -15,6 +16,7 @@ def getArgs():
     parser.add_argument("-n","--worker-num",dest="worker_num", type=int,help="the number of worker you want to start")
     parser.add_argument("-d",dest="log_level",action="store_true", default=False, help="debug mode")
     parser.add_argument("-s","--screen", dest="screen",action="store_true", help="print log output into screen")
+    parser.add_argument("--backend",dest="backend",choices=["condor","local"],default="condor",help="Backend choice")
     args = parser.parse_args()
     if (not args.app_module) or (not args.worker_num):
         print parser.error("less of app or worker number")
@@ -58,7 +60,7 @@ server = args.server_host
 if server is None:
 	server = "localhost"
 
-#Rundir 
+#Rundir
 curr_dir = os.path.abspath(os.getcwd())
 runno = 0
 while os.path.exists(curr_dir+"/Rundir_"+str(runno)):
@@ -67,42 +69,34 @@ rundir = curr_dir+"/Rundir_"+str(runno)
 os.mkdir(rundir)
 os.chdir(rundir)
 
-gen_submit(args.worker_num)
-#submit job script
-rc = subprocess.Popen(['condor_submit job_submit'],shell=True)
-rc.wait()
+# apply computing resource
+import Backend.backend as bnd
+backend = bnd.Backend()
+hostfile = None
+if args.backend is None or args.backend=="condor":
+    backend.setBackend("htcondor")
+    host_list = backend.apply(args.worker_num)
+    for k,v in host_list:
+        with open(DistTempDir+"/hostfile",'w+') as hostfile:
+            hostfile.write(str(k)+':'+str(v))
 
-output = 0
-ask_time = 1
-while int(output) != args.worker_num:
-    os.chdir(rundir)
-    #check job is running
-    rc = subprocess.Popen(['/bin/bash %s'%os.environ["DistJETPATH"]+'/bin/ssh/refresh-running-node.sh %s'%rundir],stdout=subprocess.PIPE,shell=True)
-    output,err = rc.communicate()
-    print output
-    print "Waiting for computing resource, now running nodes number: %d"%int(output)
-    time.sleep(ask_time*2)
-    ask_time = ask_time+1
-    if ask_time > 100:
-        ask_time=100
-
-os.chdir(curr_dir)
+else:
+    pass
 
 
-master = subprocess.Popen(['mpiexec -nameserver %s python %s %s %s %s %s %s'
-						%(server,os.environ['DistJETPATH']+'/bin/master.py',args.app_module, config_path,loglevel,args.screen,rundir)],shell=True)
+master = subprocess.Popen(['mpiexec -nameserver %s python %s %s %s %s %s %s'%(server,os.environ['DistJETPATH']+'/bin/master.py',args.app_module, config_path,loglevel,args.screen,rundir)],shell=True)
 
-while not os.path.exists(rundir+'/port.txt'):
-	time.sleep(1)
+while(True):
+    if os.path.exists(DistTempDir+'/config.ini'):
+        break
+    time.sleep(5)
 
-worker = subprocess.Popen(['mpiexec -n %s -nameserver %s -f %s python %s %s %s %s %s'
-						%(str(args.worker_num),server,environ['DistJETPATH']+'/bin/worker.py'), 1, 'null',loglevel,rundir])
+worker = subprocess.Popen(['mpiexec -n %s -nameserver %s -f %s %s %s %s %s'%(args.worker_num,server,os.environ['HOME']+'/.DistJET/hostfile',os.environ['DistJETPATH']+'/bin/worker.py','1','null',loglevel)],shell=True)
 
 master.wait()
 
 #clean ssh jobs
-rc = subprocess.Popen(['condor_rm %s'%os.environ['USER']],shell=True)
-rc.wait()
+backend.release()
 
 
 

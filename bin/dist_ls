@@ -6,7 +6,7 @@ if not os.environ.has_key('DistJETPATH'):
     exit()
 sys.path.append(os.environ['DistJETPATH'])
 import python.Util.Config as Config
-config_path = os.environ['HOME']+'/.DistJET_tmp/config.ini'
+config_path = os.environ['HOME']+'/.DistJET/config.ini'
 if not os.path.exists(config_path):
     print "Can not find running job, exit"
     exit()

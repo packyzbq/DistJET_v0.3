@@ -1,5 +1,6 @@
 import htcondor
 import classad
+import time
 
 class backend:
     def __init__(self):
@@ -16,6 +17,7 @@ class backend:
 
         wait_flag = False
         while(True):
+            time.sleep(5)
             #cleanup hostlist
             self.hostlist.clear()
             # jobstatus 1:IDLE 2:Runing 3:Removed 4:Completed 5:Held 6:Transferring Output 7:Suspended

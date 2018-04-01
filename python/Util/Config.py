@@ -76,11 +76,12 @@ class Config(object):
             os.mkdir(cls.__global_config['Rundir'])
         rundir = cls.__global_config['Rundir']
         #check if exists tmp dir, $HOME/.diane_tmp/
-        if not os.path.exists(rundir+'/.DistJET_tmp'):
-            os.mkdir(rundir+'/.DistJET_tmp')
+        tmp_dir = os.environ['HOME']+'/.DistJET'
+        if not os.path.exists(tmp_dir):
+            os.mkdir(tmp_dir)
         #create tmp config
-        if not os.path.exists(rundir+'/.DistJET_tmp/config.ini'):
-            tmpconfig=open(rundir+'/.DistJET_tmp/config.ini','w+')
+        if not os.path.exists(tmp_dir+'/config.ini'):
+            tmpconfig=open(tmp_dir+'/config.ini','w+')
             tmpconfig.write('[GlobalCfg]\n')
             for k,v in cls.__global_config.items():
                 tmpconfig.write("%s=%s\n"%(k,v))

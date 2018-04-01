@@ -78,14 +78,15 @@ cfg = Conf.Config()
 
 master = JobMaster(applications=applications)
 if master.getRunFlag():
-    #with open("running.log","w+") as rf:
-    #    rf.write('True')
-    #    rf.flush()
+    with open("running.log","w+") as rf:
+        rf.write('True')
+        rf.flush()
     print('@master: start running')
     master.startProcessing()
 else:
     print('@master: Load Application error, exit')
 
-import shutil
-if os.path.exists(rundir+'/.DistJET_tmp'):
-    shutil.rmtree(rundir+'/.DistJET_tmp')
+#
+#import shutil
+#if os.path.exists(rundir+'/.DistJET_tmp'):
+#    shutil.rmtree(rundir+'/.DistJET_tmp')
