@@ -103,17 +103,22 @@ elif args.backend == "local":
 
 if loglevel == "debug":
     print os.path.abspath('.')
-    print 'mpiexec -nameserver %s python %s %s %s %s %s %s'%(server,os.environ['DistJETPATH']+'/bin/master.py',app_module, config_path,loglevel,args.screen,rundir)
+print 'mpiexec -nameserver %s python %s %s %s %s %s %s'%(server,os.environ['DistJETPATH']+'/bin/master.py',app_module, config_path,loglevel,args.screen,rundir)
 master = subprocess.Popen(['mpiexec -nameserver %s python %s %s %s %s %s %s'%(server,os.environ['DistJETPATH']+'/bin/master.py',app_module, config_path,loglevel,args.screen,rundir)],shell=True)
 
 while(True):
     if os.path.exists(DistTempDir+'/config.ini'):
         break
     time.sleep(5)
-
+time.sleep(1)
+print 'mpiexec -n %s -nameserver %s -f %s python %s %s %s %s'%(args.worker_num,server,os.environ['HOME']+'/.DistJET/hostfile',os.environ['DistJETPATH']+'/bin/worker.py','1','null',loglevel)
 worker = subprocess.Popen(['mpiexec -n %s -nameserver %s -f %s %s %s %s %s'%(args.worker_num,server,os.environ['HOME']+'/.DistJET/hostfile',os.environ['DistJETPATH']+'/bin/worker.py','1','null',loglevel)],shell=True)
-
-master.wait()
+try:
+    master.wait()
+except KeyboardInterrupt:
+    #clean temp file
+    if os.path.exists(os.environ['HOME']+'/.DistJET/config.ini'):
+        os.remove(os.environ['HOME']+'/.DistJET/config.ini')
 
 #clean ssh jobs
 #backend.release()
