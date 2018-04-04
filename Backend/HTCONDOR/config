@@ -1,0 +1,6 @@
+Host *
+    Port 2222
+    #IdentityFile ~/.ssh/ssh_host_rsa_key
+	IdentityFile ~/.DistJET/ssh-auth/authority/ssh_host_rsa_key
+    StrictHostKeyChecking no
+    UserKnownHostsFile /dev/null
