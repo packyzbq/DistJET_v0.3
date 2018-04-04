@@ -1,0 +1,300 @@
+[2] client uuid = 7efd184c-2616-44e0-a921-27300bd6a9c8
+[2] --------------------Client init start--------------------
+[2] [Client]: client initail...
+[10] client uuid = edc519b5-9b79-4fda-8214-3339aada7f14
+[10] --------------------Client init start--------------------
+[10] [Client]: client initail...
+[5] client uuid = fbdb25af-e77e-474e-be6f-34d95369f4e2
+[5] --------------------Client init start--------------------
+[5] [Client]: client initail...
+[3] client uuid = 36acf679-4c62-4ea9-9ee6-d38a05d605f2
+[3] --------------------Client init start--------------------
+[3] [Client]: client initail...
+[0] client uuid = 00b36747-82e2-4fea-ac0b-491bcce38013
+[0] --------------------Client init start--------------------
+[0] [Client]: client initail...
+[11] client uuid = 876a95f5-bb18-475f-aa6b-ef61f8d15270
+[11] --------------------Client init start--------------------
+[11] [Client]: client initail...
+[1] client uuid = 40b74bfe-67ac-491a-8c2f-3830d48e4bd6
+[1] --------------------Client init start--------------------
+[1] [Client]: client initail...
+[6] client uuid = caccfde7-6043-4f32-a241-c49be126361b
+[6] --------------------Client init start--------------------
+[6] [Client]: client initail...
+[8] client uuid = bde5f157-73ad-49c3-8153-7175770eaf2d
+[8] --------------------Client init start--------------------
+[8] [Client]: client initail...
+[4] client uuid = 754f2f7b-f09d-4cc2-b76e-1f9a781c9f97
+[4] --------------------Client init start--------------------
+[4] [Client]: client initail...
+[7] client uuid = b308b0d4-6b2d-4c56-9984-8c79e907136f
+[7] --------------------Client init start--------------------
+[7] [Client]: client initail...
+[9] client uuid = 17005741-0f7f-4658-a794-79848176c974
+[9] --------------------Client init start--------------------
+[9] [Client]: client initail...
+[1] [Client_1]: support thread level= 3
+[1] [Client_1]: finding service name <Default> ...
+[4] [Client_4]: support thread level= 3
+[4] [Client_4]: finding service name <Default> ...
+[5] [Client_5]: support thread level= 3
+[5] [Client_5]: finding service name <Default> ...
+[2] [Client_2]: support thread level= 3
+[2] [Client_2]: finding service name <Default> ...
+[6] [Client_6]: support thread level= 3
+[6] [Client_6]: finding service name <Default> ...
+[0] [Client_0]: support thread level= 3
+[0] [Client_0]: finding service name <Default> ...
+[7] [Client_7]: support thread level= 3
+[7] [Client_7]: finding service name <Default> ...
+[8] [Client_8]: support thread level= 3
+[8] [Client_8]: finding service name <Default> ...
+[9] [Client_9]: support thread level= 3
+[9] [Client_9]: finding service name <Default> ...
+[10] [Client_10]: support thread level= 3
+[10] [Client_10]: finding service name <Default> ...
+[11] [Client_11]: support thread level= 3
+[11] [Client_11]: finding service name <Default> ...
+[1] port = tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$
+[1] [Client_1]: service found on port:<tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$>
+[4] port = tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$6Q
+[4] [Client_4]: service found on port:<tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$>
+[5] port = tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$#1
+[5] [Client_5]: service found on port:<tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$>
+[6] port = tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$
+[6] [Client_6]: service found on port:<tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$>
+[0] port = 
+[0] [Client_0]: finding service name <[0] [cli_0]: PMIU_parse_keyvals: unexpected key delimiter at character 104 in cmd
+[0] [cli_0]: parse_kevals failed -1
+[2] port = tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$ea
+[2] [Client_2]: service found on port:<tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$>
+[0] client error
+[7] port = tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$
+[7] [Client_7]: service found on port:<tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$>
+[8] port = tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$
+[8] [Client_8]: service found on port:<tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$>
+[9] port = tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$6a
+[9] [Client_9]: service found on port:<tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$>
+[10] port = tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$6a
+[10] [Client_10]: service found on port:<tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$>
+[11] port = tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$6a
+[11] [Client_11]: service found on port:<tag#0$description#lxslc604.ihep.ac.cn$port#38084$ifname#202.122.33.188$>
+[1] [Client_1]: client connect to server, comm = -2080374781
+[1] [Client_1]: recv thread start....
+[1] --------------------Client 1 init finish--------------------
+[4] [Client_4]: client connect to server, comm = -2080374781
+[4] [Client_4]: recv thread start....
+[4] --------------------Client 4 init finish--------------------
+[0] *** glibc detected *** python: free(): invalid pointer: 0x00000000016dd400 ***
+[0] ======= Backtrace: =========
+[0] /lib64/libc.so.6[0x35c4c75dee]
+[0] /lib64/libc.so.6[0x35c4c78c3d]
+[0] /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre2/ExternalLibs/Python/2.7.6/lib/libpython2.7.so.1.0(PyGrammar_RemoveAccelerators+0x4a)[0x7fe554daf0ea]
+[0] /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre2/ExternalLibs/Python/2.7.6/lib/libpython2.7.so.1.0(Py_Finalize+0x191)[0x7fe554e87fd1]
+[0] /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre2/ExternalLibs/Python/2.7.6/lib/libpython2.7.so.1.0(Py_Exit+0x8)[0x7fe554e880a8]
+[0] /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre2/ExternalLibs/Python/2.7.6/lib/libpython2.7.so.1.0(+0x1181f1)[0x7fe554e881f1]
+[0] /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre2/ExternalLibs/Python/2.7.6/lib/libpython2.7.so.1.0(PyErr_PrintEx+0x1dd)[0x7fe554e8847d]
+[0] /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre2/ExternalLibs/Python/2.7.6/lib/libpython2.7.so.1.0(PyRun_SimpleFileExFlags+0x22e)[0x7fe554e8914e]
+[0] /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre2/ExternalLibs/Python/2.7.6/lib/libpython2.7.so.1.0(Py_Main+0xc74)[0x7fe554e9eb24]
+[0] /lib64/libc.so.6(__libc_start_main+0xfd)[0x35c4c1ed1d]
+[0] python[0x400649]
+[0] ======= Memory map: ========
+[5] [Client_5]: client connect to server, comm = -2080374781
+[5] [Client_5]: recv thread start....
+[5] --------------------Client 5 init finish--------------------
+[0] 00400000-00401000 r-xp 00000000 00:22 610411660                          /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/bin/python2.7
+[0] 00600000-00601000 rw-p 00000000 00:22 610411660                          /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/bin/python2.7
+[0] 01602000-01776000 rw-p 00000000 00:00 0                                  [heap]
+[0] 35c4400000-35c4420000 r-xp 00000000 08:03 1458666                        /lib64/ld-2.12.so
+[0] 35c4620000-35c4621000 r--p 00020000 08:03 1458666                        /lib64/ld-2.12.so
+[0] 35c4621000-35c4622000 rw-p 00021000 08:03 1458666                        /lib64/ld-2.12.so
+[0] 35c4622000-35c4623000 rw-p 00000000 00:00 0 
+[0] 35c4800000-35c4802000 r-xp 00000000 08:03 1458670                        /lib64/libdl-2.12.so
+[0] 35c4802000-35c4a02000 ---p 00002000 08:03 1458670                        /lib64/libdl-2.12.so
+[0] 35c4a02000-35c4a03000 r--p 00002000 08:03 1458670                        /lib64/libdl-2.12.so
+[0] 35c4a03000-35c4a04000 rw-p 00003000 08:03 1458670                        /lib64/libdl-2.12.so
+[0] 35c4c00000-35c4d8a000 r-xp 00000000 08:03 1458667                        /lib64/libc-2.12.so
+[0] 35c4d8a000-35c4f8a000 ---p 0018a000 08:03 1458667                        /lib64/libc-2.12.so
+[0] 35c4f8a000-35c4f8e000 r--p 0018a000 08:03 1458667                        /lib64/libc-2.12.so
+[0] 35c4f8e000-35c4f90000 rw-p 0018e000 08:03 1458667                        /lib64/libc-2.12.so
+[0] 35c4f90000-35c4f94000 rw-p 00000000 00:00 0 
+[0] 35c5000000-35c5017000 r-xp 00000000 08:03 1458669                        /lib64/libpthread-2.12.so
+[0] 35c5017000-35c5217000 ---p 00017000 08:03 1458669                        /lib64/libpthread-2.12.so
+[0] 35c5217000-35c5218000 r--p 00017000 08:03 1458669                        /lib64/libpthread-2.12.so
+[0] 35c5218000-35c5219000 rw-p 00018000 08:03 1458669                        /lib64/libpthread-2.12.so
+[0] 35c5219000-35c521d000 rw-p 00000000 00:00 0 
+[0] 35c5400000-35c5483000 r-xp 00000000 08:03 1458668                        /lib64/libm-2.12.so
+[0] 35c5483000-35c5682000 ---p 00083000 08:03 1458668                        /lib64/libm-2.12.so
+[0] 35c5682000-35c5683000 r--p 00082000 08:03 1458668                        /lib64/libm-2.12.so
+[0] 35c5683000-35c5684000 rw-p 00083000 08:03 1458668                        /lib64/libm-2.12.so
+[0] 35c5800000-35c5815000 r-xp 00000000 08:03 1441892                        /lib64/libz.so.1.2.3
+[0] 35c5815000-35c5a14000 ---p 00015000 08:03 1441892                        /lib64/libz.so.1.2.3
+[0] 35c5a14000-35c5a15000 r--p 00014000 08:03 1441892                        /lib64/libz.so.1.2.3
+[0] 35c5a15000-35c5a16000 rw-p 00015000 08:03 1441892                        /lib64/libz.so.1.2.3
+[0] 35c5c00000-35c5c07000 r-xp 00000000 08:03 1441900                        /lib64/librt-2.12.so
+[0] 35c5c07000-35c5e06000 ---p 00007000 08:03 1441900                        /lib64/librt-2.12.so
+[0] 35c5e06000-35c5e07000 r--p 00006000 08:03 1441900                        /lib64/librt-2.12.so
+[0] 35c5e07000-35c5e08000 rw-p 00007000 08:03 1441900                        /lib64/librt-2.12.so
+[0] 35c6000000-35c6016000 r-xp 00000000 08:03 1458672                        /lib64/libresolv-2.12.so
+[0] 35c6016000-35c6216000 ---p 00016000 08:03 1458672                        /lib64/libresolv-2.12.so
+[0] 35c6216000-35c6217000 r--p 00016000 08:03 1458672                        /lib64/libresolv-2.12.so
+[0] 35c6217000-35c6218000 rw-p 00017000 08:03 1458672                        /lib64/libresolv-2.12.so
+[0] 35c6218000-35c621a000 rw-p 00000000 00:00 0 
+[0] 35c6400000-35c641d000 r-xp 00000000 08:03 1458683                        /lib64/libselinux.so.1
+[0] 35c641d000-35c661c000 ---p 0001d000 08:03 1458683                        /lib64/libselinux.so.1
+[0] 35c661c000-35c661d000 r--p 0001c000 08:03 1458683                        /lib64/libselinux.so.1
+[0] 35c661d000-35c661e000 rw-p 0001d000 08:03 1458683                        /lib64/libselinux.so.1
+[0] 35c661e000-35c661f000 rw-p 00000000 00:00 0 
+[0] 35c6800000-35c6816000 r-xp 00000000 08:03 1458677                        /lib64/libgcc_s-4.4.7-20120601.so.1
+[0] 35c6816000-35c6a15000 ---p 00016000 08:03 1458677                        /lib64/libgcc_s-4.4.7-20120601.so.1
+[0] 35c6a15000-35c6a16000 rw-p 00015000 08:03 1458677                        /lib64/libgcc_s-4.4.7-20120601.so.1
+[0] 35c7000000-35c70e8000 r-xp 00000000 08:03 664716                         /usr/lib64/libstdc++.so.6.0.13
+[0] 35c70e8000-35c72e8000 ---p 000e8000 08:03 664716                         /usr/lib64/libstdc++.so.6.0.13
+[0] 35c72e8000-35c72ef000 r--p 000e8000 08:03 664716                         /usr/lib64/libstdc++.so.6.0.13
+[0] 35c72ef000-35c72f1000 rw-p 000ef000 08:03 664716                         /usr/lib64/libstdc++.so.6.0.13
+[0] 35c72f1000-35c7306000 rw-p 00000000 00:00 0 
+[0] 35c7400000-35c74f0000 r-xp 00000000 08:03 666449                         /usr/lib64/libgfortran.so.3.0.0
+[0] 35c74f0000-35c76ef000 ---p 000f0000 08:03 666449                         /usr/lib64/libgfortran.so.3.0.0
+[0] 35c76ef000-35c76f1000 rw-p 000ef000 08:03 666449                         /usr/lib64/libgfortran.so.3.0.0
+[0] 35c76f1000-35c76f2000 rw-p 00000000 00:00 0 
+[0] 35c8c00000-35c8c02000 r-xp 00000000 08:03 1458682                        /lib64/libkeyutils.so.1.3
+[0] 35c8c02000-35c8e01000 ---p 00002000 08:03 1458682                        /lib64/libkeyutils.so.1.3
+[0] 35c8e01000-35c8e02000 r--p 00001000 08:03 1458682                        /lib64/libkeyutils.so.1.3
+[0] 35c8e02000-35c8e03000 rw-p 00002000 08:03 1458682                        /lib64/libkeyutils.so.1.3
+[0] 35c9400000-35c95ba000 r-xp 00000000 08:03 667331                         /usr/lib64/libcrypto.so.1.0.1e
+[0] 35c95ba000-35c97ba000 ---p 001ba000 08:03 667331                         /usr/lib64/libcrypto.so.1.0.1e
+[0] 35c97ba000-35c97d5000 r--p 001ba000 08:03 667331                         /usr/lib64/libcrypto.so.1.0.1e
+[0] 35c97d5000-35c97e1000 rw-p 001d5000 08:03 667331                         /usr/lib64/libcrypto.so.1.0.1e
+[0] 35c97e1000-35c97e5000 rw-p 00000000 00:00 0 
+[0] 35ca800000-35ca803000 r-xp 00000000 08:03 1458686                        /lib64/libcom_err.so.2.1
+[0] 35ca803000-35caa02000 ---p 00003000 08:03 1458686                        /lib64/libcom_err.so.2.1
+[0] 35caa02000-35caa03000 r--p 00002000 08:03 1458686                        /lib64/libcom_err.so.2.1
+[0] 35caa03000-35caa04000 rw-p 00003000 08:03 1458686                        /lib64/libcom_err.so.2.1
+[0] 35cb000000-35cb0dc000 r-xp 00000000 08:03 1458687                        /lib64/libkrb5.so.3.3
+[0] 35cb0dc000-35cb2db000 ---p 000dc000 08:03 1458687                        /lib64/libkrb5.so.3.3
+[0] 35cb2db000-35cb2e5000 r--p 000db000 08:03 1458687                        /lib64/libkrb5.so.3.3
+[0] 35cb2e5000-35cb2e7000 rw-p 000e5000 08:03 1458687                        /lib64/libkrb5.so.3.3
+[0] 35cb800000-35cb80a000 r-xp 00000000 08:03 1458684                        /lib64/libkrb5support.so.0.1
+[0] 35cb80a000-35cba09000 ---p 0000a000 08:03 1458684                        /lib64/libkrb5support.so.0.1
+[0] 35cba09000-35cba0a000 r--p 00009000 08:03 1458684                        /lib64/libkrb5support.so.0.1
+[0] 35cba0a000-35cba0b000 rw-p 0000a000 08:03 1458684                        /lib64/libkrb5support.so.0.1
+[0] 35cc000000-35cc029000 r-xp 00000000 08:03 1458685                        /lib64/libk5crypto.so.3.1
+[0] 35cc029000-35cc229000 ---p 00029000 08:03 1458685                        /lib64/libk5crypto.so.3.1
+[0] 35cc229000-35cc22a000 r--p 00029000 08:03 1458685                        /lib64/libk5crypto.so.3.1
+[0] 35cc22a000-35cc22b000 rw-p 0002a000 08:03 1458685                        /lib64/libk5crypto.so.3.1
+[0] 35cc22b000-35cc22c000 rw-p 00000000 00:00 0 
+[0] 35cd000000-35cd041000 r-xp 00000000 08:03 1458688                        /lib64/libgssapi_krb5.so.2.2
+[0] 35cd041000-35cd241000 ---p 00041000 08:03 1458688                        /lib64/libgssapi_krb5.so.2.2
+[0] 35cd241000-35cd242000 r--p 00041000 08:03 1458688                        /lib64/libgssapi_krb5.so.2.2
+[0] 35cd242000-35cd244000 rw-p 00042000 08:03 1458688                        /lib64/libgssapi_krb5.so.2.2
+[0] 35cd400000-35cd462000 r-xp 00000000 08:03 694019                         /usr/lib64/libssl.so.1.0.1e
+[0] 35cd462000-35cd662000 ---p 00062000 08:03 694019                         /usr/lib64/libssl.so.1.0.1e
+[0] 35cd662000-35cd666000 r--p 00062000 08:03 694019                         /usr/lib64/libssl.so.1.0.1e
+[0] 35cd666000-35cd66c000 rw-p 00066000 08:03 694019                         /usr/lib64/libssl.so.1.0.1e
+[0] 35d8800000-35d8802000 r-xp 00000000 08:03 1458678                        /lib64/libutil-2.12.so
+[0] 35d8802000-35d8a01000 ---p 00002000 08:03 1458678                        /lib64/libutil-2.12.so
+[0] 35d8a01000-35d8a02000 r--p 00001000 08:03 1458678                        /lib64/libutil-2.12.so
+[0] 35d8a02000-35d8a03000 rw-p 00002000 08:03 1458678                        /lib64/libutil-2.12.so
+[0] 37c3000000-37c3004000 r-xp 00000000 08:03 1441923                        /lib64/libuuid.so.1.3.0
+[0] 37c3004000-37c3203000 ---p 00004000 08:03 1441923                        /lib64/libuuid.so.1.3.0
+[0] 37c3203000-37c3204000 rw-p 00003000 08:03 1441923                        /lib64/libuuid.so.1.3.0
+[0] 7fe544000000-7fe544021000 rw-p 00000000 00:00 0 
+[0] 7fe544021000-7fe548000000 ---p 00000000 00:00 0 
+[0] 7fe548cd6000-7fe5490b8000 rw-p 00000000 00:00 0 
+[0] 7fe5490b8000-7fe5490c5000 r-xp 00000000 08:03 1441823                    /lib64/libnss_files-2.12.so
+[0] 7fe5490c5000-7fe5492c4000 ---p 0000d000 08:03 1441823                    /lib64/libnss_files-2.12.so
+[0] 7fe5492c4000-7fe5492c5000 r--p 0000c000 08:03 1441823                    /lib64/libnss_files-2.12.so
+[0] 7fe5492c5000-7fe5492c6000 rw-p 0000d000 08:03 1441823                    /lib64/libnss_files-2.12.so
+[0] 7fe5492f9000-7fe54cb3d000 rw-s 00000000 00:10 148754667                  /dev/shm/mpich_shar_tmpQ8FvB6 (deleted)
+[0] 7fe54cb3d000-7fe54cb3f000 r-xp 00000000 00:22 610420454                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/fcntl.so
+[0] 7fe54cb3f000-7fe54cd3e000 ---p 00002000 00:22 610420454                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/fcntl.so
+[0] 7fe54cd3e000-7fe54cd40000 rw-p 00001000 00:22 610420454                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/fcntl.so
+[0] 7fe54cd40000-7fe54cd44000 r-xp 00000000 00:22 610420464                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/cStringIO.so
+[0] 7fe54cd44000-7fe54cf43000 ---p 00004000 00:22 610420464                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/cStringIO.so
+[0] 7fe54cf43000-7fe54cf45000 rw-p 00003000 00:22 610420464                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/cStringIO.so
+[0] 7fe54cf45000-7fe54cf48000 r-xp 00000000 00:22 610420428                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/_random.so
+[0] 7fe54cf48000-7fe54d147000 ---p 00003000 00:22 610420428                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/_random.so
+[0] 7fe54d147000-7fe54d148000 rw-p 00002000 00:22 610420428                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/_random.so
+[0] 7fe54d148000-7fe54d14b000 r-xp 00000000 00:22 610420484                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/_hashlib.so
+[0] 7fe54d14b000-7fe54d34b000 ---p 00003000 00:22 610420484                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/_hashlib.so
+[0] 7fe54d34b000-7fe54d34c000 rw-p 00003000 00:22 610420484                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/_hashlib.so
+[0] 7fe54d34c000-7fe54d350000 r-xp 00000000 00:22 610420506                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/binascii.so
+[0] 7fe54d350000-7fe54d550000 ---p 00004000 00:22 610420506                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/binascii.so
+[0] 7fe54d550000-7fe54d551000 rw-p 00004000 00:22 610420506                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/binascii.so
+[0] 7fe54d551000-7fe54d592000 rw-p 00000000 00:00 0 
+[0] 7fe54d592000-7fe54d59a000 r-xp 00000000 00:22 610420416                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/math.so
+[0] 7fe54d59a000-7fe54d799000 ---p 00008000 00:22 610420416                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/math.so
+[0] 7fe54d799000-7fe54d79b000 rw-p 00007000 00:22 610420416                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/math.so
+[0] 7fe54d79b000-7fe54d7b8000 r-xp 00000000 00:22 610420438                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/_io.so
+[0] 7fe54d7b8000-7fe54d9b8000 ---p 0001d000 00:22 610420438                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/_io.so
+[0] 7fe54d9b8000-7fe54d9c2000 rw-p 0001d000 00:22 610420438                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/_io.so
+[0] 7fe54d9c2000-7fe54d9c9000 r-xp 00000000 00:22 610420408                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/_struct.so
+[0] 7fe54d9c9000-7fe54dbc9000 ---p 00007000 00:22 610420408                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/_struct.so
+[0] 7fe54dbc9000-7fe54dbcb000 rw-p 00007000 00:22 610420408                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/_struct.so
+[0] 7fe54dbcb000-7fe54dbeb000 r-xp 00000000 00:22 610420536                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/_ctypes.so
+[0] 7fe54dbeb000-7fe54ddeb000 ---p 00020000 00:22 610420536                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/_ctypes.so
+[0] 7fe54ddeb000-7fe54ddf0000 rw-p 00020000 00:22 610420536                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/_ctypes.so
+[0] 7fe54ddf0000-7fe54ddf4000 r-xp 00000000 00:22 610420420                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/time.so
+[0] 7fe54ddf4000-7fe54dff3000 ---p 00004000 00:22 610420420                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/time.so
+[0] 7fe54dff3000-7fe54dff5000 rw-p 00003000 00:22 610420420                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/python2.7/lib-dynload/time.so
+[0] 7fe54dff5000-7fe54e039000 r-xp 00000000 00:22 749999858                  /afs/ihep.ac.cn/users/z/zhaobq/workerSpace/MPI_Connect_v2/python/IR_Buffer_Module.so
+[0] 7fe54e039000-7fe54e238000 ---p 00044000 00:22 749999858                  /afs/ihep.ac.cn/users/z/zhaobq/workerSpace/MPI_Connect_v2/python/IR_Buffer_Module.so
+[0] 7fe54e238000-7fe54e23b000 rw-p 00043000 00:22 749999858                  /afs/ihep.ac.cn/users/z/zhaobq/workerSpace/MPI_Connect_v2/python/IR_Buffer_Module.so
+[0] 7fe54e23b000-7fe54e471000 r-xp 00000000 00:22 750041002                  /afs/ihep.ac.cn/users/z/zhaobq/mpi-install/lib/libmpi.so.12.1.0
+[0] 7fe54e471000-7fe54e670000 ---p 00236000 00:22 750041002                  /afs/ihep.ac.cn/users/z/zhaobq/mpi-install/lib/libmpi.so.12.1.0
+[0] 7fe54e670000-7fe54e682000 rw-p 00235000 00:22 750041002                  /afs/ihep.ac.cn/users/z/zhaobq/mpi-install/lib/libmpi.so.12.1.0
+[0] 7fe54e682000-7fe54e6bc000 rw-p 00000000 00:00 0 
+[0] 7fe54e6bc000-7fe54e6db000 r-xp 00000000 00:22 750041022                  /afs/ihep.ac.cn/users/z/zhaobq/mpi-install/lib/libmpicxx.so.12.1.0
+[0] 7fe54e6db000-7fe54e8db000 ---p 0001f000 00:22 750041022                  /afs/ihep.ac.cn/users/z/zhaobq/mpi-install/lib/libmpicxx.so.12.1.0
+[0] 7fe54e8db000-7fe54e8de000 rw-p 0001f000 00:22 750041022                  /afs/ihep.ac.cn/users/z/zhaobq/mpi-install/lib/libmpicxx.so.12.1.0
+[0] 7fe54e8de000-7fe54e92c000 r-xp 00000000 00:22 611059648                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Boost/1.55.0/lib/libboost_python.so.1.55.0
+[0] 7fe54e92c000-7fe54eb2b000 ---p 0004e000 00:22 611059648                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Boost/1.55.0/lib/libboost_python.so.1.55.0
+[0] 7fe54eb2b000-7fe54eb2f000 rw-p 0004d000 00:22 611059648                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Boost/1.55.0/lib/libboost_python.so.1.55.0
+[0] 7fe54eb2f000-7fe54eb5d000 r-xp 00000000 00:22 749999854                  /afs/ihep.ac.cn/users/z/zhaobq/workerSpace/MPI_Connect_v2/python/Client_Module.so
+[0] 7fe54eb5d000-7fe54ed5d000 ---p 0002e000 00:22 749999854                  /afs/ihep.ac.cn/users/z/zhaobq/workerSpace/MPI_Connect_v2/python/Client_Module.so
+[0] 7fe54ed5d000-7fe54ed5f000 rw-p 0002e000 00:22 749999854                  /afs/ihep.ac.cn/users/z/zhaobq/workerSpace/MPI_Connect_v2/python/Client_Module.so
+[0] 7fe54ed5f000-7fe54eda0000 rw-p 00000000 00:00 0 
+[0] 7fe54eda0000-7fe554c34000 r--p 00000000 08:03 655971                     /usr/lib/locale/locale-archive
+[0] 7fe554c34000-7fe554d3e000 rw-p 00000000 00:00 0 
+[0] 7fe554d3e000-7fe554d6f000 rw-p 00000000 00:00 0 
+[0] 7fe554d6f000-7fe554d70000 rwxp 00000000 00:00 0 
+[0] 7fe554d70000-7fe554f03000 r-xp 00000000 00:22 610411662                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/libpython2.7.so.1.0
+[0] 7fe554f03000-7fe555103000 ---p 00193000 00:22 610411662                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/libpython2.7.so.1.0
+[0] 7fe555103000-7fe555142000 rw-p 00193000 00:22 610411662                  /afs/ihep.ac.cn/soft/juno/JUNO-ALL-SLC6/Pre-Release/J17v1r1-Pre1/ExternalLibs/Python/2.7.6/lib/libpython2.7.so.1.0
+[0] 7fe555142000-7fe555153000 rw-p 00000000 00:00 0 
+[0] 7fff09560000-7fff0957b000 rw-p 00000000 00:00 0                          [stack]
+[0] 7fff095ab000-7fff095ac000 r-xp 00000000 00:00 0                          [vdso]
+[0] ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+[6] [Client_6]: client connect to server, comm = -2080374781
+[6] [Client_6]: recv thread start....
+[6] --------------------Client 6 init finish--------------------
+[2] [Client_2]: client connect to server, comm = -2080374781
+[2] [Client_2]: recv thread start....
+[2] --------------------Client 2 init finish--------------------
+[7] [Client_7]: client connect to server, comm = -2080374781
+[7] [Client_7]: recv thread start....
+[7] --------------------Client 7 init finish--------------------
+[9] [Client_9]: client connect to server, comm = -2080374781
+[9] [Client_9]: recv thread start....
+[9] --------------------Client 9 init finish--------------------
+[10] [Client_10]: client connect to server, comm = -2080374781
+[10] [Client_10]: recv thread start....
+[10] --------------------Client 10 init finish--------------------
+[11] [Client_11]: client connect to server, comm = -2080374781
+[11] [Client_11]: recv thread start....
+[11] --------------------Client 11 init finish--------------------
+[8] [Client_8]: client connect to server, comm = -2080374781
+[8] [Client_8]: recv thread start....
+[8] --------------------Client 8 init finish--------------------
+
+===================================================================================
+=   BAD TERMINATION OF ONE OF YOUR APPLICATION PROCESSES
+=   PID 7696 RUNNING AT lxslc604.ihep.ac.cn
+=   EXIT CODE: 134
+=   CLEANING UP REMAINING PROCESSES
+=   YOU CAN IGNORE THE BELOW CLEANUP MESSAGES
+===================================================================================
+YOUR APPLICATION TERMINATED WITH THE EXIT STRING: Aborted (signal 6)
+This typically refers to a problem with your application.
+Please see the FAQ page for debugging suggestions

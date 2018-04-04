@@ -1,0 +1,41 @@
+MPI_Base.cpp: In static member function ‘static void* MPI_Base::recv_thread(void*)’:
+MPI_Base.cpp:42:83: error: request for member ‘x’ in ‘pid’, which is of non-class type ‘pthread_t {aka long unsigned int}’
+     cout <<"<recv thread>: Proc: "<< ((MPI_Base*)ptr)->myrank << ", Pid: " << pid.x << ", receive thread start...  "<<endl;
+                                                                                   ^
+MPI_Base.cpp:107:22: warning: deleting ‘void*’ is undefined [enabled by default]
+             delete(rb);
+                      ^
+MPI_Base.cpp: In member function ‘void MPI_Base::set_send_stop()’:
+MPI_Base.cpp:129:5: error: ‘send_f’ was not declared in this scope
+     send_f = true;
+     ^
+MPI_Server.cpp: In static member function ‘static void* MPI_Server::accept_conn_thread(void*)’:
+MPI_Server.cpp:201:58: warning: NULL used in arithmetic [-Wpointer-arith]
+         while(((MPI_Server*)ptr)->comm_map[""+tmpkey] != NULL){
+                                                          ^
+MPI_Server.cpp: In member function ‘virtual void MPI_Server::recv_handle(ARGS, void*)’:
+MPI_Server.cpp:240:69: warning: NULL used in arithmetic [-Wpointer-arith]
+                 if(iter->second == args.newcomm && comm_map[msg] == NULL) {
+                                                                     ^
+MPI_Server.cpp:253:38: warning: NULL used in arithmetic [-Wpointer-arith]
+             else if(comm_map[msg] != NULL){
+                                      ^
+MPI_Server.cpp:263:33: warning: NULL used in arithmetic [-Wpointer-arith]
+             if(comm_map[msg] != NULL){
+                                 ^
+MPI_Server.cpp: In member function ‘int MPI_Server::send_string(char*, int, std::string, int)’:
+MPI_Server.cpp:308:21: warning: NULL used in arithmetic [-Wpointer-arith]
+     if(send_comm == NULL) {
+                     ^
+ServerTest.cpp:1:24: fatal error: MPI_Server.h: No such file or directory
+ #include "MPI_Server.h"
+                        ^
+compilation terminated.
+c++: error: MPI_Connect_Base.o: No such file or directory
+c++: error: ServerTest.o: No such file or directory
+ClientTest.cpp:1:24: fatal error: MPI_Client.h: No such file or directory
+ #include "MPI_Client.h"
+                        ^
+compilation terminated.
+c++: error: MPI_Connect_Base.o: No such file or directory
+c++: error: ClientTest.o: No such file or directory

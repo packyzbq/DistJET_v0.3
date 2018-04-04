@@ -73,7 +73,7 @@ class WatchDogThread(BaseThread):
 
             # save worker status to file
             rundir = self.master.cfg.getCFGattr('Rundir')
-            with open(rundir+'/.DistJET_tmp/worker','w+') as workerfile:
+            with open(os.environ['HOME']+'/.DistJET/worker','w+') as workerfile:
                 workerfile.truncate()
                 workerfile.write('wid\tstatus\trunning\tlasttime\n')
                 for wid in self.master.worker_registry:
