@@ -1,9 +1,0 @@
-UsePrivilegeSeparation no 
-Protocol 2
-HostKey /junofs/users/zhaobq/DistJET_v0.3/bin/ssh/ssh_host_rsa_key
-#HostbasedAuthentication yes
-#RequiredAuthentications2 publickey
-RSAAuthentication yes
-PubkeyAuthentication yes
-AuthorizedKeysFile /junofs/users/zhaobq/DistJET_v0.3/bin/ssh/authorized_keys
-AllowUsers zhaobq

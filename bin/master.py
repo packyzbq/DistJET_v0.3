@@ -19,6 +19,8 @@ if len(sys.argv) < 4:
 #if os.path.exists('DistJET_log'):
 #    os.removedirs('DistJET_log')
 
+print sys.argv[1:]
+
 appfile = sys.argv[1]
 config_path = sys.argv[2]
 log_level = sys.argv[3]
@@ -33,6 +35,8 @@ if len(sys.argv) > 6:
 else:
 	rundir = 'null'
 
+if log_level == "debug":
+    print appfile
 if os.path.exists(appfile):
     module_path = os.path.dirname(appfile)
     module_path = os.path.abspath(module_path)

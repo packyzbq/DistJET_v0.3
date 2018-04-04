@@ -3,9 +3,10 @@ import argparse
 import subprocess
 import os,sys
 import time
-
 assert os.environ.has_key("DistJETPATH")
-DistTempDir = os.environ['$HOME/.DistJET']
+sys.path.append(os.environ['DistJETPATH'])
+
+DistTempDir = os.environ['HOME']+'/.DistJET'
 
 def getArgs():
     parser = argparse.ArgumentParser()
@@ -37,29 +38,33 @@ def gen_submit(num):
 
 
 args = getArgs()
+arg_dict = {}
 
-print args.__dict__
-
+# app module
+app_module = os.path.abspath(args.app_module)
+arg_dict['app_module'] = app_module
 #config path
 config_path = args.config_path
-if config_path is None:
-   config_path="null"
-
+if config_path is None or config_path == "":
+    config_path="null"
+else:
+    config_path = os.path.abspath(config_path)
+arg_dict['config_path'] = config_path
 #loglevel
 loglevel = "info"
 if args.log_level:
     loglevel = "debug"
+arg_dict['loglevel'] = loglevel
 
 #app config
-app_config = args.app_config
-if app_config is None:
+if args.app_config is None or args.app_config == "":
     app_config = "null"
-
+else:
+    app_config = os.path.abspath(args.app_config) 
+arg_dict['app_config'] = app_config
 #server_host
-server = args.server_host
-if server is None:
-	server = "localhost"
-
+server = "localhost"
+arg_dict['server'] = server
 #Rundir
 curr_dir = os.path.abspath(os.getcwd())
 runno = 0
@@ -69,22 +74,37 @@ rundir = curr_dir+"/Rundir_"+str(runno)
 os.mkdir(rundir)
 os.chdir(rundir)
 
+if loglevel == "debug":
+    print arg_dict
+
 # apply computing resource
-import Backend.backend as bnd
-backend = bnd.Backend()
-hostfile = None
 if args.backend is None or args.backend=="condor":
-    backend.setBackend("htcondor")
-    host_list = backend.apply(args.worker_num)
-    for k,v in host_list:
-        with open(DistTempDir+"/hostfile",'w+') as hostfile:
-            hostfile.write(str(k)+':'+str(v))
+    import Backend.backend as bnd
+    backend = bnd.Backend()
+    hostfile = None
+    if backend.setBackend("htcondor"):
+        host_list = backend.apply(args.worker_num)
+        print host_list
+        hostfile = open(DistTempDir+'/hostfile','w+')
+        for k,v in host_list.items():
+            hostfile.write(str(k)+':'+str(v)+'\n')
+        hostfile.close()
+    else:
+        exit(0)
 
-else:
-    pass
+elif args.backend == "local":
+    hostfile = open(DistTempDir+'/hostfile','w+')
+    hostfile.truncate()
+    hostfile.write(os.environ['HOSTNAME']+':'+str(args.worker_num))
+    hostfile.flush()
+    hostfile.close()
 
 
-master = subprocess.Popen(['mpiexec -nameserver %s python %s %s %s %s %s %s'%(server,os.environ['DistJETPATH']+'/bin/master.py',args.app_module, config_path,loglevel,args.screen,rundir)],shell=True)
+
+if loglevel == "debug":
+    print os.path.abspath('.')
+    print 'mpiexec -nameserver %s python %s %s %s %s %s %s'%(server,os.environ['DistJETPATH']+'/bin/master.py',app_module, config_path,loglevel,args.screen,rundir)
+master = subprocess.Popen(['mpiexec -nameserver %s python %s %s %s %s %s %s'%(server,os.environ['DistJETPATH']+'/bin/master.py',app_module, config_path,loglevel,args.screen,rundir)],shell=True)
 
 while(True):
     if os.path.exists(DistTempDir+'/config.ini'):
@@ -96,7 +116,7 @@ worker = subprocess.Popen(['mpiexec -n %s -nameserver %s -f %s %s %s %s %s'%(arg
 master.wait()
 
 #clean ssh jobs
-backend.release()
+#backend.release()
 
 
 

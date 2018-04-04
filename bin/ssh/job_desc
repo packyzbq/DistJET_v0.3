@@ -5,7 +5,7 @@ getenv = True
 #initialdir = res
 
 Requirements = Target.OpSysAndVer =?= "SL6" && regexp("jnws*", Name)
-Queue 1
+Queue 2
 
 
 #Requirements = Target.OpSysAndVer =?= "SL6" && regexp("jnws031", Name)
