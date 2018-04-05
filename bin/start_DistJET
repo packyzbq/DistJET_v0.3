@@ -111,8 +111,8 @@ while(True):
         break
     time.sleep(5)
 time.sleep(1)
-print 'mpiexec -n %s -nameserver %s -f %s python %s %s %s %s'%(args.worker_num,server,os.environ['HOME']+'/.DistJET/hostfile',os.environ['DistJETPATH']+'/bin/worker.py','1','null',loglevel)
-worker = subprocess.Popen(['mpiexec -n %s -nameserver %s -f %s %s %s %s %s'%(args.worker_num,server,os.environ['HOME']+'/.DistJET/hostfile',os.environ['DistJETPATH']+'/bin/worker.py','1','null',loglevel)],shell=True)
+print 'mpiexec -n %s -nameserver %s -f %s python %s %s %s %s %s %s'%(args.worker_num,server,os.environ['HOME']+'/.DistJET/hostfile',os.environ['DistJETPATH']+'/bin/worker.py','1','null',loglevel,args.screen,rundir)
+worker = subprocess.Popen(['mpiexec -n %s -nameserver %s -f %s python %s %s %s %s %s %s'%(args.worker_num,server,os.environ['HOME']+'/.DistJET/hostfile',os.environ['DistJETPATH']+'/bin/worker.py','1','null',loglevel, args.screen, rundir)],shell=True)
 try:
     master.wait()
 except KeyboardInterrupt:
