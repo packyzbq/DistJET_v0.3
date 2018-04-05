@@ -29,7 +29,6 @@ if len(sys.argv) > 5:
     log_screen = sys.argv[5]
 else:
     log_screen = False
-
 if len(sys.argv) > 6:
     rundir = sys.argv[6]
 else:
@@ -49,8 +48,6 @@ else:
 
 #rundir = os.getcwd()
 import python.Util.Config as Conf
-if rundir != 'null':
-    Conf.Config.setCfg('Rundir',rundir)
 
 module=None
 try:
@@ -74,11 +71,15 @@ else:
     print('@master: No callable function "run" in app module, exit')
     exit()
 
-if config_path == 'null' or not os.path.exists(os.path.abspath(config_path)):
+if config_path == "null" or not os.path.exists(os.path.abspath(config_path)):
     print('@master: Cannot find configuration file [%s]'%os.path.abspath(config_path))
     config_path = os.getenv('DistJETPATH')+'/config/config.ini'
 Conf.set_inipath(config_path)
+if rundir != 'null':
+    print "set rundir = %s"%rundir
+    Conf.Config.setCfg('Rundir',rundir)
 cfg = Conf.Config()
+print "rundir="+cfg.getCFGattr("Rundir")
 
 master = JobMaster(applications=applications)
 if master.getRunFlag():

@@ -103,8 +103,8 @@ elif args.backend == "local":
 
 if loglevel == "debug":
     print os.path.abspath('.')
-print 'mpiexec -nameserver %s python %s %s %s %s %s %s'%(server,os.environ['DistJETPATH']+'/bin/master.py',app_module, config_path,loglevel,args.screen,rundir)
-master = subprocess.Popen(['mpiexec -nameserver %s python %s %s %s %s %s %s'%(server,os.environ['DistJETPATH']+'/bin/master.py',app_module, config_path,loglevel,args.screen,rundir)],shell=True)
+print 'mpiexec -nameserver %s python %s %s %s %s %s %s %s'%(server,os.environ['DistJETPATH']+'/bin/master.py',app_module, config_path,loglevel,app_config ,args.screen,rundir)
+master = subprocess.Popen(['mpiexec -nameserver %s python %s %s %s %s %s %s %s'%(server,os.environ['DistJETPATH']+'/bin/master.py',app_module, config_path,loglevel,app_config ,args.screen,rundir)],shell=True
 
 while(True):
     if os.path.exists(DistTempDir+'/config.ini'):
