@@ -42,11 +42,13 @@ class Config(object):
         'IGNORE_TASK_FAIL': True
     }
 
-    __loaded = False
 
     def __new__(cls, *args, **kwargs):
         global _inipath
-        if not cls.__loaded:
+        #check if have config file
+        # check if exists tmp dir, $HOME/.diane_tmp/
+        tmp_dir = os.environ['HOME'] + '/.DistJET'
+        if not os.path.exists(tmp_dir+'/config.ini'):
             if not _inipath:
                 set_inipath(os.environ['DistJETPATH']+'/config/config.ini')
             elif _inipath and not os.path.exists(_inipath):
@@ -70,23 +72,35 @@ class Config(object):
                 cls.__loaded = True
             finally:
                     GlobalLock.release()
-        if cls.__global_config['Rundir'] is None:
-            cls.__global_config['Rundir'] = os.getcwd()+'/Rundir'
-        if not os.path.exists(cls.__global_config['Rundir']):
-            os.mkdir(cls.__global_config['Rundir'])
-        rundir = cls.__global_config['Rundir']
-        #check if exists tmp dir, $HOME/.diane_tmp/
-        tmp_dir = os.environ['HOME']+'/.DistJET'
-        if not os.path.exists(tmp_dir):
-            os.mkdir(tmp_dir)
-        #create tmp config
-        if not os.path.exists(tmp_dir+'/config.ini'):
+            if cls.__global_config['Rundir'] is None:
+                cls.__global_config['Rundir'] = os.getcwd()+'/Rundir'
+            if not os.path.exists(cls.__global_config['Rundir']):
+                os.mkdir(cls.__global_config['Rundir'])
+            rundir = cls.__global_config['Rundir']
+
+            #create tmp config
             tmpconfig=open(tmp_dir+'/config.ini','w+')
             tmpconfig.write('[GlobalCfg]\n')
             for k,v in cls.__global_config.items():
                 tmpconfig.write("%s=%s\n"%(k,v))
             tmpconfig.flush()
             tmpconfig.close()
+        else:
+            try:
+                GlobalLock.acquire()
+                cf = ConfigParser.ConfigParser()
+                cf.read(_inipath)
+                if cf.has_section('GlobalCfg'):
+                    for key in cf.options('GlobalCfg'):
+                        cls.__global_config[key] = cf.get('GlobalCfg', key)
+                if cf.has_section('Policy'):
+                    for key in cf.options('Policy'):
+                        try:
+                            cls.__policy[key] = cf.getint('Policy', key)
+                        except:
+                            cls.__policy[key] = cf.getboolean('Policy',key)
+            finally:
+                    GlobalLock.release()
         return object.__new__(cls)
 
     @classmethod
@@ -138,9 +152,6 @@ class Config(object):
         finally:
             GlobalLock.release()
 
-    @classmethod
-    def isload(cls):
-        return cls.__loaded
 
 
 class AppConf:

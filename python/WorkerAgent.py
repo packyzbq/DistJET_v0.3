@@ -181,8 +181,6 @@ class WorkerAgent:
         self.__should_stop = False
         Config.Config()
         self.cfg = Config.Config
-        if self.cfg.isload():
-            wlog.debug('[Agent] Loaded config file')
         import socket
         wlog.info('[Agent] Running on host: %s'%socket.gethostname())
         wlog.debug('[Agent] Start to connect to service <%s>' % self.cfg.getCFGattr('svc_name'))

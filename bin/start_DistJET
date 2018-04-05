@@ -74,13 +74,22 @@ rundir = curr_dir+"/Rundir_"+str(runno)
 os.mkdir(rundir)
 os.chdir(rundir)
 
+# set config file
+import python.Util.Config as Config
+if config_path != "null":
+    Config.set_inipath(config_path)
+cfg = Config.Config()
+cfg.setCfg('Rundir',rundir)
+
+
+
 if loglevel == "debug":
     print arg_dict
 
 # apply computing resource
+import Backend.backend as bnd
+backend = bnd.Backend()
 if args.backend is None or args.backend=="condor":
-    import Backend.backend as bnd
-    backend = bnd.Backend()
     hostfile = None
     if backend.setBackend("htcondor"):
         host_list = backend.apply(args.worker_num)
@@ -93,6 +102,7 @@ if args.backend is None or args.backend=="condor":
         exit(0)
 
 elif args.backend == "local":
+    backend.setBackend('local')
     hostfile = open(DistTempDir+'/hostfile','w+')
     hostfile.truncate()
     hostfile.write(os.environ['HOSTNAME']+':'+str(args.worker_num))
@@ -104,7 +114,7 @@ elif args.backend == "local":
 if loglevel == "debug":
     print os.path.abspath('.')
 print 'mpiexec -nameserver %s python %s %s %s %s %s %s %s'%(server,os.environ['DistJETPATH']+'/bin/master.py',app_module, config_path,loglevel,app_config ,args.screen,rundir)
-master = subprocess.Popen(['mpiexec -nameserver %s python %s %s %s %s %s %s %s'%(server,os.environ['DistJETPATH']+'/bin/master.py',app_module, config_path,loglevel,app_config ,args.screen,rundir)],shell=True
+master = subprocess.Popen(['mpiexec -nameserver %s python %s %s %s %s %s %s %s'%(server,os.environ['DistJETPATH']+'/bin/master.py',app_module, config_path,loglevel,app_config ,args.screen,rundir)],shell=True)
 
 while(True):
     if os.path.exists(DistTempDir+'/config.ini'):
@@ -121,7 +131,7 @@ except KeyboardInterrupt:
         os.remove(os.environ['HOME']+'/.DistJET/config.ini')
 
 #clean ssh jobs
-#backend.release()
+backend.release()
 
 
 
