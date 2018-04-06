@@ -72,7 +72,7 @@ class WatchDogThread(BaseThread):
             master_log.info('[Master] Worker status = %s'%self.master.worker_registry.get_worker_status())
 
             # save worker status to file
-            rundir = self.master.cfg.getCFGattr('Rundir')
+            rundir = self.master.cfg.getCFGattr('rundir')
             with open(os.environ['HOME']+'/.DistJET/worker','w+') as workerfile:
                 workerfile.truncate()
                 workerfile.write('wid\tstatus\trunning\tlasttime\n')
@@ -87,8 +87,8 @@ class WatchDogThread(BaseThread):
 
             if not lostworker and not idleworker:
                 control_log.debug('No lost worker and idle worker')
-            if self.master.cfg.getPolicyattr('CONTROL_DELAY'):
-                time.sleep(self.master.cfg.getPolicyattr('CONTROL_DELAY'))
+            if self.master.cfg.getPolicyattr('control_delay'):
+                time.sleep(self.master.cfg.getPolicyattr('control_delay'))
             else:
                 time.sleep(0.1)
 
@@ -341,7 +341,7 @@ class JobMaster(IJobMaster):
         #master_log.debug('[Master] Appmgr has instanced')
 
         self.server = MPI_Wrapper.Server(self.recv_buffer, self.svc_name)
-        self.server.set_portfile(self.cfg.getCFGattr('Rundir')+"/port.txt")
+        self.server.set_portfile(self.cfg.getCFGattr('rundir')+"/port.txt")
         ret = self.server.initialize()
         if ret != 0:
             master_log.error('[Master] Server initialize error, stop. errcode = %d' % ret)
@@ -349,7 +349,7 @@ class JobMaster(IJobMaster):
             exit()
         self.recoder = None
         if self.cfg.getCFGattr('pmonitor') == 'True':
-            self.recoder = BaseRecoder(self.cfg.getCFGattr('Rundir'))
+            self.recoder = BaseRecoder(self.cfg.getCFGattr('rundir'))
 
         self.__newApp_flag = False
         self.__stop = False

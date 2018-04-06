@@ -64,8 +64,8 @@ class WorkerEntry:
         return self.max_capacity-self.assigned
 
     def isLost(self):
-        if self.policy.getPolicyattr('LOST_WORKER_TIMEOUT'):
-            return time.time()-self.last_contact_time > self.policy.getPolicyattr('LOST_WORKER_TIMEOUT')
+        if self.policy.getPolicyattr('lost_worker_timeout'):
+            return time.time()-self.last_contact_time > self.policy.getPolicyattr('lost_worker_timeout')
         return False
 
     def getStatus(self):
@@ -75,14 +75,14 @@ class WorkerEntry:
         self.lock.acquire()
         try:
             self.init_times+=1
-            return self.init_times < Config.getPolicyattr('INITIAL_TRY_TIME')
+            return self.init_times < Config.getPolicyattr('initial_try_time')
         finally:
             self.lock.release()
     def refin(self):
         self.lock.acquire()
         try:
             self.init_times += 1
-            return self.init_times < Config.getPolicyattr('FIN_TRY_TIME')
+            return self.init_times < Config.getPolicyattr('fin_try_time')
         finally:
             self.lock.release()
 
@@ -436,14 +436,14 @@ class WorkerRegistry:
 
     def checkIDLETimeout(self):
         list = []
-        timeout = Config.getCFGattr('IDLE_WORKER_TIMEOUT')
+        timeout = Config.getCFGattr('idle_worker_timeout')
         if not timeout or timeout==0:
             return None
         else:
             for w in self.__all_workers.values():
                 if w.alive and w.worker_status == WorkerStatus.IDLE:
                     if w.idle_time != 0:
-                        if Config.getPolicyattr('IDLE_WORKER_TIME') and time.time()-w.idle_time > Config.getPolicyattr('IDLE_WORKER_TIMEOUT'):
+                        if Config.getPolicyattr('idle_worker_time') and time.time()-w.idle_time > Config.getPolicyattr('idle_worker_time'):
                             list.append(w.wid)
                     else:
                         w.idle_time = time.time()

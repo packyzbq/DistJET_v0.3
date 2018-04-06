@@ -93,7 +93,7 @@ class Process_withENV(threading.Thread):
 
         self.stop_flag = False
 
-        self.TaskLogDir = Config.Config.getCFGattr('Rundir')+'/task_log'
+        self.TaskLogDir = Config.Config.getCFGattr('rundir')+'/task_log'
         #print 'task dir= %s'%self.TaskLogDir
         if not os.path.exists(self.TaskLogDir):
             try:

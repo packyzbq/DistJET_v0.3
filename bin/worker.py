@@ -39,10 +39,10 @@ if sys.argv[2] != 'null' and not os.path.exists(sys.argv[2]):
 
 CONF.set_inipath(cfg_path)
 cfg = CONF.Config()
-cfg.setCfg('Rundir',rundir)
+cfg.setCfg('rundir',rundir)
 
 print "rundir = "+rundir
-while "port.txt" not in os.listdir(cfg.getCFGattr('Rundir')):
+while "port.txt" not in os.listdir(cfg.getCFGattr('rundir')):
     print "cannot find port"
     time.sleep(1)
 '''

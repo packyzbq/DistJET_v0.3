@@ -7,7 +7,7 @@ loglevel={'info':logging.INFO, 'debug':logging.DEBUG}
 
 
 def getLogger(name, level=None, applog=False):
-    log_dir = cfg.getCFGattr('Rundir')+'/DistJET_log'
+    log_dir = cfg.getCFGattr('rundir')+'/DistJET_log'
     print 'log_dir=%s'%log_dir
     if applog:
         #log_dir = Config.getCFGattr('Rundir')
@@ -17,7 +17,7 @@ def getLogger(name, level=None, applog=False):
     #else:
     #    log_dir = cfg.getCFGattr('Logdir')
     if not level:
-        level = cfg.getCFGattr('Log_Level')
+        level = cfg.getCFGattr('log_level')
         if not level:
             level = 'info'
     #if not log_dir:
@@ -27,7 +27,7 @@ def getLogger(name, level=None, applog=False):
 
     format = logging.Formatter('[%(asctime)s] %(threadName)s %(levelname)s: %(message)s')
     console = None
-    if Config.getCFGattr('LogConsole'):
+    if Config.getCFGattr('logconsole'):
         console = logging.StreamHandler()
         console.setFormatter(format)
     handler = logging.FileHandler(log_dir + '/DistJET.' + name + '.log')
@@ -44,7 +44,7 @@ def getLogger(name, level=None, applog=False):
 def setlevel(level, logger=None):
     if logger:
         logger.setLevel(loglevel[level])
-    Config.setCfg('Log_Level',level)
+    Config.setCfg('log_level',level)
 
 def setConsole(flag=False):
-	Config.setCfg('LogConsole',flag)
+	Config.setCfg('logconsole',flag)

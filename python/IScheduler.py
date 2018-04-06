@@ -298,7 +298,7 @@ class SimpleTaskScheduler(IScheduler):
         if tid in self.scheduled_task_list[wid]:
             self.scheduled_task_list[wid].remove(tid)
         scheduler_log.info('[Scheduler] Task %s failed, errmsg=%s'%(tid,task.history[-1].error))
-        attempt = self.master.cfg.getPolicyattr('TASK_ATTEMPT_TIME')
+        attempt = self.master.cfg.getPolicyattr('task_attempt_time')
         if task.attemptime < attempt:
             scheduler_log.info('[Scheduler] Redo Task %s'%tid)
             self.task_todo_queue.put(task.tid)

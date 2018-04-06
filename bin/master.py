@@ -77,9 +77,9 @@ if config_path == "null" or not os.path.exists(os.path.abspath(config_path)):
 Conf.set_inipath(config_path)
 if rundir != 'null':
     print "set rundir = %s"%rundir
-    Conf.Config.setCfg('Rundir',rundir)
+    Conf.Config.setCfg('rundir',rundir)
 cfg = Conf.Config()
-print "rundir="+cfg.getCFGattr("Rundir")
+print "rundir="+cfg.getCFGattr("rundir")
 
 master = JobMaster(applications=applications)
 if master.getRunFlag():

@@ -78,9 +78,8 @@ os.chdir(rundir)
 import python.Util.Config as Config
 if config_path != "null":
     Config.set_inipath(config_path)
+Config.Config.setCfg('rundir',rundir)
 cfg = Config.Config()
-cfg.setCfg('Rundir',rundir)
-
 
 
 if loglevel == "debug":
@@ -113,6 +112,8 @@ elif args.backend == "local":
 
 if loglevel == "debug":
     print os.path.abspath('.')
+
+
 print 'mpiexec -nameserver %s python %s %s %s %s %s %s %s'%(server,os.environ['DistJETPATH']+'/bin/master.py',app_module, config_path,loglevel,app_config ,args.screen,rundir)
 master = subprocess.Popen(['mpiexec -nameserver %s python %s %s %s %s %s %s %s'%(server,os.environ['DistJETPATH']+'/bin/master.py',app_module, config_path,loglevel,app_config ,args.screen,rundir)],shell=True)
 

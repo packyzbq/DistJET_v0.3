@@ -186,7 +186,7 @@ class WorkerAgent:
         wlog.debug('[Agent] Start to connect to service <%s>' % self.cfg.getCFGattr('svc_name'))
 
         self.client = Client(self.recv_buff, self.cfg.getCFGattr('svc_name'), self.uuid)
-        self.client.set_portfile(Config.Config.getCFGattr('Rundir')+'/port.txt')
+        self.client.set_portfile(Config.Config.getCFGattr('rundir')+'/port.txt')
         ret = self.client.initial()
         #----test----
         #self.client=None
@@ -198,7 +198,7 @@ class WorkerAgent:
             wlog.error('[Agent] Client initialize error, errcode = %d'%ret)
             exit()
         if self.cfg.getCFGattr('delay_rec') == 'True':
-            self.recoder = Recoder.BaseRecoder(Config.Config.getCFGattr('Rundir')+'/Agent-'+self.uuid)
+            self.recoder = Recoder.BaseRecoder(Config.Config.getCFGattr('rundir')+'/Agent-'+self.uuid)
 
         self.wid = None
         self.appid = None
@@ -563,8 +563,8 @@ class WorkerAgent:
         except psutil.Error:
             return {}
         script = self.cfg.getCFGattr("health_detect_scripts")
-        if script and os.path.exists(self.cfg.getCFGattr('topDir') + '/' + script):
-            script = self.cfg.getCFGattr('topDir') + '/' + script
+        if script and os.path.exists(self.cfg.getCFGattr('topdir') + '/' + script):
+            script = self.cfg.getCFGattr('topdir') + '/' + script
             rc = subprocess.Popen(executable=script, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             info, err = rc.communicate()
             if err == '':
@@ -607,7 +607,7 @@ class Worker(BaseThread):
             self.worker_obj = worker_class(self.log)
             self.log.debug('[Worker_%s] Create Worker object %s'%(self.id,self.worker_obj.__class__.__name__))
         #self.proc_log = open("%s/worker_%d.log"%(self.workeragent.cfg.getCFGattr("Rundir"),self.id),'w+')
-        self.log.debug('[Worker_%s] Worker Process log path:%s/worker_%d.log'%(self.id,self.workeragent.cfg.getCFGattr("Rundir"),self.id))
+        self.log.debug('[Worker_%s] Worker Process log path:%s/worker_%d.log'%(self.id,self.workeragent.cfg.getCFGattr("rundir"),self.id))
 
         self.process = None
         self.recode = 0
@@ -620,11 +620,11 @@ class Worker(BaseThread):
         else:
             #print "### if ignore fail: "+str(Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
             self.process = Process_withENV(init_task.boot,
-                                           Config.Config.getCFGattr('Rundir')+'/DistJET_log/process_%d_%d.log'%(self.workeragent.wid,self.id),
+                                           Config.Config.getCFGattr('rundir')+'/DistJET_log/process_%d_%d.log'%(self.workeragent.wid,self.id),
                                            task_callback=self.task_done,
                                            finalize_callback=self.finalize_done,
                                            ignoreFail=Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
-            #print '<worker has create process>'
+            print '<worker has create process>'
             self.status = WorkerStatus.INITIALIZING
             self.workeragent.set_status(self.id,self.status)
             ret = self.process.initialize()

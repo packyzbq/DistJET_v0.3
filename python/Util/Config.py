@@ -20,28 +20,28 @@ def set_inipath(inipath):
 class Config(object):
     __global_config = {
         'svc_name':'Default',
-        'Log_Level': 'debug',
+        'log_level': 'debug',
         'health_detect_scripts': None,
-        'topDir': os.environ['DistJETPATH'],
-        'Rundir': None,
-        'LogConsole': False,
-        'HeartBeatInterval': 0.5,
-        'Halt_Recv_Interval': 10,
-		'DELAY_REC': False,
-		'PMONITOR': False
+        'topdir': os.environ['DistJETPATH'],
+        'rundir': None,
+        'logconsole': False,
+        'heartbeatinterval': 0.5,
+        'halt_recv_interval': 10,
+		'delay_rec': False,
+		'pmonitor': False
     }
 
     __policy = {
-        'LOST_WORKER_TIMEOUT': 60,
-        'IDLE_WORKER_TIMEOUT': 0,
-        'CONTROL_DELAY': 1,
-        'TASK_ATTEMPT_TIME': 1,
-        'INITIAL_TRY_TIME': 3,
-        'FIN_TRY_TIME': 3,
-        'WORKER_SYNC_QUIT': False,
-        'IGNORE_TASK_FAIL': True
+        'lost_worker_timeout': 60,
+        'idle_worker_timeout': 0,
+        'control_delay': 1,
+        'task_attempt_time': 1,
+        'initial_try_time': 3,
+        'fin_try_time': 3,
+        'worker_sync_quit': False,
+        'ignore_task_fail': True
     }
-
+    __sysconfig = os.environ['HOME']+'/.DistJET/config.ini'
 
     def __new__(cls, *args, **kwargs):
         global _inipath
@@ -72,27 +72,32 @@ class Config(object):
                 cls.__loaded = True
             finally:
                     GlobalLock.release()
-            if cls.__global_config['Rundir'] is None:
-                cls.__global_config['Rundir'] = os.getcwd()+'/Rundir'
-            if not os.path.exists(cls.__global_config['Rundir']):
-                os.mkdir(cls.__global_config['Rundir'])
-            rundir = cls.__global_config['Rundir']
+            if cls.__global_config['rundir'] is None:
+                cls.__global_config['rundir'] = os.getcwd()+'/rundir'
+            if not os.path.exists(cls.__global_config['rundir']):
+                os.mkdir(cls.__global_config['rundir'])
+            rundir = cls.__global_config['rundir']
 
             #create tmp config
             tmpconfig=open(tmp_dir+'/config.ini','w+')
             tmpconfig.write('[GlobalCfg]\n')
             for k,v in cls.__global_config.items():
                 tmpconfig.write("%s=%s\n"%(k,v))
+            tmpconfig.write('[Policy]\n')
+            for k,v in cls.__policy.items():
+                tmpconfig.write("%s=%s\n"%(k,v))
             tmpconfig.flush()
             tmpconfig.close()
         else:
             try:
                 GlobalLock.acquire()
+                print 'load config file'
                 cf = ConfigParser.ConfigParser()
-                cf.read(_inipath)
+                cf.read(cls.__sysconfig)
                 if cf.has_section('GlobalCfg'):
                     for key in cf.options('GlobalCfg'):
                         cls.__global_config[key] = cf.get('GlobalCfg', key)
+              
                 if cf.has_section('Policy'):
                     for key in cf.options('Policy'):
                         try:
@@ -105,6 +110,7 @@ class Config(object):
 
     @classmethod
     def getCFGattr(cls, key):
+        #print 'acquire key %s, keylist = %s'%(key,cls.__global_config.items())
         try:
             GlobalLock.acquire()
             if key in cls.__global_config.keys():
@@ -156,9 +162,9 @@ class Config(object):
 
 class AppConf:
     __cfg = {
-        'appName': None,
-        'workDir': None,
-        'topDir': os.environ['DistJETPATH']
+        'appname': None,
+        'workdir': None,
+        'topdir': os.environ['DistJETPATH']
     }
 
     def __init__(self, ini_path=None, app_name=None):
@@ -253,7 +259,4 @@ class AppConf:
 
 if __name__ == '__main__':
     set_inipath(os.environ['DistJETPATH']+'/config/config.ini')
-    config = Config()
-    if config.__class__.isload():
-        print 'config file loaded'
-    print config.__class__.getCFGattr('svc_name')
+    Config()
