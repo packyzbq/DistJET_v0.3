@@ -623,7 +623,7 @@ class Worker(BaseThread):
                                            Config.Config.getCFGattr('rundir')+'/DistJET_log/process_%d_%d.log'%(self.workeragent.wid,self.id),
                                            task_callback=self.task_done,
                                            finalize_callback=self.finalize_done,
-                                           ignoreFail=Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
+                                           ignoreFail=Config.Config.getPolicyattr('ignore_task_fail'))
             print '<worker has create process>'
             self.status = WorkerStatus.INITIALIZING
             self.workeragent.set_status(self.id,self.status)
@@ -709,7 +709,7 @@ class Worker(BaseThread):
                 self.cond.wait()
                 self.cond.release()
             if not self.initialized:
-                if init_try < Config.Config.getPolicyattr('INITIAL_TRY_TIME'):
+                if init_try < Config.Config.getPolicyattr('initial_try_time'):
                     init_try+=1
                     #print "<worker_%d> setup process"%self.id
                     ret = self.setup(self.workeragent.iniExecutor)
