@@ -79,7 +79,9 @@ import python.Util.Config as Config
 if config_path != "null":
     Config.set_inipath(config_path)
 Config.Config.setCfg('rundir',rundir)
-cfg = Config.Config()
+Config.Config.setCfg('log_level',loglevel)
+
+fg = Config.Config()
 
 
 if loglevel == "debug":

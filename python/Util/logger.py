@@ -8,7 +8,6 @@ loglevel={'info':logging.INFO, 'debug':logging.DEBUG}
 
 def getLogger(name, level=None, applog=False):
     log_dir = cfg.getCFGattr('rundir')+'/DistJET_log'
-    print 'log_dir=%s'%log_dir
     if applog:
         #log_dir = Config.getCFGattr('Rundir')
         #if not log_dir:
@@ -20,6 +19,7 @@ def getLogger(name, level=None, applog=False):
         level = cfg.getCFGattr('log_level')
         if not level:
             level = 'info'
+    print 'log %s level = %s'%(name,level)
     #if not log_dir:
     #    log_dir = os.getcwd() + '/DistJET_log'
     if not os.path.exists(log_dir):
@@ -37,7 +37,7 @@ def getLogger(name, level=None, applog=False):
     logger.setLevel(loglevel[level])
     logger.addHandler(handler)
     if console:
-        print "add console handler"
+        print "log %s add console handler"%name
         logger.addHandler(console)
     return logger
 
