@@ -24,9 +24,11 @@ class Backend:
             # load backend script
             sys.path.append(os.environ['DistJETPATH'] + '/Backend/%s'%self.backend)
             module = __import__('script')
-            if not module.__dict__.has_key("backend") or not callable(module.__dict__['backend']) or not callable(module.__dict__['apply']) or not callable(module.__dict__['release']):
+            if not module.__dict__.has_key("backend") or not callable(module.__dict__['backend']):
                 return False
             self.backend_obj = module.backend()
+            if not callable(self.backend_obj.apply) or not callable(self.backend_obj.release):
+                return False
             return True
         else:
             print("Can't find backend %s, backend list is %s"%(self.backend, [back for back in self.backend_list.keys()]))
