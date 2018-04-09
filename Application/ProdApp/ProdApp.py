@@ -214,8 +214,8 @@ class ProdApp(JunoApp):
 
 
 if __name__ == '__main__':
-    app = ProdApp("/afs/ihep.ac.cn/users/z/zhaobq/workerSpace/DistJET_v0.3/Application/ProdApp/",'ProdApp')
-    app.res_dir = "/afs/ihep.ac.cn/users/z/zhaobq/workerSpace/DistJET_v0.3/Application/ProdApp/test"
+    app = ProdApp(os.environ['DistJETPATH']+"/Application/ProdApp/",'ProdApp')
+    app.res_dir = os.environ['DistJETPATH']+"/Application/ProdApp/test"
     tasklist = app.split()
     print len(tasklist)
     for task in tasklist:
