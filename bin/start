@@ -36,7 +36,17 @@ def gen_submit(num):
         sub.write('Requirements = Target.OpSysAndVer =?= "SL6" && regexp("jnws*", Name)\n')
         sub.write("Queue %s\n"%str(num))
 
+#clear config
+if os.path.exists(DistTempDir+'/config.ini'):
+    os.remove(DistTempDir+'/config.ini')
 
+# check runtime environment
+import psutil
+pid = [p.info['pid'] for p in psutil.process_iter(attrs=['pid','name']) if 'hydra_nameserver' in p.info['name']]
+if not pid:
+    subprocess.Popen(['hydra_nameserver &'], shell=True)
+
+time.sleep(1)
 args = getArgs()
 arg_dict = {}
 
