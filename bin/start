@@ -16,8 +16,9 @@ def getArgs():
     parser.add_argument("--app-conf",dest="app_config", type=str,help="the configure file of Application")
     parser.add_argument("-n","--worker-num",dest="worker_num", type=int,help="the number of worker you want to start")
     parser.add_argument("-d",dest="log_level",action="store_true", default=False, help="debug mode")
-    parser.add_argument("-s","--screen", dest="screen",action="store_true", help="print log output into screen")
+    parser.add_argument("-s","--screen", dest="screen",action="store_true", default=False,help="print log output into screen")
     parser.add_argument("--backend",dest="backend",choices=["condor","local"],default="condor",help="Backend choice")
+    parser.add_argument('-t', dest="test",action="store_true",default=False,help="For test")
     args = parser.parse_args()
     if (not args.app_module) or (not args.worker_num):
         print parser.error("less of app or worker number")
@@ -96,7 +97,8 @@ fg = Config.Config()
 
 if loglevel == "debug":
     print arg_dict
-
+if args.test:
+    exit(0)
 # apply computing resource
 import Backend.backend as bnd
 backend = bnd.Backend()
