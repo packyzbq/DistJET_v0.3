@@ -19,7 +19,7 @@ def getLogger(name, level=None, applog=False):
         level = cfg.getCFGattr('log_level')
         if not level:
             level = 'info'
-    print 'log %s level = %s'%(name,level)
+    #print 'log %s level = %s'%(name,level)
     #if not log_dir:
     #    log_dir = os.getcwd() + '/DistJET_log'
     if not os.path.exists(log_dir):

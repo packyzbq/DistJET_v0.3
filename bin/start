@@ -89,11 +89,11 @@ os.chdir(rundir)
 import python.Util.Config as Config
 if config_path != "null":
     Config.set_inipath(config_path)
+Config.Config.setCfg('logconsole',args.screen)
 Config.Config.setCfg('rundir',rundir)
 Config.Config.setCfg('log_level',loglevel)
 
-fg = Config.Config()
-
+Config.Config()
 
 if loglevel == "debug":
     print arg_dict

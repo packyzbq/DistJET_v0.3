@@ -106,10 +106,11 @@ class ProdApp(JunoApp):
                 for tag in tags: 
                     evt_count = 0
                     # Add detsim 0
-                    detsim0 = ChainTask()
-                    detsim0.boot.append("bash %s/run-%s-%s.sh" % (os.getcwd() + '/' + tag + '/detsim', 'detsim', '0'))
-                    detsim0.res_dir = task_resdir
-                    task_list.append(detsim0)
+                    if 'detsim' in workflow:
+                        detsim0 = ChainTask()
+                        detsim0.boot.append("bash %s/run-%s-%s.sh" % (os.getcwd() + '/' + tag + '/detsim', 'detsim', '0'))
+                        detsim0.res_dir = task_resdir
+                        task_list.append(detsim0)
                     while True:
                         #if (rest_evt != 0 and evt_count >= int(maxevt)+task_njob) or (rest_evt == 0 and evt_count >= int(maxevt)):
                         if evt_count >= int(maxevt):
@@ -119,15 +120,16 @@ class ProdApp(JunoApp):
                                 args = self._gen_args(sample,str(seed_base),str(task_njob),tag,wf,worksubdir)
                             else:
                                 args = self._gen_args(sample,str(seed_base),str(rest_evt),tag,wf,worksubdir)
-                            #self.log.info('bash %s %s'%(spt,args))
+                            #print('bash %s %s'%(spt,args))
                             os.system('bash %s %s'%(chain_script[spt],args))
                             tmp_task = ChainTask()
+                            #print 'create task %d'%tmp_task.tid
                             tmp_task.boot.append("bash %s/run-%s-%s.sh"%(os.getcwd()+"/"+tag+'/'+wf,wf,seed_base))
                             #tmp_task.boot = "bash %s/run-%s-%s.sh"%(os.getcwd()+"/"+tag+'/'+wf,wf,seed_base+seed_offset)
                             tmp_task.res_dir = task_resdir
-                            if wf != 'detsim':
+                            if wf != 'detsim' and pre_task is not None:
                                 tmp_task.set_father(pre_task)
-                            if wf == 'rec':
+                            if wf == 'rec' and 'detsim' in workflow:
                                 detsim0.set_child(tmp_task)
                                 tmp_task.set_father(detsim0)
                             if pre_task:
@@ -214,7 +216,7 @@ class ProdApp(JunoApp):
 
 
 if __name__ == '__main__':
-    app = ProdApp(os.environ['DistJETPATH']+"/Application/ProdApp/",'ProdApp')
+    app = ProdApp(os.environ['DistJETPATH']+"/Application/ProdApp/",'ProdApp',config_path=sys.argv[1])
     app.res_dir = os.environ['DistJETPATH']+"/Application/ProdApp/test"
     tasklist = app.split()
     print len(tasklist)

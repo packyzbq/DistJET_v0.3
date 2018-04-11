@@ -177,6 +177,8 @@ class ChainTask(Task):
     def set_father(self,father):
         if isinstance(father,Task):
             father = father.tid
+        else:
+            print type(father)
         assert type(father) == types.IntType
         if father in self._father:
             return False
@@ -201,6 +203,8 @@ class ChainTask(Task):
     def set_child(self, child):
         if isinstance(child,Task):
             child = child.tid
+        else:
+            print type(child)
         assert type(child) == types.IntType
         if child in self._child:
             return False
