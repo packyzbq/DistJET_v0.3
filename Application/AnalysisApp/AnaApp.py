@@ -62,8 +62,8 @@ class AnaApp(JunoApp):
             sample_list = sample_list.split()
         for sample in sample_list:
             sample_dict[os.path.basename(sample)] = {}
-            for subdir in os.listdir(sample):
-                subdir=sample+'/'+subdir
+            for subdir in os.listdir(self.data_path+'/'+sample):
+                subdir=self.data_path+'/'+sample+'/'+subdir
                 if os.path.isdir(subdir):
                     #sample_dict[os.path.basename(sample)][os.path.subdir]={}
                     for energy in os.listdir(subdir):
@@ -111,8 +111,8 @@ class AnaApp(JunoApp):
 
 
 if __name__ == "__main__":
-    app = AnaApp("/afs/ihep.ac.cn/users/z/zhaobq/workerSpace/DistJET_v0.3/Application/AnalysisApp/", 'AnalysisApp')
-    app.res_dir = (os.environ['DistJETPATH']+'/AnalysisApp/test')
+    app = AnaApp(os.environ['DistJETPATH']+"/Application/AnalysisApp/", 'AnalysisApp',sys.argv[1])
+    app.res_dir = (os.environ['DistJETPATH']+'/Application/AnalysisApp/test')
     task_list = app.split()
     if task_list is None:
         exit()
