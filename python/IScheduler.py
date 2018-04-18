@@ -236,24 +236,12 @@ class SimpleTaskScheduler(IScheduler):
         else:
             # assign 1 task once
             print "assign 1 task to worker %d, todo_queue_size = %d"%(wid,self.task_todo_queue.qsize())
-            task = None
-            pre_task = None
-            while not self.task_todo_queue.empty():
-                tid = self.task_todo_queue.get()
-                task = self.get_task(tid)
-                if isinstance(task,Task.ChainTask) and task.father_len() != 0:
-                    if pre_task and pre_task.tid == task.tid:
-                        scheduler_log.warning("There is only one task with father %s"%task.get_father_list())
-                        return task_list
-                    else:
-                        pre_task = task
-                        self.task_todo_queue.put(tid)
-                    continue
-                else:
-                    break
+            task = self.selectTask()
+            if task is None:
+                return task_list
             task.assign(wid)
             task_list.append(task)
-            self.scheduled_task_list[wid].append(tid)
+            self.scheduled_task_list[wid].append(task.tid)
             # assign tasks depends on the capacity of task
             #while room >= 1 and not self.task_todo_queue.empty():
             #    tid = self.task_todo_queue.get()
@@ -352,3 +340,22 @@ class SimpleTaskScheduler(IScheduler):
             return True
         else:
             return False
+
+    # the schedule algorithm that decide which task is assigned
+    # default pick up the first task in queue
+    # return task obj
+    def selectTask(self,**kwargs):
+        pre_task = None
+        while not self.task_todo_queue.empty():
+            tid = self.task_todo_queue.get()
+            task = self.get_task(tid)
+            if isinstance(task, Task.ChainTask) and task.father_len() != 0:
+                if pre_task and pre_task.tid == task.tid:
+                    scheduler_log.warning("There is only one task with father %s" % task.get_father_list())
+                    return None
+                else:
+                    pre_task = task
+                    self.task_todo_queue.put(tid)
+                continue
+            else:
+                break
