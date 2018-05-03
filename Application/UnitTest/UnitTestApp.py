@@ -15,11 +15,21 @@ class UnitTestApp(JunoApp):
     def split(self):
         task_list = []
 
-        task1 = ChainTask()
-        task1.boot = self.app_boot
-        task1.data[0] = "Tutorial"
-        task1.res_dir = self.res_dir
-        task_list.append(task1)
+        for i in xrange(0,10):
+            task = ChainTask()
+            if i == 4 or i == 9:
+                task.boot = ["Fault"]
+                task.data[0] = "Error"
+            else:
+                task.boot = self.app_boot
+                task.data[0] = "Cf252"
+            task.res_dir = self.res_dir
+            task_list.append(task)
+        #task1 = ChainTask()
+        #task1.boot = self.app_boot
+        #task1.data[0] = "Tutorial"
+        #task1.res_dir = self.res_dir
+        #task_list.append(task1)
         
         #task2 = ChainTask()
         #task2.boot = self.app_boot
