@@ -36,6 +36,7 @@ class Config(object):
         'idle_worker_timeout': 0,
         'control_delay': 1,
         'task_attempt_time': 1,
+        'task_answer_timeout':0,
         'initial_try_time': 3,
         'fin_try_time': 3,
         'worker_sync_quit': False,

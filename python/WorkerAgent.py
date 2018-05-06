@@ -583,10 +583,11 @@ class WorkerAgent:
 
 
 class Worker(BaseThread):
-    def __init__(self,id, workagent, cond, name=None, worker_class=None):
+    def __init__(self,id, workagent, cond, config, name=None, worker_class=None):
         if not name:
             name = "worker_%s"%id
         BaseThread.__init__(self,name)
+        self.cfg = config
         self.workeragent = workagent
         self.id = id
         self.running_task = None #TASK obj
@@ -613,6 +614,9 @@ class Worker(BaseThread):
         self.recode = 0
 
     def setup(self, init_task):
+        timeout = self.cfg.getCFGattr('task_answer_timeout')
+        if timeout == 0:
+            timeout=None
         wlog.info('[Worker_%s] Start to setup...' % self.id)
         if self.worker_obj:
             #TODO
@@ -621,6 +625,7 @@ class Worker(BaseThread):
             #print "### if ignore fail: "+str(Config.Config.getPolicyattr('IGNORE_TASK_FAIL'))
             self.process = Process_withENV(init_task.boot,
                                            Config.Config.getCFGattr('rundir')+'/DistJET_log/process_%d_%d.log'%(self.workeragent.wid,self.id),
+                                           timeout=timeout,
                                            task_callback=self.task_done,
                                            finalize_callback=self.finalize_done,
                                            ignoreFail=Config.Config.getPolicyattr('ignore_task_fail'))
