@@ -311,6 +311,7 @@ class SimpleTaskScheduler(IScheduler):
         :return:
         """
         tl = []
+        scheduler_log.info("[Scheduler] Remove worker %s..."%(wid))
         if self.scheduled_task_list.has_key(wid):
             for tid in self.scheduled_task_list[wid]:
                 tl.append(tid)
@@ -318,8 +319,8 @@ class SimpleTaskScheduler(IScheduler):
                 task.withdraw(time_point)
                 self.task_todo_queue.put(task.tid)
                 self.scheduled_task_list[wid].remove(tid)
+            scheduler_log.info("[Scheduler] Pull back tasks %s from worker %s"%(tl, wid))
 
-        scheduler_log.info("[Scheduler] Remove worker %s, pull back tasks %s"%(wid,tl))
 
     def worker_finalized(self, wid):
         if self.worker_registry.isAlive(wid):

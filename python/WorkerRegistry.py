@@ -144,13 +144,13 @@ class WorkerRegistry:
         """
         remove worker, if worker alive, return worker's uuid to finalize worker, otherwise stop worker
         :param wid:
-        :return: bool, uuid
+        :return: bool, str(failure reason)
         """
         try:
             w_uuid = self.__all_workers[wid].w_uuid
         except KeyError:
             wRegistery_log.warning('[WorkerRegistry]attempt to remove not registered worker: wid=%d', wid)
-            return False,None
+            return False,"Worker Not Registered"
         else:
             wRegistery_log.info('[WorkerRegistry]worker removed: wid=%d',wid)
             try:
@@ -161,7 +161,7 @@ class WorkerRegistry:
                     self.alive_workers.remove(w_uuid)
             except KeyError:
                 wRegistery_log.warning('[WorkerRegistry]: can not find worker when remove worker=%d, uuid=%s', wid, w_uuid)
-                return False, None
+                return False, "Worker Not Found"
             finally:
                 self.lock.release()
             return True ,None

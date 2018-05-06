@@ -45,15 +45,19 @@ class WatchDogThread(BaseThread):
         control_log.info('Control Thread start...')
         while not self.get_stop_flag():
             # check if lost
-            if not self.master.get_all_final():
-                lostworker = self.master.worker_registry.checkLostWorker()
-                if lostworker:
-                    control_log.warning('Lost worker = %s' % lostworker)
-                    for wid in lostworker:
-                        #TODO: maybe use other method to deal with the lost worker
-                        #self.master.remove_worker(wid)
-                        self.master.worker_registry.setStatus(wid,WorkerStatus.LOST)
-                        #self.master.lost_worker(wid)
+            lostworker = self.master.worker_registry.checkLostWorker()
+            if lostworker:
+                control_log.warning('Lost worker = %s' % lostworker)
+                for wid in lostworker:
+                    #TODO: maybe use other method to deal with the lost worker
+                    #self.master.remove_worker(wid)
+                    self.master.worker_registry.setStatus(wid,WorkerStatus.LOST)
+                    self.master.lost_worker(wid)
+
+            # check if all worker idle
+            if self.master.worker_registry.checkIdle():
+                # finalize all worker
+                self.master.finalize_worker()
 
             # check idle timeout worker
             idleworker = self.master.worker_registry.checkIDLETimeout()
@@ -407,10 +411,11 @@ class JobMaster(IJobMaster):
             # self.server.send_string(send_str, len(send_str), w_uuid, MPI_Wrapper.Tags.MPI_REGISTY_ACK)
 
     def remove_worker(self, wid):
-        flag, uuid = self.worker_registry.remove_worker(wid)
+        flag, ret = self.worker_registry.remove_worker(wid)
         if flag:
             self.task_scheduler.worker_removed(wid, time.time())
         else:
+            master_log.error("[Master] remove worker error, %s"%ret)
             # TODO MPI Layer handle this problem
             pass
 
@@ -527,6 +532,9 @@ class JobMaster(IJobMaster):
                                     self.server.send_string(stop_line,len(stop_line),uuid,MPI_Wrapper.Tags.WORKER_STOP)
                                 continue
                             self.stop()
+                # All worker disconnected
+                if self.get_all_final() and self.worker_registry.size() == 0:
+                    self.stop()
 
 
         except KeyboardInterrupt, Exception:
@@ -546,13 +554,22 @@ class JobMaster(IJobMaster):
         self.task_scheduler.appid = self.appmgr.get_current_appid()
 
     def lost_worker(self,wid):
-        self.task_scheduler.worker_removed(wid)
+        master_log.info("[Master] Worker %s lost, removing..."%wid)
+        self.remove_worker(wid)
+
     def getRunFlag(self):
         return self.appmgr.runflag
 
-    def finalize_worker(self, uuid):
-        tmp_dict = self.task_scheduler.fin_worker()
-        self.command_q.put({MPI_Wrapper.Tags.APP_FIN: tmp_dict, 'extra': [uuid],'uuid':uuid})
+    def finalize_worker(self, uuid=None):
+        fin_task = self.task_scheduler.uninstall_worker()
+        if not uuid:
+            master_log.info('[Master] Finalize all worker')
+            self.command_q.put({MPI_Wrapper.Tags.APP_FIN: fin_task, 'extra': [], 'uuid': "111"})
+            self.set_all_final()
+        else:
+            master_log.info('[Master] Finalize worker %s' % self.worker_registry.get_by_uuid(uuid).wid)
+            fin_task = self.task_scheduler.uninstall_worker()
+            self.command_q.put({MPI_Wrapper.Tags.APP_FIN: fin_task, 'uuid': uuid})
 
     def try_pullback(self,wid, tid):
         master_log.debug('[Master] Try pull back task %s from worker %s'%(tid,wid))
