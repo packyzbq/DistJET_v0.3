@@ -1,4 +1,5 @@
-wRegistery_log = None
+from Util import logger
+wRegistery_log = logger.getLogger("Registry")
 
 import threading
 import time
@@ -282,6 +283,8 @@ class WorkerRegistry:
         """
         if exp:
             wRegistery_log.debug('[Registry] check idle exclude worker %s, type of exp = %s'%(exp,type(exp[0])))
+        if len(self.alive_workers) == 0:
+            return False
         flag = True
         self.lock.acquire()
         try:
@@ -293,7 +296,7 @@ class WorkerRegistry:
                 if str(wentry.wid) in exp or int(wentry.wid) in exp:
                     continue
                 elif wentry.status in [WorkerStatus.RUNNING, WorkerStatus.INITIALIZED, WorkerStatus.SCHEDULED]:
-                    wRegistery_log.info('[Registry] worker %s is in status=%s, cannot finalize'%(wentry.wid, WorkerStatus.desc(wentry.status)))
+                    #wRegistery_log.info('[Registry] worker %s is in status=%s, cannot finalize'%(wentry.wid, WorkerStatus.desc(wentry.status)))
                     flag = False
                     return flag
             return flag

@@ -15,7 +15,7 @@ class UnitTestApp(JunoApp):
     def split(self):
         task_list = []
         pre = None
-        
+        '''
         for i in xrange(0,2):
             task = ChainTask()
             task.boot = ["/bin/sleep"]
@@ -23,21 +23,21 @@ class UnitTestApp(JunoApp):
             task.res_dir = self.res_dir
             task_list.append(task)
         '''
-        for i in xrange(0,10):
+        for i in xrange(0,4):
             task = ChainTask()
-            if i == 4 or i == 9:
-                task.boot = ["/bin/sleep"]
-                task.data[0] = "30"
+            if i == 1:
+                task.boot = ["Command"]
+                task.data[0] = "Error"
             else:
                 task.boot = self.app_boot
                 task.data[0] = "Cf252"
             task.res_dir = self.res_dir
-            #if pre is not None:
-            #    task.set_father(pre)
-            #    pre.set_child(task)
+            if pre is not None:
+                task.set_father(pre)
+                pre.set_child(task)
             task_list.append(task)
             pre = task
-        '''		
+        		
         #task1 = ChainTask()
         #task1.boot = self.app_boot
         #task1.data[0] = "Tutorial"

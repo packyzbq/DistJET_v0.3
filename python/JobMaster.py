@@ -140,6 +140,7 @@ class HandlerThread(BaseThread):
                         # {uuid:str, MPI_REGISTY:{ capacity: int}, ctime:int, flag:"FP"}
                         master_log.info('[Master] Receive REGISTY msg = %s' % recv_dict)
                         self.master.register_worker(recv_dict['uuid'], recv_dict[MPI_Wrapper.Tags.MPI_REGISTY]['capacity'])
+                        self.master.setStart()
                     elif recv_dict['flag'] == 'LP':
                         # last ping from worker, sync completed task, report node's health, logout and disconnect worker
                         master_log.info(
@@ -360,12 +361,16 @@ class JobMaster(IJobMaster):
 
         self.__newApp_flag = False
         self.__stop = False
+        self.__start=False
 	
     def get_all_final(self):
         return self.__all_final_flag
 
     def set_all_final(self):
         self.__all_final_flag = True
+
+    def setStart(self):
+        self.__start=True
 
     def acquire_newApp(self):
         self.__newApp_flag = True
@@ -533,7 +538,8 @@ class JobMaster(IJobMaster):
                                 continue
                             self.stop()
                 # All worker disconnected
-                if self.get_all_final() and self.worker_registry.size() == 0:
+                if (self.__start or self.get_all_final()) and self.worker_registry.size() == 0:
+                    #print "--- Master stop"
                     self.stop()
 
 

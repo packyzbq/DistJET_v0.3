@@ -300,7 +300,7 @@ class WorkerAgent:
                                 self.list_lock.acquire()
                                 for i in range(self.capacity):
                                     self.cond_list[i]=threading.Condition()
-                                    self.worker_list[i]=Worker(i, self, self.cond_list[i], worker_class=self.worker_class)
+                                    self.worker_list[i]=Worker(i, self, self.cond_list[i],self.cfg, worker_class=self.worker_class)
                                     self.worker_status[i] = WorkerStatus.NEW
                                     wlog.info('[Agent] Worker %s start' % i)
                                     self.worker_list[i].start()
