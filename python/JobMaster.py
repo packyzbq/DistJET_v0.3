@@ -340,6 +340,9 @@ class JobMaster(IJobMaster):
         self.appmgr = SimpleAppManager(apps=self.applications)
         #master_log.debug('[Master] Appmgr has instanced')
 
+        # load app
+        self.load_app()
+
         self.server = MPI_Wrapper.Server(self.recv_buffer, self.svc_name)
         self.server.set_portfile(self.cfg.getCFGattr('rundir')+"/port.txt")
         ret = self.server.initialize()
@@ -417,7 +420,7 @@ class JobMaster(IJobMaster):
 
     def startProcessing(self):
         #load app
-        self.load_app()
+        #self.load_app()
         self.control_thread.start()
         self.handler.start()
         try:

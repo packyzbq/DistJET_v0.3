@@ -358,4 +358,4 @@ class SimpleTaskScheduler(IScheduler):
                     self.task_todo_queue.put(tid)
                 continue
             else:
-                break
+                return task
