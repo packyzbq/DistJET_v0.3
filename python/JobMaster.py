@@ -538,8 +538,8 @@ class JobMaster(IJobMaster):
                                 continue
                             self.stop()
                 # All worker disconnected
-                if (self.__start or self.get_all_final()) and self.worker_registry.size() == 0:
-                    #print "--- Master stop"
+                if (not self.__stop) and (self.__start or self.get_all_final()) and self.worker_registry.size() == 0:
+                    print "--- Master stop---"
                     self.stop()
 
 

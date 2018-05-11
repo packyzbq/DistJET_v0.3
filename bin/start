@@ -42,10 +42,11 @@ if os.path.exists(DistTempDir+'/config.ini'):
     os.remove(DistTempDir+'/config.ini')
 
 # check runtime environment
-import psutil
-pid = [p.info['pid'] for p in psutil.process_iter(attrs=['pid','name']) if 'hydra_nameserver' in p.info['name']]
-if not pid:
-    subprocess.Popen(['hydra_nameserver &'], shell=True)
+import psutil,getpass,signal
+pid = [p.info['pid'] for p in psutil.process_iter(attrs=['pid','name','username']) if 'hydra_nameserver' in p.info['name'] and p.info['username']==getpass.getuser()]
+if pid:
+    os.kill(int(pid[0]),signal.SIGKILL)
+subprocess.Popen(['hydra_nameserver &'], shell=True)
 
 time.sleep(1)
 args = getArgs()
